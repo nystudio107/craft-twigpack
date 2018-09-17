@@ -2,7 +2,8 @@
 /**
  * Twigpack plugin for Craft CMS 3.x
  *
- * Twigpack is the conduit between Twig and webpack, with manifest.json & webpack-dev-server HMR support
+ * Twigpack is the conduit between Twig and webpack, with manifest.json &
+ * webpack-dev-server HMR support
  *
  * @link      https://nystudio107.com/
  * @copyright Copyright (c) 2018 nystudio107
@@ -11,9 +12,11 @@
 namespace nystudio107\twigpack\services;
 
 use nystudio107\twigpack\Twigpack;
+use nystudio107\twigpack\helpers\Manifest as ManifestHelper;
 
-use Craft;
 use craft\base\Component;
+
+/** @noinspection MissingPropertyAnnotationsInspection */
 
 /**
  * @author    nystudio107
@@ -25,8 +28,41 @@ class Manifest extends Component
     // Public Methods
     // =========================================================================
 
-    public function get(array $config, string $module)
+    /**
+     * @param string     $moduleName
+     * @param bool       $async
+     * @param null|array $config
+     *
+     * @return null|string
+     */
+    public function getCssModuleTags(string $moduleName, bool $async = false, $config = null)
     {
-        if
+        $settings = Twigpack::$plugin->getSettings();
+        $config = $config ?? $settings->getAttributes();
+
+        return ManifestHelper::getCssModuleTags($config, $moduleName, $async);
+    }
+
+    /**
+     * @param string     $moduleName
+     * @param bool       $async
+     * @param null|array $config
+     *
+     * @return null|string
+     */
+    public function getJsModuleTags(string $moduleName, bool $async = false, $config = null)
+    {
+        $settings = Twigpack::$plugin->getSettings();
+        $config = $config ?? $settings->getAttributes();
+
+        return ManifestHelper::getJsModuleTags($config, $moduleName, $async);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getSafariNomoduleFix()
+    {
+        return ManifestHelper::getSafariNomoduleFix();
     }
 }

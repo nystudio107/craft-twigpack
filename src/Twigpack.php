@@ -12,11 +12,11 @@ namespace nystudio107\twigpack;
 
 use nystudio107\twigpack\services\Manifest as ManifestService;
 use nystudio107\twigpack\models\Settings;
+use nystudio107\twigpack\variables\ManifestVariable;
 
 use Craft;
 use craft\base\Plugin;
-use craft\services\Plugins;
-use craft\events\PluginEvent;
+use craft\web\twig\variables\CraftVariable;
 
 use yii\base\Event;
 
@@ -57,16 +57,15 @@ class Twigpack extends Plugin
     {
         parent::init();
         self::$plugin = $this;
-
         Event::on(
-            Plugins::class,
-            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-            function (PluginEvent $event) {
-                if ($event->plugin === $this) {
-                }
+            CraftVariable::class,
+            CraftVariable::EVENT_INIT,
+            function (Event $event) {
+                /** @var CraftVariable $variable */
+                $variable = $event->sender;
+                $variable->set('twigpack', ManifestVariable::class);
             }
         );
-
         Craft::info(
             Craft::t(
                 'twigpack',

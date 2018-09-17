@@ -12,7 +12,6 @@ namespace nystudio107\twigpack\helpers;
 
 use nystudio107\twigpack\Twigpack;
 
-use craft\helpers\FileHelper;
 use craft\helpers\Json as JsonHelper;
 
 use Craft;
@@ -25,7 +24,6 @@ use yii\caching\TagDependency;
  */
 class Manifest
 {
-
     // Constants
     // =========================================================================
 
@@ -91,18 +89,34 @@ class Manifest
         $lines = [];
         if ($async) {
             $lines[] = "<script type=\"module\" src=\"{$modernModule}\"></script>";
-            $lines[] = "<script nomodule src=\"{$legacyModule}\"></script";
+            $lines[] = "<script nomodule src=\"{$legacyModule}\"></script>";
         } else {
-            $lines[] = "<script src=\"{$legacyModule}\"></script";
+            $lines[] = "<script src=\"{$legacyModule}\"></script>";
         }
 
         return implode("\r\n", $lines);
     }
 
     /**
+     * Safari 10.1 supports modules, but does not support the `nomodule`
+     * attribute - it will load <script nomodule> anyway. This snippet solve
+     * this problem, but only for script tags that load external code, e.g.:
+     * <script nomodule src="nomodule.js"></script>
+     *
+     * Again: this will **not* # prevent inline script, e.g.:
+     * <script nomodule>alert('no modules');</script>.
+     *
+     * This workaround is possible because Safari supports the non-standard
+     * 'beforeload' event. This allows us to trap the module and nomodule load.
+     *
+     * Note also that `nomodule` is supported in later versions of Safari -
+     * it's just 10.1 that omits this attribute.
+     *
+     * c.f.: https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc
+     *
      * @return string
      */
-    public function getModuleFixJs(): string
+    public static function getSafariNomoduleFix(): string
     {
         return <<<EOT
 <script>
@@ -120,15 +134,31 @@ EOT;
      */
     public static function getModule(array $config, string $moduleName, string $type = 'modern')
     {
-        $manifest = self::getManifestFile($config['manifest'][$type], $config['basePath']);
-        if ($manifest === null) {
-            return null;
+        $devMode = Craft::$app->getConfig()->getGeneral()->devMode;
+        $isHot = ($devMode && $config['useDevServer']);
+        $manifest = null;
+        // Try to get the manifest
+        while ($manifest === null) {
+            $manifestPath = $isHot
+                ? $config['devServer']['manifestPath']
+                : $config['basePath'];
+            $manifest = self::getManifestFile($config['manifest'][$type], $manifestPath);
+            // If the manigest isn't found, and it was hot, fall back on non-hot
+            if ($manifest === null) {
+                if ($isHot) {
+                    $isHot = false;
+                } else {
+                    return null;
+                }
+            }
         }
         $module = $manifest[$moduleName];
-        $prefix = $config['useDevServer']
-            ? $config['devServer']['basePath']
-            : $config['server']['basePath'];
-        $module = rtrim($prefix, '/') . '/' . $module;
+        $prefix = $isHot
+            ? $config['devServer']['publicPath']
+            : $config['server']['publicPath'];
+        if ($prefix !== '') {
+            $module = rtrim($prefix, '/').'/'.ltrim($module, '/');
+        }
 
         return $module;
     }
@@ -145,9 +175,11 @@ EOT;
     protected static function getManifestFile(string $name, string $path)
     {
         // Normalize the path, and use it for the cache key
-        $path = FileHelper::normalizePath($path) . DIRECTORY_SEPARATOR . $name;
+        if ($path !== '') {
+            $path = rtrim($path, '/').'/'.ltrim($name, '/');
+        }
         // Return the memoized manifest if it exists
-        if (self::$manifests[$path] !== null) {
+        if (!empty(self::$manifests[$path])) {
             return self::$manifests[$path];
         }
         // Create the dependency tags
