@@ -1,0 +1,43 @@
+{
+    "name": "nystudio107/craft-twigpack",
+    "description": "Twigpack is the conduit between Twig and webpack, with manifest.json & webpack-dev-server HMR support",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "twigpack"
+    ],
+    "support": {
+        "docs": "https://github.com/nystudio107/craft-twigpack/blob/v1/README.md",
+        "issues": "https://github.com/nystudio107/craft-twigpack/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "nystudio107",
+            "homepage": "https://nystudio107.com/"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "nystudio107\\twigpack\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Twigpack",
+        "handle": "twigpack",
+        "hasCpSettings": true,
+        "hasCpSection": false,
+        "changelogUrl": "https://raw.githubusercontent.com/craft-nystudio107/twigpack/v1/CHANGELOG.md",
+        "components": {
+            "manifest": "nystudio107\\twigpack\\services\\Manifest"
+        },
+        "class": "nystudio107\\twigpack\\Twigpack"
+    }
+}
