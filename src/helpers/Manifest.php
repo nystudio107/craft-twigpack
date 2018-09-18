@@ -141,7 +141,7 @@ EOT;
         while ($manifest === null) {
             $manifestPath = $isHot
                 ? $config['devServer']['manifestPath']
-                : $config['basePath'];
+                : realpath(CRAFT_BASE_PATH) . ltrim($config['basePath'], '.');
             $manifest = self::getManifestFile($config['manifest'][$type], $manifestPath);
             // If the manigest isn't found, and it was hot, fall back on non-hot
             if ($manifest === null) {
