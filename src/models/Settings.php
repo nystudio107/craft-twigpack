@@ -2,7 +2,8 @@
 /**
  * Twigpack plugin for Craft CMS 3.x
  *
- * Twigpack is the conduit between Twig and webpack, with manifest.json & webpack-dev-server HMR support
+ * Twigpack is the conduit between Twig and webpack, with manifest.json &
+ * webpack-dev-server HMR support
  *
  * @link      https://nystudio107.com/
  * @copyright Copyright (c) 2018 nystudio107
@@ -28,7 +29,24 @@ class Settings extends Model
     /**
      * @var string
      */
-    public $someAttribute = 'Some Default';
+    public $basePath = './web/dist/';
+
+    // Manifest names
+    public $manifest = [
+        'legacy' => 'manifest-legacy.json',
+        'modern' => 'manifest.json',
+    ];
+    // Public server config
+    public $server = [
+        'publicPath' => '/',
+    ];
+    // If `devMode` is on, use webpack-dev-server to all for HMR (hot module reloading)
+    public $useDevServer = true;
+    // webpack-dev-server config
+    public $devServer = [
+        'manifestPath' => 'http://127.0.0.1:8080',
+        'publicPath' => '',
+    ];
 
     // Public Methods
     // =========================================================================
