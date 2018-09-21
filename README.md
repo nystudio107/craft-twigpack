@@ -6,7 +6,7 @@ Twigpack is the conduit between Twig and webpack, with manifest.json & webpack-d
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.0-beta.23 or later.
+This plugin requires Craft CMS 3.0.0 or later.
 
 ## Installation
 
@@ -18,9 +18,11 @@ To install the plugin, follow these instructions.
 
 2. Then tell Composer to load the plugin:
 
-        composer require nystudio107/twigpack
+        composer require nystudio107/craft-twigpack
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Twigpack.
+
+You can also install SEOmatic via the **Plugin Store** in the Craft AdminCP.
 
 ## Twigpack Overview
 
