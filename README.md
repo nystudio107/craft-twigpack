@@ -28,7 +28,13 @@ You can also install SEOmatic via the **Plugin Store** in the Craft AdminCP.
 
 ## Twigpack Overview
 
--Insert text here-
+Twigpack is the conduit between Twig and webpack, with `manifest.json` & [webpack-dev-server](https://github.com/webpack/webpack-dev-server) hot module replacement (HMR) support.  
+ 
+ Twigpack supports both modern and legacy bundle builds, as per the [Deploying ES2015+ Code in Production Today](https://philipwalton.com/articles/deploying-es2015-code-in-production-today/) article.
+ 
+ Twigpack also handles generating the necessary tags to support both synchronous and asynchronous loading of JavaScripts and CSS.
+ 
+ Additionally, Twigpack has a caching layer to ensure optimal performance.
 
 ## Configuring Twigpack
 
@@ -36,7 +42,7 @@ You can also install SEOmatic via the **Plugin Store** in the Craft AdminCP.
 
 ## Using Twigpack
 
--Insert text here-
+Why not just use the popular [AssetRev plugin](https://github.com/clubstudioltd/craft-asset-rev)? You can, and we've used it in the past. But there were a few features
 
 ## Twigpack Roadmap
 
