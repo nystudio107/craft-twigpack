@@ -29,6 +29,8 @@ class Manifest extends Component
     // =========================================================================
 
     /**
+     * Return the HTML tags to include the CSS
+     *
      * @param string     $moduleName
      * @param bool       $async
      * @param null|array $config
@@ -44,6 +46,8 @@ class Manifest extends Component
     }
 
     /**
+     * Return the HTML tags to include the JavaScript module
+     *
      * @param string     $moduleName
      * @param bool       $async
      * @param null|array $config
@@ -59,10 +63,20 @@ class Manifest extends Component
     }
 
     /**
+     * Return the Safari 10.1 nomodule JavaScript fix
+     *
      * @return null|string
      */
     public function getSafariNomoduleFix()
     {
         return ManifestHelper::getSafariNomoduleFix();
+    }
+
+    /**
+     * Invalidate the manifest cache
+     */
+    public function invalidateCaches()
+    {
+        ManifestHelper::invalidateCaches();
     }
 }

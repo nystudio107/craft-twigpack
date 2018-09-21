@@ -23,22 +23,21 @@
  */
 
 return [
-    // File system path
-    'basePath'     => '',
-    // Manifest names
+    // If `devMode` is on, use webpack-dev-server to all for HMR (hot module reloading)
+    'useDevServer' => true,
+    // Manifest file names
     'manifest'     => [
         'legacy' => 'manifest-legacy.json',
         'modern' => 'manifest.json',
     ],
     // Public server config
     'server'       => [
+        'manifestPath' => '/',
         'publicPath' => '/',
     ],
-    // If `devMode` is on, use webpack-dev-server to all for HMR (hot module reloading)
-    'useDevServer' => true,
     // webpack-dev-server config
     'devServer'    => [
         'manifestPath' => 'http://127.0.0.1:8080',
-        'publicPath' => '',
+        'publicPath' => '/',
     ],
 ];

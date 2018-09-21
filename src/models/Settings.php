@@ -11,9 +11,6 @@
 
 namespace nystudio107\twigpack\models;
 
-use nystudio107\twigpack\Twigpack;
-
-use Craft;
 use craft\base\Model;
 
 /**
@@ -27,25 +24,24 @@ class Settings extends Model
     // =========================================================================
 
     /**
-     * @var string
+     * @var bool If `devMode` is on, use webpack-dev-server to all for HMR (hot module reloading)
      */
-    public $basePath = './web/dist/';
+    public $useDevServer = true;
 
-    // Manifest names
+    // Manifest file names
     public $manifest = [
         'legacy' => 'manifest-legacy.json',
         'modern' => 'manifest.json',
     ];
     // Public server config
     public $server = [
+        'manifestPath' => '/dist/',
         'publicPath' => '/',
     ];
-    // If `devMode` is on, use webpack-dev-server to all for HMR (hot module reloading)
-    public $useDevServer = true;
     // webpack-dev-server config
     public $devServer = [
         'manifestPath' => 'http://127.0.0.1:8080',
-        'publicPath' => '',
+        'publicPath' => 'http://192.168.10.10:8080/',
     ];
 
     // Public Methods
@@ -57,8 +53,17 @@ class Settings extends Model
     public function rules()
     {
         return [
-            ['someAttribute', 'string'],
-            ['someAttribute', 'default', 'value' => 'Some Default'],
+            ['useDevServer', 'boolean'],
+            ['useDevServer', 'default', 'value' => true],
+            [
+                [
+                    'manifest',
+                    'server',
+                    'devServer',
+                ],
+                'each',
+                'rule' => ['string']
+            ],
         ];
     }
 }

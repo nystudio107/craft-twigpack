@@ -1,20 +1,12 @@
 <?php
-/**
- * Twigpack plugin for Craft CMS 3.x
- *
- * Twigpack is the conduit between Twig and webpack, with manifest.json & webpack-dev-server HMR support
- *
- * @link      https://nystudio107.com/
- * @copyright Copyright (c) 2018 nystudio107
- */
 
 namespace nystudio107\twigpack\helpers;
-
-use nystudio107\twigpack\Twigpack;
 
 use craft\helpers\Json as JsonHelper;
 
 use Craft;
+use craft\helpers\UrlHelper;
+use yii\base\Exception;
 use yii\caching\TagDependency;
 
 /**
@@ -24,6 +16,7 @@ use yii\caching\TagDependency;
  */
 class Manifest
 {
+
     // Constants
     // =========================================================================
 
@@ -141,7 +134,7 @@ EOT;
         while ($manifest === null) {
             $manifestPath = $isHot
                 ? $config['devServer']['manifestPath']
-                : realpath(CRAFT_BASE_PATH) . ltrim($config['basePath'], '.');
+                : $config['server']['manifestPath'];
             $manifest = self::getManifestFile($config['manifest'][$type], $manifestPath);
             // If the manigest isn't found, and it was hot, fall back on non-hot
             if ($manifest === null) {
@@ -156,14 +149,33 @@ EOT;
         $prefix = $isHot
             ? $config['devServer']['publicPath']
             : $config['server']['publicPath'];
-        if ($prefix !== '') {
-            $module = rtrim($prefix, '/').'/'.ltrim($module, '/');
+        // If the module isn't a full URL, prefix it
+        if (!UrlHelper::isAbsoluteUrl($module)) {
+            $module = self::combinePaths($prefix, $module);
+        }
+        // Make sure it's a full URL
+        if (!UrlHelper::isAbsoluteUrl($module)) {
+            try {
+                $module = UrlHelper::siteUrl($module);
+            } catch (Exception $e) {
+                Craft::error($e->getMessage(), __METHOD__);
+            }
         }
 
         return $module;
     }
 
-    // Public Static Methods
+    /**
+     * Invalidate all of the manifest caches
+     */
+    public static function invalidateCaches()
+    {
+        $cache = Craft::$app->getCache();
+        TagDependency::invalidate($cache, self::CACHE_TAG);
+        Craft::info('All manifest caches cleared', __METHOD__);
+    }
+
+    // Protected Static Methods
     // =========================================================================
 
     /**
@@ -175,8 +187,14 @@ EOT;
     protected static function getManifestFile(string $name, string $path)
     {
         // Normalize the path, and use it for the cache key
-        if ($path !== '') {
-            $path = rtrim($path, '/').'/'.ltrim($name, '/');
+        $path = self::combinePaths($path, $name);
+        // Make sure it's a full URL
+        if (!UrlHelper::isAbsoluteUrl($path)) {
+            try {
+                $path = UrlHelper::siteUrl($path);
+            } catch (Exception $e) {
+                Craft::error($e->getMessage(), __METHOD__);
+            }
         }
         // Return the memoized manifest if it exists
         if (!empty(self::$manifests[$path])) {
@@ -212,5 +230,39 @@ EOT;
         self::$manifests[$path] = $manifest;
 
         return $manifest;
+    }
+
+
+    /**
+     * Combined the passed in paths, whether file system or URL
+     *
+     * @param string ...$paths
+     *
+     * @return string
+     */
+    protected static function combinePaths(string ...$paths): string
+    {
+        $last_key = \count($paths) - 1;
+        array_walk($paths, function (&$val, $key) use ($last_key) {
+            switch ($key) {
+                case 0:
+                    $val = rtrim($val, '/ ');
+                    break;
+                case $last_key:
+                    $val = ltrim($val, '/ ');
+                    break;
+                default:
+                    $val = trim($val, '/ ');
+                    break;
+            }
+        });
+
+        $first = array_shift($paths);
+        $last = array_pop($paths);
+        $paths = array_filter($paths);
+        array_unshift($paths, $first);
+        $paths[] = $last;
+
+        return implode('/', $paths);
     }
 }
