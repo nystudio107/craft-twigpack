@@ -1,11 +1,20 @@
 <?php
+/**
+ * Twigpack plugin for Craft CMS 3.x
+ *
+ * Twigpack is the conduit between Twig and webpack, with manifest.json &
+ * webpack-dev-server HMR support
+ *
+ * @link      https://nystudio107.com/
+ * @copyright Copyright (c) 2018 nystudio107
+ */
 
 namespace nystudio107\twigpack\helpers;
 
-use craft\helpers\Json as JsonHelper;
-
 use Craft;
+use craft\helpers\Json as JsonHelper;
 use craft\helpers\UrlHelper;
+
 use yii\base\Exception;
 use yii\caching\TagDependency;
 

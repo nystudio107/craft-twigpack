@@ -35,13 +35,13 @@ class Settings extends Model
     ];
     // Public server config
     public $server = [
-        'manifestPath' => '/dist/',
+        'manifestPath' => '/',
         'publicPath' => '/',
     ];
     // webpack-dev-server config
     public $devServer = [
-        'manifestPath' => 'http://127.0.0.1:8080',
-        'publicPath' => 'http://192.168.10.10:8080/',
+        'manifestPath' => 'http://localhost:8080',
+        'publicPath' => 'http://localhost:8080/',
     ];
 
     // Public Methods

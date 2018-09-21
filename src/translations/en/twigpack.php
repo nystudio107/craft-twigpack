@@ -14,5 +14,6 @@
  * @since     1.0.0
  */
 return [
-    'Twigpack plugin loaded' => 'Twigpack plugin loaded',
+    'Twigpack Manifest Cache' => 'Twigpack Manifest Cache',
+    '{name} plugin loaded'    => '{name} plugin loaded'
 ];

@@ -10,24 +10,21 @@
 
 namespace nystudio107\twigpack;
 
-use craft\events\DeleteTemplateCachesEvent;
-use craft\events\PluginEvent;
-use craft\events\RegisterCacheOptionsEvent;
-use craft\services\Plugins;
-use craft\services\TemplateCaches;
-use craft\utilities\ClearCaches;
 use nystudio107\twigpack\services\Manifest as ManifestService;
 use nystudio107\twigpack\models\Settings;
 use nystudio107\twigpack\variables\ManifestVariable;
 
 use Craft;
 use craft\base\Plugin;
+use craft\events\DeleteTemplateCachesEvent;
+use craft\events\PluginEvent;
+use craft\events\RegisterCacheOptionsEvent;
+use craft\services\Plugins;
+use craft\services\TemplateCaches;
+use craft\utilities\ClearCaches;
 use craft\web\twig\variables\CraftVariable;
 
 use yii\base\Event;
-
-use nystudio107\fastcgicachebust\FastcgiCacheBust;
-use yii\base\Exception;
 
 /**
  * Class Twigpack
@@ -86,11 +83,6 @@ class Twigpack extends Plugin
     {
         // Clear all of Twigpack's caches
         self::$plugin->manifest->invalidateCaches();
-        // If the FastCGI Cache Bust plugin is installed, clear its caches too
-        $plugin = Craft::$app->getPlugins()->getPlugin('fastcgi-cache-bust');
-        if ($plugin !== null) {
-            FastcgiCacheBust::$plugin->cache->clearAll();
-        }
     }
 
     // Protected Methods
@@ -149,7 +141,6 @@ class Twigpack extends Plugin
         );
     }
 
-
     /**
      * Returns the custom AdminCP cache options.
      *
@@ -158,9 +149,9 @@ class Twigpack extends Plugin
     protected function customAdminCpCacheOptions(): array
     {
         return [
-            // Frontend template caches
+            // Manifest cache
             [
-                'key' => 'twigpack-manfiest-caches',
+                'key' => 'twigpack-manfiest-cache',
                 'label' => Craft::t('twigpack', 'Twigpack Manifest Cache'),
                 'action' => [$this, 'clearAllCaches'],
             ],
@@ -173,26 +164,5 @@ class Twigpack extends Plugin
     protected function createSettingsModel()
     {
         return new Settings();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function settingsHtml(): string
-    {
-        try {
-            return Craft::$app->view->renderTemplate(
-                'twigpack/settings',
-                [
-                    'settings' => $this->getSettings(),
-                ]
-            );
-        } catch (\Twig_Error_Loader $e) {
-            Craft::error($e->getMessage(), __METHOD__);
-        } catch (Exception $e) {
-            Craft::error($e->getMessage(), __METHOD__);
-        }
-
-        return '';
     }
 }
