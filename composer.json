@@ -32,7 +32,7 @@
     "extra": {
         "name": "Twigpack",
         "handle": "twigpack",
-        "hasCpSettings": true,
+        "hasCpSettings": false,
         "hasCpSection": false,
         "changelogUrl": "https://raw.githubusercontent.com/craft-nystudio107/twigpack/v1/CHANGELOG.md",
         "components": {
