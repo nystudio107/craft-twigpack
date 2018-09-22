@@ -4,11 +4,13 @@
     "type": "craft-plugin",
     "version": "1.0.0",
     "keywords": [
-        "craft",
-        "cms",
         "craftcms",
         "craft-plugin",
-        "twigpack"
+        "twig",
+        "webpack",
+        "webpack-dev-server",
+        "hmr-support",
+        "manifest-json"
     ],
     "support": {
         "docs": "https://github.com/nystudio107/craft-twigpack/blob/v1/README.md",
