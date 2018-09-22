@@ -99,6 +99,8 @@ return [
    * **manifestPath** - the devServer path to your manifest files; it can be a full URL or a partial path.  This is usually the same as whatever you set your webpack `devServer.publicPath` to
    * **publicPath** - the devServer path to your asset files; it can be a full URL or a partial path. This is usually the same as whatever you set your webpack `output.publicPath` to
 
+Note that the `manifest.json` is loaded server-side via PHP, so if you're using a VM such as Homestead, the **manifestPath** may be different from the  **publicPath**.
+
 ### Legacy and Modern Bundles
 
 The idea behind using `manifest.json` and `manifest-legacy.json` is that there will be two builds, one for modern ES6+ modules, and a second for legacy ES5 bundles with polyfills, etc. The entry points are named the same, but the files the entry points load are different.
@@ -111,7 +113,7 @@ If **useDevServer** is set to `true`, Twigpack will first try to find your manif
 
 Note that the **devServer** will only be used if `devMode` is on.
 
-Using the [webpack-dev-server](https://github.com/webpack/webpack-dev-server) means you get hot modules replacement, and the files are all built in-memory for speed. Think of it as a very enhanced version of BrowserWatch or `watch` tasks.
+Using the [webpack-dev-server](https://github.com/webpack/webpack-dev-server) means you get [hot module replacement](https://webpack.js.org/concepts/hot-module-replacement/), and the files are all built in-memory for speed. Think of it as a very enhanced version of BrowserWatch or `watch` tasks.
 
 Even if you're not using `webpack-dev-server`, you can still use Twigpack. Just set **useDevServer** to false.
 
