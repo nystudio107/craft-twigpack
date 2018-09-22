@@ -163,14 +163,18 @@ EOT;
                     // Try again, but not with home module replacement
                     $isHot = false;
                 } else {
-                    // We couldn't find a manifest; throw an error
-                    throw new NotFoundHttpException(
-                        Craft::t(
-                            'twigpack',
-                            'Manifest file not found at: {manifestPath}',
-                            ['manifestPath' => $manifestPath]
-                        )
-                    );
+                    if ($devMode) {
+                        // We couldn't find a manifest; throw an error
+                        throw new NotFoundHttpException(
+                            Craft::t(
+                                'twigpack',
+                                'Manifest file not found at: {manifestPath}',
+                                ['manifestPath' => $manifestPath]
+                            )
+                        );
+                    }
+
+                    return null;
                 }
             }
         }
