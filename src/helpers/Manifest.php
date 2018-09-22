@@ -52,6 +52,7 @@ class Manifest
      * @param bool   $async
      *
      * @return null|string
+     * @throws NotFoundHttpException
      */
     public static function getCssModuleTags(array $config, string $moduleName, bool $async)
     {
@@ -76,6 +77,7 @@ class Manifest
      * @param bool   $async
      *
      * @return null|string
+     * @throws NotFoundHttpException
      */
     public static function getJsModuleTags(array $config, string $moduleName, bool $async)
     {
