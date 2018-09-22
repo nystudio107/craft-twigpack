@@ -36,6 +36,16 @@ Twigpack is a bridge between Twig and webpack, with `manifest.json` & [webpack-d
  
  Additionally, Twigpack has a caching layer to ensure optimal performance.
 
+### Why not just use AssetRev?
+
+You might be wondering... why not just use the excellent [AssetRev plugin](https://github.com/clubstudioltd/craft-asset-rev)? You certainly can, and we have in the past. Twigpack was written because:
+* We wanted support for legacy/modern JavaScript bundles
+* We wanted to use `webpack-dev-server` for hot module replacement
+* We wanted a performant caching mechanism in place
+* ...and we also didn't care about various versioning schemes other than the webpack `manifest.json`
+
+Use whatever works for you!
+
 ## Configuring Twigpack
 
 Add configuration for Twigpack is done via the `config.php` config file. Here's the default `config.php`; it should be renamed to `twigpack.php` and copied to your `config/` directory to take effect.
