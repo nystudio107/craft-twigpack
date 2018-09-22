@@ -2,7 +2,7 @@
 
 # Twigpack plugin for Craft CMS 3.x
 
-Twigpack is the conduit between Twig and webpack, with manifest.json & webpack-dev-server HMR support
+Twigpack is a bridge between Twig and webpack, with manifest.json & webpack-dev-server HMR support
 
 ![Screenshot](resources/img/plugin-logo.png)
 
@@ -28,7 +28,7 @@ You can also install SEOmatic via the **Plugin Store** in the Craft AdminCP.
 
 ## Twigpack Overview
 
-Twigpack is the conduit between Twig and webpack, with `manifest.json` & [webpack-dev-server](https://github.com/webpack/webpack-dev-server) hot module replacement (HMR) support.  
+Twigpack is a bridge between Twig and webpack, with `manifest.json` & [webpack-dev-server](https://github.com/webpack/webpack-dev-server) hot module replacement (HMR) support.  
  
  Twigpack supports both modern and legacy bundle builds, as per the [Deploying ES2015+ Code in Production Today](https://philipwalton.com/articles/deploying-es2015-code-in-production-today/) article.
  
