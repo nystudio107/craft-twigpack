@@ -17,6 +17,7 @@ use craft\helpers\UrlHelper;
 
 use yii\base\Exception;
 use yii\caching\TagDependency;
+use yii\web\NotFoundHttpException;
 
 /**
  * @author    nystudio107
@@ -51,6 +52,7 @@ class Manifest
      * @param bool   $async
      *
      * @return null|string
+     * @throws NotFoundHttpException
      */
     public static function getCssModuleTags(array $config, string $moduleName, bool $async)
     {
@@ -75,6 +77,7 @@ class Manifest
      * @param bool   $async
      *
      * @return null|string
+     * @throws NotFoundHttpException
      */
     public static function getJsModuleTags(array $config, string $moduleName, bool $async)
     {
@@ -133,6 +136,7 @@ EOT;
      * @param string $type
      *
      * @return null|string
+     * @throws NotFoundHttpException
      */
     public static function getModule(array $config, string $moduleName, string $type = 'modern')
     {
@@ -147,10 +151,26 @@ EOT;
             $manifest = self::getManifestFile($config['manifest'][$type], $manifestPath);
             // If the manigest isn't found, and it was hot, fall back on non-hot
             if ($manifest === null) {
+                Craft::error(
+                    Craft::t(
+                        'twigpack',
+                        'Manifest file not found at: {manifestPath}',
+                        ['manifestPath' => $manifestPath]
+                    ),
+                    __METHOD__
+                );
                 if ($isHot) {
+                    // Try again, but not with home module replacement
                     $isHot = false;
                 } else {
-                    return null;
+                    // We couldn't find a manifest; throw an error
+                    throw new NotFoundHttpException(
+                        Craft::t(
+                            'twigpack',
+                            'Manifest file not found at: {manifestPath}',
+                            ['manifestPath' => $manifestPath]
+                        )
+                    );
                 }
             }
         }

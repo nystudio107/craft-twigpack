@@ -15,5 +15,6 @@
  */
 return [
     'Twigpack Manifest Cache' => 'Twigpack Manifest Cache',
-    '{name} plugin loaded'    => '{name} plugin loaded'
+    '{name} plugin loaded'    => '{name} plugin loaded',
+    'Manifest file not found at: {manifestPath}' => 'Manifest file not found at: {manifestPath}'
 ];
