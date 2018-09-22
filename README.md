@@ -195,6 +195,12 @@ This will output:
 
 ...as per the [safari-nomodule.js Gist](https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc). You'll want to include this one on the page, before you do `{{ craft.twigpack.includeJsModule("app.js", true) }}`. It's only necessary if you're using legacy/modern JavaScript bundles.
 
+## Just for Fun
+
+Here's a video of hot module replacement of a Vue JS component, using Twigpack as the bridge:
+
+[![Hot Module Replacement with webpack & Twigpack](http://i3.ytimg.com/vi/LfF3CV_Do0Y/hqdefault.jpg)](https://youtu.be/LfF3CV_Do0Y)
+
 ## Twigpack Roadmap
 
 Some things to do, and ideas for potential features:
