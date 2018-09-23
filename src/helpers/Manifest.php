@@ -211,6 +211,8 @@ EOT;
     // =========================================================================
 
     /**
+     * Return a manifest file from a name and URI path
+     *
      * @param string $name
      * @param string $path
      *
@@ -221,15 +223,17 @@ EOT;
         // Normalize the path
         $path = self::combinePaths($path, $name);
 
-        return self::getFileContents($path);
+        return self::getJsonFileFromUri($path);
     }
 
     /**
+     * Return the contents of a file from a URI path
+     *
      * @param string $path
      *
      * @return mixed
      */
-    protected static function getFileContents(string $path)
+    protected static function getJsonFileFromUri(string $path)
     {
         // Make sure it's a full URL
         if (!UrlHelper::isAbsoluteUrl($path)) {
@@ -239,6 +243,19 @@ EOT;
                 Craft::error($e->getMessage(), __METHOD__);
             }
         }
+
+        return self::getJsonFileContents($path);
+    }
+
+    /**
+     * Return the contents of a file from the passed in path
+     *
+     * @param string $path
+     *
+     * @return mixed
+     */
+    protected static function getJsonFileContents(string $path)
+    {
         // Return the memoized manifest if it exists
         if (!empty(self::$files[$path])) {
             return self::$files[$path];
@@ -250,7 +267,7 @@ EOT;
                 self::CACHE_TAG.$path,
             ],
         ]);
-        // Set the cache duraction based on devMode
+        // Set the cache duration based on devMode
         $cacheDuration = Craft::$app->getConfig()->getGeneral()->devMode
             ? self::DEVMODE_CACHE_DURATION
             : null;
