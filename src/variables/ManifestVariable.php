@@ -25,13 +25,14 @@ class ManifestVariable
     // =========================================================================
 
     /**
-     * @param string $moduleName
-     * @param bool   $async
-     * @param null|array   $config
+     * @param string     $moduleName
+     * @param bool       $async
+     * @param null|array $config
      *
-     * @return \Twig_Markup
+     * @return null|\Twig_Markup
+     * @throws \yii\web\NotFoundHttpException
      */
-    public function includeCssModule(string $moduleName, bool $async = false, $config = null): \Twig_Markup
+    public function includeCssModule(string $moduleName, bool $async = false, $config = null)
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getCssModuleTags($moduleName, $async, $config)
@@ -39,13 +40,14 @@ class ManifestVariable
     }
 
     /**
-     * @param string $moduleName
-     * @param bool   $async
-     * @param null|array   $config
+     * @param string     $moduleName
+     * @param bool       $async
+     * @param null|array $config
      *
-     * @return \Twig_Markup
+     * @return null|\Twig_Markup
+     * @throws \yii\web\NotFoundHttpException
      */
-    public function includeJsModule(string $moduleName, bool $async = false, $config = null): \Twig_Markup
+    public function includeJsModule(string $moduleName, bool $async = false, $config = null)
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getJsModuleTags($moduleName, $async, $config)
@@ -53,7 +55,26 @@ class ManifestVariable
     }
 
     /**
-     * @return \Twig_Markup
+     * Return the URI to a module
+     *
+     * @param string $moduleName
+     * @param string $type
+     * @param null   $config
+     *
+     * @return null|\Twig_Markup
+     * @throws \yii\web\NotFoundHttpException
+     */
+    public function getModuleUri(string $moduleName, string $type = 'modern', $config = null)
+    {
+        return Template::raw(
+            Twigpack::$plugin->manifest->getModule($moduleName, $type, $config)
+        );
+    }
+
+    /**
+     * Include the Safari 10.1 nomodule fix JavaScript
+     *
+     * @return null|\Twig_Markup
      */
     public function includeSafariNomoduleFix(): \Twig_Markup
     {
