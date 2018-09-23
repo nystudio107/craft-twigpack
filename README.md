@@ -195,6 +195,28 @@ This will output:
 
 ...as per the [safari-nomodule.js Gist](https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc). You'll want to include this one on the page, before you do `{{ craft.twigpack.includeJsModule("app.js", true) }}`. It's only necessary if you're using legacy/modern JavaScript bundles.
 
+### Getting a Module URI
+
+You normally shouldn't need to get a JavaScript/CSS module's URI directly, but you can do so via:
+
+`{{ craft.twigpack.getModule("app.js") }}`
+
+This will output:
+
+```html
+/js/app.gldlkg983ajhs8s.js
+```
+
+The same works for CSS:
+
+`{{ craft.twigpack.getModule("style.css") }}`
+
+This will output:
+
+```html
+/css/style.sfkjsf734ashf.css
+```
+
 ## Just for Fun
 
 Here's a video of hot module replacement of a Vue JS component, using Twigpack as the bridge:

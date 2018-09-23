@@ -36,6 +36,7 @@ class Manifest extends Component
      * @param null|array $config
      *
      * @return null|string
+     * @throws \yii\web\NotFoundHttpException
      */
     public function getCssModuleTags(string $moduleName, bool $async = false, $config = null)
     {
@@ -53,6 +54,7 @@ class Manifest extends Component
      * @param null|array $config
      *
      * @return null|string
+     * @throws \yii\web\NotFoundHttpException
      */
     public function getJsModuleTags(string $moduleName, bool $async = false, $config = null)
     {
@@ -70,6 +72,21 @@ class Manifest extends Component
     public function getSafariNomoduleFix()
     {
         return ManifestHelper::getSafariNomoduleFix();
+    }
+
+    /**
+     * Return the URI to a module
+     *
+     * @param string $moduleName
+     * @param string $type
+     * @param null   $config
+     *
+     * @return null|string
+     * @throws \yii\web\NotFoundHttpException
+     */
+    public function getModule(string $moduleName, string $type = 'modern', $config = null)
+    {
+        return ManifestHelper::getModule($config, $moduleName, $type);
     }
 
     /**
