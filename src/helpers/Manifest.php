@@ -130,6 +130,8 @@ EOT;
     }
 
     /**
+     * Return the URI to a module
+     *
      * @param array  $config
      * @param string $moduleName
      * @param string $type
@@ -139,16 +141,56 @@ EOT;
      */
     public static function getModule(array $config, string $moduleName, string $type = 'modern')
     {
+        $module = null;
+        // Determine whether we should use the devServer for HMR or not
         $devMode = Craft::$app->getConfig()->getGeneral()->devMode;
         $isHot = ($devMode && $config['useDevServer']);
+        // Get the manifest file
+        $manifest = self::getManifestFile($config, $isHot, $type);
+        if ($manifest !== null) {
+            $module = $manifest[$moduleName];
+            $prefix = $isHot
+                ? $config['devServer']['publicPath']
+                : $config['server']['publicPath'];
+            // If the module isn't a full URL, prefix it
+            if (!UrlHelper::isAbsoluteUrl($module)) {
+                $module = self::combinePaths($prefix, $module);
+            }
+            // Make sure it's a full URL
+            if (!UrlHelper::isAbsoluteUrl($module)) {
+                try {
+                    $module = UrlHelper::siteUrl($module);
+                } catch (Exception $e) {
+                    Craft::error($e->getMessage(), __METHOD__);
+                }
+            }
+        }
+
+        return $module;
+    }
+
+    /**
+     * Return a JSON-decoded manifest file
+     *
+     * @param array  $config
+     * @param bool   $isHot
+     * @param string $type
+     *
+     * @return null|array
+     * @throws NotFoundHttpException
+     */
+    public static function getManifestFile(array $config, bool &$isHot, string $type = 'modern')
+    {
         $manifest = null;
         // Try to get the manifest
         while ($manifest === null) {
             $manifestPath = $isHot
                 ? $config['devServer']['manifestPath']
                 : $config['server']['manifestPath'];
-            $manifest = self::getManifestFile($config['manifest'][$type], $manifestPath);
-            // If the manigest isn't found, and it was hot, fall back on non-hot
+            // Normalize the path
+            $path = self::combinePaths($manifestPath, $config['manifest'][$type]);
+            $manifest = self::getJsonFileFromUri($path);
+            // If the manifest isn't found, and it was hot, fall back on non-hot
             if ($manifest === null) {
                 Craft::error(
                     Craft::t(
@@ -177,24 +219,8 @@ EOT;
                 }
             }
         }
-        $module = $manifest[$moduleName];
-        $prefix = $isHot
-            ? $config['devServer']['publicPath']
-            : $config['server']['publicPath'];
-        // If the module isn't a full URL, prefix it
-        if (!UrlHelper::isAbsoluteUrl($module)) {
-            $module = self::combinePaths($prefix, $module);
-        }
-        // Make sure it's a full URL
-        if (!UrlHelper::isAbsoluteUrl($module)) {
-            try {
-                $module = UrlHelper::siteUrl($module);
-            } catch (Exception $e) {
-                Craft::error($e->getMessage(), __METHOD__);
-            }
-        }
 
-        return $module;
+        return $manifest;
     }
 
     /**
@@ -209,22 +235,6 @@ EOT;
 
     // Protected Static Methods
     // =========================================================================
-
-    /**
-     * Return a manifest file from a name and URI path
-     *
-     * @param string $name
-     * @param string $path
-     *
-     * @return mixed
-     */
-    protected static function getManifestFile(string $name, string $path)
-    {
-        // Normalize the path
-        $path = self::combinePaths($path, $name);
-
-        return self::getJsonFileFromUri($path);
-    }
 
     /**
      * Return the contents of a file from a URI path
