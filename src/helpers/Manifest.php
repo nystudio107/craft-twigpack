@@ -26,7 +26,6 @@ use yii\web\NotFoundHttpException;
  */
 class Manifest
 {
-
     // Constants
     // =========================================================================
 
@@ -41,7 +40,7 @@ class Manifest
     /**
      * @var array
      */
-    protected static $manifests;
+    protected static $files;
 
     // Public Static Methods
     // =========================================================================
@@ -219,8 +218,19 @@ EOT;
      */
     protected static function getManifestFile(string $name, string $path)
     {
-        // Normalize the path, and use it for the cache key
+        // Normalize the path
         $path = self::combinePaths($path, $name);
+
+        return self::getFileContents($path);
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return mixed
+     */
+    protected static function getFileContents(string $path)
+    {
         // Make sure it's a full URL
         if (!UrlHelper::isAbsoluteUrl($path)) {
             try {
@@ -230,8 +240,8 @@ EOT;
             }
         }
         // Return the memoized manifest if it exists
-        if (!empty(self::$manifests[$path])) {
-            return self::$manifests[$path];
+        if (!empty(self::$files[$path])) {
+            return self::$files[$path];
         }
         // Create the dependency tags
         $dependency = new TagDependency([
@@ -246,7 +256,7 @@ EOT;
             : null;
         // Get the result from the cache, or parse the file
         $cache = Craft::$app->getCache();
-        $manifest = $cache->getOrSet(
+        $file = $cache->getOrSet(
             self::CACHE_KEY.$path,
             function () use ($path) {
                 $result = null;
@@ -260,11 +270,10 @@ EOT;
             $cacheDuration,
             $dependency
         );
-        self::$manifests[$path] = $manifest;
+        self::$files[$path] = $file;
 
-        return $manifest;
+        return $file;
     }
-
 
     /**
      * Combined the passed in paths, whether file system or URL
