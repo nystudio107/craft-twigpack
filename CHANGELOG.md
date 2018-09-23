@@ -7,6 +7,7 @@
 
 ### Changed
 * Fixed return types to allow for null
+* Code refactoring
 
 ## 1.0.1 - 2018-09-22
 ### Added
