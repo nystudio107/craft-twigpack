@@ -76,7 +76,7 @@ class ManifestVariable
      *
      * @return null|\Twig_Markup
      */
-    public function includeSafariNomoduleFix(): \Twig_Markup
+    public function includeSafariNomoduleFix()
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getSafariNomoduleFix()
