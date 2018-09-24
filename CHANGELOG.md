@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.0.3 - 2018-09-24
+### Changed
+* Allow the `manifestPath` to be a file system path or a URI
+
 ## 1.0.2 - 2018-09-23
 ### Added
 * Added `getModuleUri()` function
