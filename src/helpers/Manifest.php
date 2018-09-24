@@ -204,6 +204,7 @@ EOT;
                     // Try again, but not with home module replacement
                     $isHot = false;
                 } else {
+                    $devMode = Craft::$app->getConfig()->getGeneral()->devMode;
                     if ($devMode) {
                         // We couldn't find a manifest; throw an error
                         throw new NotFoundHttpException(
