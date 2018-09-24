@@ -247,7 +247,7 @@ EOT;
     protected static function getJsonFileFromUri(string $path)
     {
         // Make sure it's a full URL
-        if (!UrlHelper::isAbsoluteUrl($path)) {
+        if (!UrlHelper::isAbsoluteUrl($path) && !is_file($path)) {
             try {
                 $path = UrlHelper::siteUrl($path);
             } catch (Exception $e) {
