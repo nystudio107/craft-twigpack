@@ -57,17 +57,33 @@ class Manifest
     {
         $legacyModule = self::getModule($config, $moduleName, 'legacy');
         if ($legacyModule === null) {
-            return null;
+            return '';
         }
         $lines = [];
         if ($async) {
-            $lines[] = "<link rel=\"preload\" href=\"{$legacyModule}\" as=\"style\" onload=\"this.rel='stylesheet'\" />";
+            $lines[] = "<link rel=\"preload\" href=\"{$legacyModule}\" as=\"style\" onload=\"this.onload=null;this.rel='stylesheet'\" />";
             $lines[] = "<noscript><link rel=\"stylesheet\" href=\"{$legacyModule}\"></noscript>";
         } else {
             $lines[] = "<link rel=\"stylesheet\" href=\"{$legacyModule}\" />";
         }
 
         return implode("\r\n", $lines);
+    }
+
+    /**
+     * Returns the uglified loadCSS rel=preload Polyfill as per:
+     * https://github.com/filamentgroup/loadCSS#how-to-use-loadcss-recommended-example
+     *
+     * @return string
+     */
+    public static function getCssRelPreloadPolyfill(): string
+    {
+        return <<<EOT
+<script>
+/*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+!function(t){"use strict";t.loadCSS||(t.loadCSS=function(){});var e=loadCSS.relpreload={};if(e.support=function(){var e;try{e=t.document.createElement("link").relList.supports("preload")}catch(t){e=!1}return function(){return e}}(),e.bindMediaToggle=function(t){var e=t.media||"all";function a(){t.media=e}t.addEventListener?t.addEventListener("load",a):t.attachEvent&&t.attachEvent("onload",a),setTimeout(function(){t.rel="stylesheet",t.media="only x"}),setTimeout(a,3e3)},e.poly=function(){if(!e.support())for(var a=t.document.getElementsByTagName("link"),n=0;n<a.length;n++){var o=a[n];"preload"!==o.rel||"style"!==o.getAttribute("as")||o.getAttribute("data-loadcss")||(o.setAttribute("data-loadcss",!0),e.bindMediaToggle(o))}},!e.support()){e.poly();var a=t.setInterval(e.poly,500);t.addEventListener?t.addEventListener("load",function(){e.poly(),t.clearInterval(a)}):t.attachEvent&&t.attachEvent("onload",function(){e.poly(),t.clearInterval(a)})}"undefined"!=typeof exports?exports.loadCSS=loadCSS:t.loadCSS=loadCSS}("undefined"!=typeof global?global:this);
+</script>
+EOT;
     }
 
     /**
@@ -82,12 +98,12 @@ class Manifest
     {
         $legacyModule = self::getModule($config, $moduleName, 'legacy');
         if ($legacyModule === null) {
-            return null;
+            return '';
         }
         if ($async) {
             $modernModule = self::getModule($config, $moduleName, 'modern');
             if ($modernModule === null) {
-                return null;
+                return '';
             }
         }
         $lines = [];
@@ -148,6 +164,16 @@ EOT;
         // Get the manifest file
         $manifest = self::getManifestFile($config, $isHot, $type);
         if ($manifest !== null) {
+            // Make sure it exists in the manifest
+            if ($manifest[$moduleName] === null) {
+                self::reportError(Craft::t(
+                    'twigpack',
+                    'Module does not exist in the manifest: {moduleName}',
+                    ['moduleName' => $moduleName]
+                ));
+
+                return null;
+            }
             $module = $manifest[$moduleName];
             $prefix = $isHot
                 ? $config['devServer']['publicPath']
@@ -192,30 +218,17 @@ EOT;
             $manifest = self::getJsonFileFromUri($path);
             // If the manifest isn't found, and it was hot, fall back on non-hot
             if ($manifest === null) {
-                Craft::error(
-                    Craft::t(
-                        'twigpack',
-                        'Manifest file not found at: {manifestPath}',
-                        ['manifestPath' => $manifestPath]
-                    ),
-                    __METHOD__
-                );
+                // We couldn't find a manifest; throw an error
+                self::reportError(Craft::t(
+                    'twigpack',
+                    'Manifest file not found at: {manifestPath}',
+                    ['manifestPath' => $manifestPath]
+                ), true);
                 if ($isHot) {
                     // Try again, but not with home module replacement
                     $isHot = false;
                 } else {
-                    $devMode = Craft::$app->getConfig()->getGeneral()->devMode;
-                    if ($devMode) {
-                        // We couldn't find a manifest; throw an error
-                        throw new NotFoundHttpException(
-                            Craft::t(
-                                'twigpack',
-                                'Manifest file not found at: {manifestPath}',
-                                ['manifestPath' => $manifestPath]
-                            )
-                        );
-                    }
-
+                    // Give up and return null
                     return null;
                 }
             }
@@ -247,7 +260,7 @@ EOT;
     protected static function getJsonFileFromUri(string $path)
     {
         // Make sure it's a full URL
-        if (!UrlHelper::isAbsoluteUrl($path)) {
+        if (!UrlHelper::isAbsoluteUrl($path) && !is_file($path)) {
             try {
                 $path = UrlHelper::siteUrl($path);
             } catch (Exception $e) {
@@ -334,5 +347,20 @@ EOT;
         $paths[] = $last;
 
         return implode('/', $paths);
+    }
+
+    /**
+     * @param string $error
+     * @param bool   $soft
+     *
+     * @throws NotFoundHttpException
+     */
+    protected static function reportError(string $error, $soft = false)
+    {
+        $devMode = Craft::$app->getConfig()->getGeneral()->devMode;
+        if ($devMode && !$soft) {
+            throw new NotFoundHttpException($error);
+        }
+        Craft::error($error, __METHOD__);
     }
 }

@@ -153,9 +153,24 @@ You can also include a second optional parameter, to determine whether the CSS s
 This will output:
 
 ```html
-<link rel="preload" href="/css/style.sfkjsf734ashf.css" as="style" onload="this.rel='stylesheet'" />
+<link rel="preload" href="/css/style.sfkjsf734ashf.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
 <noscript><link rel="stylesheet" href="/css/style.sfkjsf734ashf.css"></noscript>
 ```
+
+There is a `link rel=preload` polyfill that you can include on the page via:
+
+`{{ craft.twigpack.includeCssRelPreloadPolyfill() }}`
+
+This will output:
+```html
+<script>
+/*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+!function(t){"use strict";t.loadCSS||(t.loadCSS=function(){});var e=loadCSS.relpreload={};if(e.support=function(){var e;try{e=t.document.createElement("link").relList.supports("preload")}catch(t){e=!1}return function(){return e}}(),e.bindMediaToggle=function(t){var e=t.media||"all";function a(){t.media=e}t.addEventListener?t.addEventListener("load",a):t.attachEvent&&t.attachEvent("onload",a),setTimeout(function(){t.rel="stylesheet",t.media="only x"}),setTimeout(a,3e3)},e.poly=function(){if(!e.support())for(var a=t.document.getElementsByTagName("link"),n=0;n<a.length;n++){var o=a[n];"preload"!==o.rel||"style"!==o.getAttribute("as")||o.getAttribute("data-loadcss")||(o.setAttribute("data-loadcss",!0),e.bindMediaToggle(o))}},!e.support()){e.poly();var a=t.setInterval(e.poly,500);t.addEventListener?t.addEventListener("load",function(){e.poly(),t.clearInterval(a)}):t.attachEvent&&t.attachEvent("onload",function(){e.poly(),t.clearInterval(a)})}"undefined"!=typeof exports?exports.loadCSS=loadCSS:t.loadCSS=loadCSS}("undefined"!=typeof global?global:this);
+</script>
+```
+
+...as per [How To Use loadCSS (Recommended example)
+](https://github.com/filamentgroup/loadCSS#how-to-use-loadcss-recommended-example). You'll want to include this once on the page, after you do `{{ craft.twigpack.includeCssModule("style.css", true) }}`. It's only if you're doing async CSS loading, and need to support older browsers via the polyfill.
 
 ### Including JavaScript
 
@@ -193,7 +208,7 @@ This will output:
 </script>
 ```
 
-...as per the [safari-nomodule.js Gist](https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc). You'll want to include this one on the page, before you do `{{ craft.twigpack.includeJsModule("app.js", true) }}`. It's only necessary if you're using legacy/modern JavaScript bundles.
+...as per the [safari-nomodule.js Gist](https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc). You'll want to include this once on the page, before you do `{{ craft.twigpack.includeJsModule("app.js", true) }}`. It's only necessary if you're using legacy/modern JavaScript bundles.
 
 ### Getting a Module URI
 
