@@ -47,6 +47,17 @@ class Manifest extends Component
     }
 
     /**
+     * Returns the uglified loadCSS rel=preload Polyfill as per:
+     * https://github.com/filamentgroup/loadCSS#how-to-use-loadcss-recommended-example
+     *
+     * @return string
+     */
+    public function getCssRelPreloadPolyfill(): string
+    {
+        return ManifestHelper::getCssRelPreloadPolyfill();
+    }
+
+    /**
      * Return the HTML tags to include the JavaScript module
      *
      * @param string     $moduleName
@@ -67,9 +78,9 @@ class Manifest extends Component
     /**
      * Return the Safari 10.1 nomodule JavaScript fix
      *
-     * @return null|string
+     * @return string
      */
-    public function getSafariNomoduleFix()
+    public function getSafariNomoduleFix(): string
     {
         return ManifestHelper::getSafariNomoduleFix();
     }

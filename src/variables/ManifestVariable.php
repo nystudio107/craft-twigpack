@@ -2,7 +2,8 @@
 /**
  * Twigpack plugin for Craft CMS 3.x
  *
- * Twigpack is the conduit between Twig and webpack, with manifest.json & webpack-dev-server HMR support
+ * Twigpack is the conduit between Twig and webpack, with manifest.json &
+ * webpack-dev-server HMR support
  *
  * @link      https://nystudio107.com/
  * @copyright Copyright (c) 2018 nystudio107
@@ -36,6 +37,19 @@ class ManifestVariable
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getCssModuleTags($moduleName, $async, $config)
+        );
+    }
+
+    /**
+     * Returns the uglified loadCSS rel=preload Polyfill as per:
+     * https://github.com/filamentgroup/loadCSS#how-to-use-loadcss-recommended-example
+     *
+     * @return string
+     */
+    public static function includeCssRelPreloadPolyfill(): string
+    {
+        return Template::raw(
+            Twigpack::$plugin->manifest->getCssRelPreloadPolyfill()
         );
     }
 
@@ -74,9 +88,9 @@ class ManifestVariable
     /**
      * Include the Safari 10.1 nomodule fix JavaScript
      *
-     * @return null|\Twig_Markup
+     * @return \Twig_Markup
      */
-    public function includeSafariNomoduleFix()
+    public function includeSafariNomoduleFix(): \Twig_Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getSafariNomoduleFix()
