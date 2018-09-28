@@ -55,7 +55,7 @@ class Manifest
      */
     public static function getCssModuleTags(array $config, string $moduleName, bool $async)
     {
-        $legacyModule = self::getModule($config, $moduleName, 'legacy');
+        $legacyModule = self::getModule($config, $moduleName, 'legacy', true);
         if ($legacyModule === null) {
             return '';
         }
@@ -151,11 +151,12 @@ EOT;
      * @param array  $config
      * @param string $moduleName
      * @param string $type
+     * @param bool   $soft
      *
      * @return null|string
      * @throws NotFoundHttpException
      */
-    public static function getModule(array $config, string $moduleName, string $type = 'modern')
+    public static function getModule(array $config, string $moduleName, string $type = 'modern', bool $soft = false)
     {
         $module = null;
         // Determine whether we should use the devServer for HMR or not
@@ -165,12 +166,12 @@ EOT;
         $manifest = self::getManifestFile($config, $isHot, $type);
         if ($manifest !== null) {
             // Make sure it exists in the manifest
-            if ($manifest[$moduleName] === null) {
+            if (empty($manifest[$moduleName])) {
                 self::reportError(Craft::t(
                     'twigpack',
                     'Module does not exist in the manifest: {moduleName}',
                     ['moduleName' => $moduleName]
-                ));
+                ), $soft);
 
                 return null;
             }
