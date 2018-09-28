@@ -1,5 +1,10 @@
 # Twigpack Changelog
 
+## 1.0.5 - 2018-09-28
+### Changed
+* Check via `empty()` rather than `!== null` when checking the manifest for module entries
+* CSS module loading generates a soft error now, rather than throwing an `NotFoundHttpException`
+
 ## 1.0.4 - 2018-09-28
 ### Added
 * Added `this.onload=null;` to async CSS link tag
