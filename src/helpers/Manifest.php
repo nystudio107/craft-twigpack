@@ -15,6 +15,7 @@ use Craft;
 use craft\helpers\Json as JsonHelper;
 use craft\helpers\UrlHelper;
 
+use nystudio107\twigpack\Twigpack;
 use yii\base\Exception;
 use yii\caching\TagDependency;
 use yii\web\NotFoundHttpException;
@@ -68,6 +69,41 @@ class Manifest
         }
 
         return implode("\r\n", $lines);
+    }
+
+    /**
+     * @param $path
+     *
+     * @return mixed|string
+     */
+    public static function getCssInlineTags($path)
+    {
+        $result = self::getFile($path);
+        if ($result) {
+            $result = "<style>\r\n" . $result . "</style>\r\n";
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $config
+     * @param       $name
+     *
+     * @return mixed|string
+     */
+    public static function getCriticalCssTags(array $config, $name = null)
+    {
+        // Resolve the template name
+        $template = Craft::$app->getView()->resolveTemplate($name ?? Twigpack::$templateName);
+        if ($template) {
+            $name = pathinfo($template, PATHINFO_FILENAME);
+            $path = self::combinePaths($config['critical']['basePath'], $name).$config['critical']['suffix'];
+
+            return self::getCssInlineTags($path);
+        }
+
+        return '';
     }
 
     /**
@@ -216,7 +252,7 @@ EOT;
                 : $config['server']['manifestPath'];
             // Normalize the path
             $path = self::combinePaths($manifestPath, $config['manifest'][$type]);
-            $manifest = self::getJsonFileFromUri($path);
+            $manifest = self::getJsonFile($path);
             // If the manifest isn't found, and it was hot, fall back on non-hot
             if ($manifest === null) {
                 // We couldn't find a manifest; throw an error
@@ -251,6 +287,18 @@ EOT;
     }
 
     /**
+     * Return the contents of a JSON file from a URI path
+     *
+     * @param string $path
+     *
+     * @return mixed
+     */
+    protected static function getJsonFile(string $path)
+    {
+        return self::getFileFromUri($path, [self::class, 'jsonFileDecode']);
+    }
+
+    /**
      * Invalidate all of the manifest caches
      */
     public static function invalidateCaches()
@@ -264,18 +312,6 @@ EOT;
     // =========================================================================
 
     /**
-     * Return the contents of a JSON file from a URI path
-     *
-     * @param string $path
-     *
-     * @return mixed
-     */
-    protected static function getJsonFileFromUri(string $path)
-    {
-        return self::getFileFromUri($path, [self::class, 'jsonFileDecode']);
-    }
-
-    /**
      * Return the contents of a file from a URI path
      *
      * @param string        $path
@@ -285,6 +321,11 @@ EOT;
      */
     protected static function getFileFromUri(string $path, callable $callback = null)
     {
+        // Resolve any aliases
+        $alias = Craft::getAlias($path, false);
+        if ($alias) {
+            $path = $alias;
+        }
         // Make sure it's a full URL
         if (!UrlHelper::isAbsoluteUrl($path) && !is_file($path)) {
             try {
@@ -398,7 +439,7 @@ EOT;
      *
      * @return mixed
      */
-    private function jsonFileDecode($string)
+    private static function jsonFileDecode($string)
     {
         return JsonHelper::decodeIfJson($string);
     }

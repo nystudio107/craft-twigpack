@@ -19,10 +19,12 @@ use craft\base\Plugin;
 use craft\events\DeleteTemplateCachesEvent;
 use craft\events\PluginEvent;
 use craft\events\RegisterCacheOptionsEvent;
+use craft\events\TemplateEvent;
 use craft\services\Plugins;
 use craft\services\TemplateCaches;
 use craft\utilities\ClearCaches;
 use craft\web\twig\variables\CraftVariable;
+use craft\web\View;
 
 use yii\base\Event;
 
@@ -44,6 +46,11 @@ class Twigpack extends Plugin
      * @var Twigpack
      */
     public static $plugin;
+
+    /**
+     * @var string
+     */
+    public static $templateName;
 
     // Public Properties
     // =========================================================================
@@ -93,6 +100,15 @@ class Twigpack extends Plugin
      */
     protected function installEventListeners()
     {
+        // Remember the name of the currently rendering template
+        // Handler: View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE
+        Event::on(
+            View::class,
+            View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE,
+            function (TemplateEvent $event) {
+                self::$templateName = $event->template;
+            }
+        );
         // Handler: CraftVariable::EVENT_INIT
         Event::on(
             CraftVariable::class,

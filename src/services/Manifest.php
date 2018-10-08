@@ -47,6 +47,32 @@ class Manifest extends Component
     }
 
     /**
+     * Returns the CSS file in $path wrapped in <style></style> tags
+     *
+     * @param $path
+     *
+     * @return mixed|string
+     */
+    public function getCssInlineTags($path)
+    {
+        return ManifestHelper::getCssInlineTags($path);
+    }
+
+    /**
+     * @param array $config
+     * @param       $name
+     *
+     * @return mixed|string
+     */
+    public function getCriticalCssTags($name = null, $config = null)
+    {
+        $settings = Twigpack::$plugin->getSettings();
+        $config = $config ?? $settings->getAttributes();
+
+        return ManifestHelper::getCriticalCssTags($config, $name);
+    }
+
+    /**
      * Returns the uglified loadCSS rel=preload Polyfill as per:
      * https://github.com/filamentgroup/loadCSS#how-to-use-loadcss-recommended-example
      *

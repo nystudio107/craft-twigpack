@@ -24,7 +24,8 @@ class Settings extends Model
     // =========================================================================
 
     /**
-     * @var bool If `devMode` is on, use webpack-dev-server to all for HMR (hot module reloading)
+     * @var bool If `devMode` is on, use webpack-dev-server to all for HMR (hot
+     *      module reloading)
      */
     public $useDevServer = true;
 
@@ -40,8 +41,13 @@ class Settings extends Model
     ];
     // webpack-dev-server config
     public $devServer = [
-        'manifestPath' => 'http://localhost:8080',
+        'manifestPath' => 'http://localhost:8080/',
         'publicPath' => 'http://localhost:8080/',
+    ];
+    // Critical CSS config
+    public $critical = [
+        'basePath' => '@webroot/dist/css/critical/',
+        'suffix' => '_critical.min.css',
     ];
 
     // Public Methods
@@ -60,9 +66,10 @@ class Settings extends Model
                     'manifest',
                     'server',
                     'devServer',
+                    'critical',
                 ],
                 'each',
-                'rule' => ['string']
+                'rule' => ['string'],
             ],
         ];
     }

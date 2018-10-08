@@ -41,6 +41,35 @@ class ManifestVariable
     }
 
     /**
+     * Returns the CSS file in $path wrapped in <style></style> tags
+     *
+     * @param $path
+     *
+     * @return mixed|string
+     */
+    public function includeInlineCssTags($path)
+    {
+        return Template::raw(
+            Twigpack::$plugin->manifest->getCssInlineTags($path)
+        );
+    }
+
+    /**
+     * Returns the Critical CSS file for $template wrapped in <style></style> tags
+     *
+     * @param $name
+     * @param null|array $config
+     *
+     * @return mixed|string
+     */
+    public function includeCriticalCssTags($name = null, $config = null)
+    {
+        return Template::raw(
+            Twigpack::$plugin->manifest->getCriticalCssTags($name, $config)
+        );
+    }
+
+    /**
      * Returns the uglified loadCSS rel=preload Polyfill as per:
      * https://github.com/filamentgroup/loadCSS#how-to-use-loadcss-recommended-example
      *
