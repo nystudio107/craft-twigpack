@@ -239,6 +239,18 @@ EOT;
     }
 
     /**
+     * Returns the contents of a file from a URI path
+     *
+     * @param string $path
+     *
+     * @return mixed
+     */
+    public static function getFile($path)
+    {
+        return self::getFileFromUri($path, null);
+    }
+
+    /**
      * Invalidate all of the manifest caches
      */
     public static function invalidateCaches()
@@ -252,13 +264,26 @@ EOT;
     // =========================================================================
 
     /**
-     * Return the contents of a file from a URI path
+     * Return the contents of a JSON file from a URI path
      *
      * @param string $path
      *
      * @return mixed
      */
     protected static function getJsonFileFromUri(string $path)
+    {
+        return self::getFileFromUri($path, [self::class, 'jsonFileDecode']);
+    }
+
+    /**
+     * Return the contents of a file from a URI path
+     *
+     * @param string        $path
+     * @param callable|null $callback
+     *
+     * @return mixed
+     */
+    protected static function getFileFromUri(string $path, callable $callback = null)
     {
         // Make sure it's a full URL
         if (!UrlHelper::isAbsoluteUrl($path) && !is_file($path)) {
@@ -269,17 +294,18 @@ EOT;
             }
         }
 
-        return self::getJsonFileContents($path);
+        return self::getFileContents($path, $callback);
     }
 
     /**
      * Return the contents of a file from the passed in path
      *
-     * @param string $path
+     * @param string   $path
+     * @param callable $callback
      *
      * @return mixed
      */
-    protected static function getJsonFileContents(string $path)
+    protected static function getFileContents(string $path, callable $callback = null)
     {
         // Return the memoized manifest if it exists
         if (!empty(self::$files[$path])) {
@@ -300,11 +326,10 @@ EOT;
         $cache = Craft::$app->getCache();
         $file = $cache->getOrSet(
             self::CACHE_KEY.$path,
-            function () use ($path) {
-                $result = null;
-                $string = @file_get_contents($path);
-                if ($string) {
-                    $result = JsonHelper::decodeIfJson($string);
+            function () use ($path, $callback) {
+                $result = @file_get_contents($path);
+                if ($result && $callback) {
+                    $result = $callback($result);
                 }
 
                 return $result;
@@ -363,5 +388,18 @@ EOT;
             throw new NotFoundHttpException($error);
         }
         Craft::error($error, __METHOD__);
+    }
+
+    // Private Static Methods
+    // =========================================================================
+
+    /**
+     * @param $string
+     *
+     * @return mixed
+     */
+    private function jsonFileDecode($string)
+    {
+        return JsonHelper::decodeIfJson($string);
     }
 }
