@@ -93,10 +93,10 @@ return [
   * **legacy** - the name of your legacy manifest file
   * **modern** - the name of your modern manifest file
  * **server** - is an array with `manifestPath` and `publicPath` keys:
-   * **manifestPath** - the public server path to your manifest files; it can be a full URL or a partial path.  This is usually the same as whatever you set your webpack `output.publicPath` to
+   * **manifestPath** - the public server path to your manifest files; it can be a full URL or a partial path, or a Yii2 alias.  This is usually the same as whatever you set your webpack `output.publicPath` to
    * **publicPath** - the public server path to your asset files; it can be a full URL or a partial path. This is usually the same as whatever you set your webpack `output.publicPath` to
  * **devServer** - is an array with `manifestPath` and `publicPath` keys:
-   * **manifestPath** - the devServer path to your manifest files; it can be a full URL or a partial path.  This is usually the same as whatever you set your webpack `devServer.publicPath` to
+   * **manifestPath** - the devServer path to your manifest files; it can be a full URL or a partial path, or a Yii2 alias.  This is usually the same as whatever you set your webpack `devServer.publicPath` to
    * **publicPath** - the devServer path to your asset files; it can be a full URL or a partial path. This is usually the same as whatever you set your webpack `output.publicPath` to
 
 Note that the `manifest.json` is loaded server-side via PHP, so if you're using a VM such as Homestead, the **manifestPath** may be different from the  **publicPath**.
