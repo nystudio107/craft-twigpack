@@ -2,7 +2,7 @@
     "name": "nystudio107/craft-twigpack",
     "description": "Twigpack is a bridge between Twig and webpack, with manifest.json & webpack-dev-server HMR support",
     "type": "craft-plugin",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "keywords": [
         "craftcms",
         "craft-plugin",
