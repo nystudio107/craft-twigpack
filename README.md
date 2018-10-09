@@ -73,6 +73,11 @@ return [
             'manifestPath' => 'http://localhost:8080/',
             'publicPath' => 'http://localhost:8080/',
         ],
+        // Critical CSS config
+        'critical' => [
+            'basePath' => '@webroot/dist/critical/',
+            'suffix' => '_critical.min.css',
+        ],
     ],
     // Live (production) environment
     'live' => [
@@ -98,6 +103,9 @@ return [
  * **devServer** - is an array with `manifestPath` and `publicPath` keys:
    * **manifestPath** - the devServer path to your manifest files; it can be a full URL or a partial path, or a Yii2 alias.  This is usually the same as whatever you set your webpack `devServer.publicPath` to
    * **publicPath** - the devServer path to your asset files; it can be a full URL or a partial path. This is usually the same as whatever you set your webpack `output.publicPath` to
+ * **critical** - is an array with `basePath` and `suffix` keys:
+   * **basePath** - the file system path or Yii2 alias to where your generated Critical CSS files are stored
+   * **suffix** - the suffix added to the name of the currently rendering template for the critical css file name
 
 Note that the `manifest.json` is loaded server-side via PHP, so if you're using a VM such as Homestead, the **manifestPath** may be different from the  **publicPath**.
 
