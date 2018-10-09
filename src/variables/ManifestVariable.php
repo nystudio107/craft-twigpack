@@ -30,10 +30,10 @@ class ManifestVariable
      * @param bool       $async
      * @param null|array $config
      *
-     * @return null|\Twig_Markup
+     * @return \Twig_Markup
      * @throws \yii\web\NotFoundHttpException
      */
-    public function includeCssModule(string $moduleName, bool $async = false, $config = null)
+    public function includeCssModule(string $moduleName, bool $async = false, $config = null): \Twig_Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getCssModuleTags($moduleName, $async, $config)
@@ -45,9 +45,9 @@ class ManifestVariable
      *
      * @param string $path
      *
-     * @return mixed|string
+     * @return string
      */
-    public function includeInlineCssTags(string $path)
+    public function includeInlineCssTags(string $path): \Twig_Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getCssInlineTags($path)
@@ -60,9 +60,9 @@ class ManifestVariable
      * @param null|string $name
      * @param null|array $config
      *
-     * @return mixed|string
+     * @return \Twig_Markup
      */
-    public function includeCriticalCssTags($name = null, $config = null)
+    public function includeCriticalCssTags($name = null, $config = null): \Twig_Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getCriticalCssTags($name, $config)
@@ -73,9 +73,9 @@ class ManifestVariable
      * Returns the uglified loadCSS rel=preload Polyfill as per:
      * https://github.com/filamentgroup/loadCSS#how-to-use-loadcss-recommended-example
      *
-     * @return string
+     * @return \Twig_Markup
      */
-    public static function includeCssRelPreloadPolyfill(): string
+    public static function includeCssRelPreloadPolyfill(): \Twig_Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getCssRelPreloadPolyfill()

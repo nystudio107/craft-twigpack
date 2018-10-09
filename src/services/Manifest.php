@@ -35,10 +35,10 @@ class Manifest extends Component
      * @param bool       $async
      * @param null|array $config
      *
-     * @return null|string
+     * @return string
      * @throws \yii\web\NotFoundHttpException
      */
-    public function getCssModuleTags(string $moduleName, bool $async = false, $config = null)
+    public function getCssModuleTags(string $moduleName, bool $async = false, $config = null): string
     {
         $settings = Twigpack::$plugin->getSettings();
         $config = $config ?? $settings->getAttributes();
@@ -51,9 +51,9 @@ class Manifest extends Component
      *
      * @param $path
      *
-     * @return mixed|string
+     * @return string
      */
-    public function getCssInlineTags(string $path)
+    public function getCssInlineTags(string $path): string
     {
         return ManifestHelper::getCssInlineTags($path);
     }
@@ -62,9 +62,9 @@ class Manifest extends Component
      * @param array $config
      * @param null|string $name
      *
-     * @return mixed|string
+     * @return string
      */
-    public function getCriticalCssTags($name = null, $config = null)
+    public function getCriticalCssTags($name = null, $config = null): string
     {
         $settings = Twigpack::$plugin->getSettings();
         $config = $config ?? $settings->getAttributes();
@@ -123,6 +123,9 @@ class Manifest extends Component
      */
     public function getModule(string $moduleName, string $type = 'modern', $config = null)
     {
+        $settings = Twigpack::$plugin->getSettings();
+        $config = $config ?? $settings->getAttributes();
+
         return ManifestHelper::getModule($config, $moduleName, $type);
     }
 
@@ -131,9 +134,9 @@ class Manifest extends Component
      *
      * @param string $path
      *
-     * @return mixed
+     * @return string
      */
-    public function getFile(string $path)
+    public function getFile(string $path): string
     {
         return ManifestHelper::getFile($path);
     }

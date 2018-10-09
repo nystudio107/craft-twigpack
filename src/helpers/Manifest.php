@@ -43,6 +43,11 @@ class Manifest
      */
     protected static $files;
 
+    /**
+     * @var bool
+     */
+    protected static $isHot = false;
+
     // Public Static Methods
     // =========================================================================
 
@@ -51,10 +56,10 @@ class Manifest
      * @param string $moduleName
      * @param bool   $async
      *
-     * @return null|string
+     * @return string
      * @throws NotFoundHttpException
      */
-    public static function getCssModuleTags(array $config, string $moduleName, bool $async)
+    public static function getCssModuleTags(array $config, string $moduleName, bool $async): string
     {
         $legacyModule = self::getModule($config, $moduleName, 'legacy', true);
         if ($legacyModule === null) {
@@ -74,30 +79,40 @@ class Manifest
     /**
      * @param string $path
      *
-     * @return mixed|string
+     * @return string
      */
-    public static function getCssInlineTags(string $path)
+    public static function getCssInlineTags(string $path): string
     {
         $result = self::getFile($path);
         if ($result) {
             $result = "<style>\r\n".$result."</style>\r\n";
+            return $result;
         }
 
-        return $result;
+        return '';
     }
 
     /**
      * @param array       $config
      * @param null|string $name
      *
-     * @return mixed|string
+     * @return string
      */
-    public static function getCriticalCssTags(array $config, $name = null)
+    public static function getCriticalCssTags(array $config, $name = null): string
     {
         // Resolve the template name
         $template = Craft::$app->getView()->resolveTemplate($name ?? Twigpack::$templateName);
         if ($template) {
-            $name = pathinfo($template, PATHINFO_FILENAME);
+            $name = self::combinePaths(
+                pathinfo($template, PATHINFO_DIRNAME),
+                pathinfo($template, PATHINFO_FILENAME)
+            );
+            $dirPrefix = 'templates/';
+            if (\defined('CRAFT_TEMPLATES_PATH')) {
+                $dirPrefix = CRAFT_TEMPLATES_PATH;
+            }
+            $name = strstr($name, $dirPrefix);
+            $name = str_replace($dirPrefix, '', $name);
             $path = self::combinePaths($config['critical']['basePath'], $name).$config['critical']['suffix'];
 
             return self::getCssInlineTags($path);
@@ -194,33 +209,23 @@ EOT;
      */
     public static function getModule(array $config, string $moduleName, string $type = 'modern', bool $soft = false)
     {
-        $module = null;
-        // Determine whether we should use the devServer for HMR or not
-        $devMode = Craft::$app->getConfig()->getGeneral()->devMode;
-        $isHot = ($devMode && $config['useDevServer']);
-        // Get the manifest file
-        $manifest = self::getManifestFile($config, $isHot, $type);
-        if ($manifest !== null) {
-            // Make sure it exists in the manifest
-            if (empty($manifest[$moduleName])) {
-                self::reportError(Craft::t(
-                    'twigpack',
-                    'Module does not exist in the manifest: {moduleName}',
-                    ['moduleName' => $moduleName]
-                ), $soft);
-
-                return null;
-            }
-            $module = $manifest[$moduleName];
-            $prefix = $isHot
+        // Get the module entry
+        $module = self::getModuleEntry($config, $moduleName, $type, $soft);
+        if ($module !== null) {
+            $prefix = self::$isHot
                 ? $config['devServer']['publicPath']
                 : $config['server']['publicPath'];
             // If the module isn't a full URL, prefix it
             if (!UrlHelper::isAbsoluteUrl($module)) {
                 $module = self::combinePaths($prefix, $module);
             }
+            // Resolve any aliases
+            $alias = Craft::getAlias($module, false);
+            if ($alias) {
+                $module = $alias;
+            }
             // Make sure it's a full URL
-            if (!UrlHelper::isAbsoluteUrl($module)) {
+            if (!UrlHelper::isAbsoluteUrl($module) && !is_file($module)) {
                 try {
                     $module = UrlHelper::siteUrl($module);
                 } catch (Exception $e) {
@@ -233,21 +238,56 @@ EOT;
     }
 
     /**
+     * Return a module's raw entry from the manifest
+     *
+     * @param array  $config
+     * @param string $moduleName
+     * @param string $type
+     * @param bool   $soft
+     *
+     * @return null|string
+     * @throws NotFoundHttpException
+     */
+    public static function getModuleEntry(array $config, string $moduleName, string $type = 'modern', bool $soft = false)
+    {
+        $module = null;
+        // Get the manifest file
+        $manifest = self::getManifestFile($config, $type);
+        if ($manifest !== null) {
+            // Make sure it exists in the manifest
+            if (empty($manifest[$moduleName])) {
+                self::reportError(Craft::t(
+                    'twigpack',
+                    'Module does not exist in the manifest: {moduleName}',
+                    ['moduleName' => $moduleName]
+                ), $soft);
+
+                return null;
+            }
+            $module = $manifest[$moduleName];
+        }
+
+        return $module;
+    }
+
+    /**
      * Return a JSON-decoded manifest file
      *
      * @param array  $config
-     * @param bool   $isHot
      * @param string $type
      *
      * @return null|array
      * @throws NotFoundHttpException
      */
-    public static function getManifestFile(array $config, bool &$isHot, string $type = 'modern')
+    public static function getManifestFile(array $config, string $type = 'modern')
     {
         $manifest = null;
+        // Determine whether we should use the devServer for HMR or not
+        $devMode = Craft::$app->getConfig()->getGeneral()->devMode;
+        self::$isHot = ($devMode && $config['useDevServer']);
         // Try to get the manifest
         while ($manifest === null) {
-            $manifestPath = $isHot
+            $manifestPath = self::$isHot
                 ? $config['devServer']['manifestPath']
                 : $config['server']['manifestPath'];
             // Normalize the path
@@ -261,9 +301,9 @@ EOT;
                     'Manifest file not found at: {manifestPath}',
                     ['manifestPath' => $manifestPath]
                 ), true);
-                if ($isHot) {
+                if (self::$isHot) {
                     // Try again, but not with home module replacement
-                    $isHot = false;
+                    self::$isHot = false;
                 } else {
                     // Give up and return null
                     return null;
@@ -279,11 +319,11 @@ EOT;
      *
      * @param string $path
      *
-     * @return mixed
+     * @return string
      */
-    public static function getFile(string $path)
+    public static function getFile(string $path): string
     {
-        return self::getFileFromUri($path, null);
+        return self::getFileFromUri($path, null) ?? '';
     }
 
     /**
@@ -291,7 +331,7 @@ EOT;
      *
      * @param string $path
      *
-     * @return mixed
+     * @return null|array
      */
     protected static function getJsonFile(string $path)
     {
@@ -317,7 +357,7 @@ EOT;
      * @param string        $path
      * @param callable|null $callback
      *
-     * @return mixed
+     * @return null|mixed
      */
     protected static function getFileFromUri(string $path, callable $callback = null)
     {
@@ -344,7 +384,7 @@ EOT;
      * @param string   $path
      * @param callable $callback
      *
-     * @return mixed
+     * @return null|mixed
      */
     protected static function getFileContents(string $path, callable $callback = null)
     {
@@ -368,9 +408,13 @@ EOT;
         $file = $cache->getOrSet(
             self::CACHE_KEY.$path,
             function () use ($path, $callback) {
-                $result = @file_get_contents($path);
-                if ($result && $callback) {
-                    $result = $callback($result);
+                $result = null;
+                $contents = @file_get_contents($path);
+                if ($contents) {
+                    $result = $contents;
+                    if ($callback) {
+                        $result = $callback($result);
+                    }
                 }
 
                 return $result;
