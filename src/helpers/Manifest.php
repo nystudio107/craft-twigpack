@@ -72,23 +72,23 @@ class Manifest
     }
 
     /**
-     * @param $path
+     * @param string $path
      *
      * @return mixed|string
      */
-    public static function getCssInlineTags($path)
+    public static function getCssInlineTags(string $path)
     {
         $result = self::getFile($path);
         if ($result) {
-            $result = "<style>\r\n" . $result . "</style>\r\n";
+            $result = "<style>\r\n".$result."</style>\r\n";
         }
 
         return $result;
     }
 
     /**
-     * @param array $config
-     * @param       $name
+     * @param array       $config
+     * @param null|string $name
      *
      * @return mixed|string
      */
@@ -281,7 +281,7 @@ EOT;
      *
      * @return mixed
      */
-    public static function getFile($path)
+    public static function getFile(string $path)
     {
         return self::getFileFromUri($path, null);
     }

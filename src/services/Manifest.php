@@ -53,14 +53,14 @@ class Manifest extends Component
      *
      * @return mixed|string
      */
-    public function getCssInlineTags($path)
+    public function getCssInlineTags(string $path)
     {
         return ManifestHelper::getCssInlineTags($path);
     }
 
     /**
      * @param array $config
-     * @param       $name
+     * @param null|string $name
      *
      * @return mixed|string
      */
@@ -124,6 +124,18 @@ class Manifest extends Component
     public function getModule(string $moduleName, string $type = 'modern', $config = null)
     {
         return ManifestHelper::getModule($config, $moduleName, $type);
+    }
+
+    /**
+     * Returns the contents of a file from a URI path
+     *
+     * @param string $path
+     *
+     * @return mixed
+     */
+    public function getFile(string $path)
+    {
+        return ManifestHelper::getFile($path);
     }
 
     /**

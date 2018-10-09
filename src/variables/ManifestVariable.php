@@ -43,11 +43,11 @@ class ManifestVariable
     /**
      * Returns the CSS file in $path wrapped in <style></style> tags
      *
-     * @param $path
+     * @param string $path
      *
      * @return mixed|string
      */
-    public function includeInlineCssTags($path)
+    public function includeInlineCssTags(string $path)
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getCssInlineTags($path)
@@ -57,7 +57,7 @@ class ManifestVariable
     /**
      * Returns the Critical CSS file for $template wrapped in <style></style> tags
      *
-     * @param $name
+     * @param null|string $name
      * @param null|array $config
      *
      * @return mixed|string
@@ -123,6 +123,20 @@ class ManifestVariable
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getSafariNomoduleFix()
+        );
+    }
+
+    /**
+     * Returns the contents of a file from a URI path
+     *
+     * @param string $path
+     *
+     * @return \Twig_Markup
+     */
+    public function includeFile(string $path): \Twig_Markup
+    {
+        return Template::raw(
+            Twigpack::$plugin->manifest->getFile($path)
         );
     }
 }
