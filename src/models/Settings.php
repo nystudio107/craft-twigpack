@@ -44,10 +44,11 @@ class Settings extends Model
         'manifestPath' => 'http://localhost:8080/',
         'publicPath' => 'http://localhost:8080/',
     ];
-    // Critical CSS config
-    public $critical = [
-        'basePath' => '@webroot/dist/css/critical/',
-        'suffix' => '_critical.min.css',
+    // Local files config
+    public $localFiles = [
+        'basePath' => '@webroot/',
+        'criticalPrefix' => 'dist/criticalcss/',
+        'criticalSuffix' => '_critical.min.css',
     ];
 
     // Public Methods
@@ -66,7 +67,7 @@ class Settings extends Model
                     'manifest',
                     'server',
                     'devServer',
-                    'critical',
+                    'localFiles',
                 ],
                 'each',
                 'rule' => ['string'],

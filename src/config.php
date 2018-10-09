@@ -43,10 +43,11 @@ return [
             'manifestPath' => 'http://localhost:8080/',
             'publicPath' => 'http://localhost:8080/',
         ],
-        // Critical CSS config
-        'critical' => [
-            'basePath' => '@webroot/dist/critical/',
-            'suffix' => '_critical.min.css',
+        // Local files config
+        'localFiles' => [
+            'basePath' => '@webroot/',
+            'criticalPrefix' => 'dist/criticalcss/',
+            'criticalSuffix' => '_critical.min.css',
         ],
     ],
     // Live (production) environment
