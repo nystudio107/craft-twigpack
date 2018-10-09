@@ -331,6 +331,32 @@ EOT;
     }
 
     /**
+     * @param array  $config
+     * @param string $fileName
+     * @param string $type
+     *
+     * @return string
+     */
+    public static function getFileFromManifest(array $config, string $fileName, string $type = 'legacy'): string
+    {
+        try {
+            $path = self::getModuleEntry($config, $fileName, $type, true);
+        } catch (NotFoundHttpException $e) {
+            Craft::error($e->getMessage(), __METHOD__);
+        }
+        if ($path !== null) {
+            $path = self::combinePaths(
+                    $config['localFiles']['basePath'],
+                    $path
+                );
+
+            return self::getFileFromUri($path, null) ?? '';
+        }
+
+        return '';
+    }
+
+    /**
      * Return the contents of a JSON file from a URI path
      *
      * @param string $path

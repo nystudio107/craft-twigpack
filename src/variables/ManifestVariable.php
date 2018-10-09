@@ -139,4 +139,20 @@ class ManifestVariable
             Twigpack::$plugin->manifest->getFile($path)
         );
     }
+
+    /**
+     * Returns the contents of a file from the $fileName in the manifest
+     *
+     * @param string $fileName
+     * @param string $type
+     * @param null   $config
+     *
+     * @return \Twig_Markup
+     */
+    public function includeFileFromManifest(string $fileName, string $type = 'legacy', $config = null): \Twig_Markup
+    {
+        return Template::raw(
+            Twigpack::$plugin->manifest->getFileFromManifest($fileName, $type, $config)
+        );
+    }
 }

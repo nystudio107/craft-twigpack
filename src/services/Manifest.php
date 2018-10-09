@@ -142,6 +142,23 @@ class Manifest extends Component
     }
 
     /**
+     * Returns the contents of a file from the $fileName in the manifest
+     *
+     * @param string $fileName
+     * @param string $type
+     * @param null   $config
+     *
+     * @return string
+     */
+    public function getFileFromManifest(string $fileName, string $type = 'legacy',  $config = null): string
+    {
+        $settings = Twigpack::$plugin->getSettings();
+        $config = $config ?? $settings->getAttributes();
+
+        return ManifestHelper::getFileFromManifest($config, $fileName, $type);
+    }
+
+    /**
      * Invalidate the manifest cache
      */
     public function invalidateCaches()
