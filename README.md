@@ -28,7 +28,7 @@ You can also install Twigpack via the **Plugin Store** in the Craft AdminCP.
 
 ## Twigpack Overview
 
-Twigpack is a bridge between Twig and webpack, with `manifest.json` & [webpack-dev-server](https://github.com/webpack/webpack-dev-server) hot module replacement (HMR) support.
+Twigpack is a bridge between Twig and webpack, with `manifest.json` & [webpack-dev-server](https://github.com/webpack/webpack-dev-server) hot module replacement (HMR) support. It also works with Laravel Mix, vue-cli, or anything else that is a layer on top of webpack.
  
  Twigpack supports both modern and legacy bundle builds, as per the [Deploying ES2015+ Code in Production Today](https://philipwalton.com/articles/deploying-es2015-code-in-production-today/) article.
  
