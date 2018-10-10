@@ -35,15 +35,41 @@ class Manifest extends Component
      * @param bool       $async
      * @param null|array $config
      *
-     * @return null|string
+     * @return string
      * @throws \yii\web\NotFoundHttpException
      */
-    public function getCssModuleTags(string $moduleName, bool $async = false, $config = null)
+    public function getCssModuleTags(string $moduleName, bool $async = false, $config = null): string
     {
         $settings = Twigpack::$plugin->getSettings();
         $config = $config ?? $settings->getAttributes();
 
         return ManifestHelper::getCssModuleTags($config, $moduleName, $async);
+    }
+
+    /**
+     * Returns the CSS file in $path wrapped in <style></style> tags
+     *
+     * @param $path
+     *
+     * @return string
+     */
+    public function getCssInlineTags(string $path): string
+    {
+        return ManifestHelper::getCssInlineTags($path);
+    }
+
+    /**
+     * @param array $config
+     * @param null|string $name
+     *
+     * @return string
+     */
+    public function getCriticalCssTags($name = null, $config = null): string
+    {
+        $settings = Twigpack::$plugin->getSettings();
+        $config = $config ?? $settings->getAttributes();
+
+        return ManifestHelper::getCriticalCssTags($config, $name);
     }
 
     /**
@@ -97,7 +123,39 @@ class Manifest extends Component
      */
     public function getModule(string $moduleName, string $type = 'modern', $config = null)
     {
+        $settings = Twigpack::$plugin->getSettings();
+        $config = $config ?? $settings->getAttributes();
+
         return ManifestHelper::getModule($config, $moduleName, $type);
+    }
+
+    /**
+     * Returns the contents of a file from a URI path
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function getFile(string $path): string
+    {
+        return ManifestHelper::getFile($path);
+    }
+
+    /**
+     * Returns the contents of a file from the $fileName in the manifest
+     *
+     * @param string $fileName
+     * @param string $type
+     * @param null   $config
+     *
+     * @return string
+     */
+    public function getFileFromManifest(string $fileName, string $type = 'legacy',  $config = null): string
+    {
+        $settings = Twigpack::$plugin->getSettings();
+        $config = $config ?? $settings->getAttributes();
+
+        return ManifestHelper::getFileFromManifest($config, $fileName, $type);
     }
 
     /**

@@ -30,10 +30,10 @@ class ManifestVariable
      * @param bool       $async
      * @param null|array $config
      *
-     * @return null|\Twig_Markup
+     * @return \Twig_Markup
      * @throws \yii\web\NotFoundHttpException
      */
-    public function includeCssModule(string $moduleName, bool $async = false, $config = null)
+    public function includeCssModule(string $moduleName, bool $async = false, $config = null): \Twig_Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getCssModuleTags($moduleName, $async, $config)
@@ -41,12 +41,41 @@ class ManifestVariable
     }
 
     /**
-     * Returns the uglified loadCSS rel=preload Polyfill as per:
-     * https://github.com/filamentgroup/loadCSS#how-to-use-loadcss-recommended-example
+     * Returns the CSS file in $path wrapped in <style></style> tags
+     *
+     * @param string $path
      *
      * @return string
      */
-    public static function includeCssRelPreloadPolyfill(): string
+    public function includeInlineCssTags(string $path): \Twig_Markup
+    {
+        return Template::raw(
+            Twigpack::$plugin->manifest->getCssInlineTags($path)
+        );
+    }
+
+    /**
+     * Returns the Critical CSS file for $template wrapped in <style></style> tags
+     *
+     * @param null|string $name
+     * @param null|array $config
+     *
+     * @return \Twig_Markup
+     */
+    public function includeCriticalCssTags($name = null, $config = null): \Twig_Markup
+    {
+        return Template::raw(
+            Twigpack::$plugin->manifest->getCriticalCssTags($name, $config)
+        );
+    }
+
+    /**
+     * Returns the uglified loadCSS rel=preload Polyfill as per:
+     * https://github.com/filamentgroup/loadCSS#how-to-use-loadcss-recommended-example
+     *
+     * @return \Twig_Markup
+     */
+    public static function includeCssRelPreloadPolyfill(): \Twig_Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getCssRelPreloadPolyfill()
@@ -94,6 +123,36 @@ class ManifestVariable
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getSafariNomoduleFix()
+        );
+    }
+
+    /**
+     * Returns the contents of a file from a URI path
+     *
+     * @param string $path
+     *
+     * @return \Twig_Markup
+     */
+    public function includeFile(string $path): \Twig_Markup
+    {
+        return Template::raw(
+            Twigpack::$plugin->manifest->getFile($path)
+        );
+    }
+
+    /**
+     * Returns the contents of a file from the $fileName in the manifest
+     *
+     * @param string $fileName
+     * @param string $type
+     * @param null   $config
+     *
+     * @return \Twig_Markup
+     */
+    public function includeFileFromManifest(string $fileName, string $type = 'legacy', $config = null): \Twig_Markup
+    {
+        return Template::raw(
+            Twigpack::$plugin->manifest->getFileFromManifest($fileName, $type, $config)
         );
     }
 }
