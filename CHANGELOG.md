@@ -1,11 +1,12 @@
 # Twigpack Changelog
 
-## 1.0.6 - 2018-10-08
+## 1.1.0 - 2018-10-09
 ### Added
 * Strings passed in to `manifestPath` can now be Yii2 aliases as well
+* Added `craft.twigpack.includeFile()`
+* Added `craft.twigpack.includeFileFromManifest()`
 * Added `craft.twigpack.includeInlineCssTags()`
 * Added `craft.twigpack.includeCriticalCssTags()`
-* Added `craft.twigpack.includeFile()`
 
 ## 1.0.5 - 2018-09-28
 ### Changed
