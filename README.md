@@ -229,7 +229,7 @@ This will output:
 
 You normally shouldn't need to get a JavaScript/CSS module's URI directly, but you can do so via:
 
-`{{ craft.twigpack.getModule("app.js") }}`
+`{{ craft.twigpack.getModuleUri("app.js") }}`
 
 This will output:
 
@@ -239,7 +239,7 @@ This will output:
 
 The same works for CSS:
 
-`{{ craft.twigpack.getModule("style.css") }}`
+`{{ craft.twigpack.getModuleUri("style.css") }}`
 
 This will output:
 
