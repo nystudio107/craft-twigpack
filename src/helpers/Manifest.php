@@ -152,12 +152,12 @@ EOT;
      */
     public static function getJsModuleTags(array $config, string $moduleName, bool $async)
     {
-        $legacyModule = self::getModule($config, $moduleName, 'legacy');
+        $legacyModule = self::getModule($config, $moduleName, 'legacy', true);
         if ($legacyModule === null) {
             return '';
         }
         if ($async) {
-            $modernModule = self::getModule($config, $moduleName, 'modern');
+            $modernModule = self::getModule($config, $moduleName, 'modern', true);
             if ($modernModule === null) {
                 return '';
             }
