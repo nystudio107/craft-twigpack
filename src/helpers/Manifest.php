@@ -86,6 +86,7 @@ class Manifest
         $result = self::getFile($path);
         if ($result) {
             $result = "<style>\r\n".$result."</style>\r\n";
+
             return $result;
         }
 
@@ -114,10 +115,10 @@ class Manifest
             $name = strstr($name, $dirPrefix);
             $name = str_replace($dirPrefix, '', $name);
             $path = self::combinePaths(
-                $config['localFiles']['basePath'],
-                $config['localFiles']['criticalPrefix'],
-                $name
-            ).$config['localFiles']['criticalSuffix'];
+                    $config['localFiles']['basePath'],
+                    $config['localFiles']['criticalPrefix'],
+                    $name
+                ).$config['localFiles']['criticalSuffix'];
 
             return self::getCssInlineTags($path);
         }
@@ -346,14 +347,24 @@ EOT;
         }
         if ($path !== null) {
             $path = self::combinePaths(
-                    $config['localFiles']['basePath'],
-                    $path
-                );
+                $config['localFiles']['basePath'],
+                $path
+            );
 
             return self::getFileFromUri($path, null) ?? '';
         }
 
         return '';
+    }
+
+    /**
+     * Invalidate all of the manifest caches
+     */
+    public static function invalidateCaches()
+    {
+        $cache = Craft::$app->getCache();
+        TagDependency::invalidate($cache, self::CACHE_TAG);
+        Craft::info('All manifest caches cleared', __METHOD__);
     }
 
     /**
@@ -366,16 +377,6 @@ EOT;
     protected static function getJsonFile(string $path)
     {
         return self::getFileFromUri($path, [self::class, 'jsonFileDecode']);
-    }
-
-    /**
-     * Invalidate all of the manifest caches
-     */
-    public static function invalidateCaches()
-    {
-        $cache = Craft::$app->getCache();
-        TagDependency::invalidate($cache, self::CACHE_TAG);
-        Craft::info('All manifest caches cleared', __METHOD__);
     }
 
     // Protected Static Methods
@@ -439,7 +440,26 @@ EOT;
             self::CACHE_KEY.$path,
             function () use ($path, $callback) {
                 $result = null;
-                $contents = @file_get_contents($path);
+                if (UrlHelper::isAbsoluteUrl($path)) {
+                    /**
+                     * Silly work-around for what appears to be a file_get_contents bug with https
+                     * http://stackoverflow.com/questions/10524748/why-im-getting-500-error-when-using-file-get-contents-but-works-in-a-browser
+                     */
+                    $opts = [
+                        'ssl' => [
+                            'verify_peer' => false,
+                            'verify_peer_name' => false,
+                        ],
+                        'http' => [
+                            'ignore_errors' => true,
+                            'header' => "User-Agent:Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13\r\n",
+                        ],
+                    ];
+                    $context = stream_context_create($opts);
+                    $contents = @file_get_contents($path, false, $context);
+                } else {
+                    $contents = @file_get_contents($path);
+                }
                 if ($contents) {
                     $result = $contents;
                     if ($callback) {
