@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.1.1 - 2018-10-16
+### Changed
+* Fixed an issue where if the `manifest.json` was served remotely via https, Twigpack was unable to load it
+
 ## 1.1.0 - 2018-10-09
 ### Added
 * Strings passed in to `manifestPath` can now be Yii2 aliases as well
