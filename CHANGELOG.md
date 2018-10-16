@@ -3,6 +3,7 @@
 ## 1.1.1 - 2018-10-16
 ### Changed
 * Fixed an issue where if the `manifest.json` was served remotely via https, Twigpack was unable to load it
+* Made all errors "soft" for missing CSS/JS modules, so a warning will be logged, but life continues on
 
 ## 1.1.0 - 2018-10-09
 ### Added
