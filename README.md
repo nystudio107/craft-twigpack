@@ -6,6 +6,8 @@ Twigpack is a bridge between Twig and webpack, with manifest.json & webpack-dev-
 
 ![Screenshot](resources/img/plugin-logo.png)
 
+Related Article: [An Annotated webpack 4 Config for Frontend Web Development](https://nystudio107.com/blog/an-annotated-webpack-4-config-for-frontend-web-development)
+
 ## Requirements
 
 This plugin requires Craft CMS 3.0.0 or later.
