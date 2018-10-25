@@ -29,22 +29,38 @@ class Settings extends Model
      */
     public $useDevServer = true;
 
-    // Manifest file names
+    /**
+     * @var string The JavaScript entry from the manifest.json to inject on Twig error pages
+     */
+    public $errorEntry = '';
+
+    /**
+     * @var array Manifest file names
+     */
     public $manifest = [
         'legacy' => 'manifest-legacy.json',
         'modern' => 'manifest.json',
     ];
-    // Public server config
+
+    /**
+     * @var array Public server config
+     */
     public $server = [
         'manifestPath' => '/',
         'publicPath' => '/',
     ];
-    // webpack-dev-server config
+
+    /**
+     * @var array webpack-dev-server config
+     */
     public $devServer = [
         'manifestPath' => 'http://localhost:8080/',
         'publicPath' => 'http://localhost:8080/',
     ];
-    // Local files config
+
+    /**
+     * @var array Local files config
+     */
     public $localFiles = [
         'basePath' => '@webroot/',
         'criticalPrefix' => 'dist/criticalcss/',
@@ -62,6 +78,7 @@ class Settings extends Model
         return [
             ['useDevServer', 'boolean'],
             ['useDevServer', 'default', 'value' => true],
+            ['errorEntry', 'string'],
             [
                 [
                     'manifest',

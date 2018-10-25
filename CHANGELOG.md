@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.1.2 - 2018-10-25
+### Added
+* Added the ability for Hot Module Replacement (HMR) to work through Twig error template pages via the `errorEntry` setting in `config.php`
+
 ## 1.1.1 - 2018-10-16
 ### Changed
 * Fixed an issue where if the `manifest.json` was served remotely via https, Twigpack was unable to load it
