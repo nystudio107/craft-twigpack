@@ -24,9 +24,11 @@ use craft\services\Plugins;
 use craft\services\TemplateCaches;
 use craft\utilities\ClearCaches;
 use craft\web\twig\variables\CraftVariable;
+use craft\web\Application;
 use craft\web\View;
 
 use yii\base\Event;
+use yii\web\NotFoundHttpException;
 
 /**
  * Class Twigpack
@@ -155,6 +157,33 @@ class Twigpack extends Plugin
                 );
             }
         );
+        // delay attaching event handler to the view component after it is fully configured
+        $app = Craft::$app;
+        if ($app->getConfig()->getGeneral()->devMode) {
+            $app->on(Application::EVENT_BEFORE_REQUEST, function () use ($app) {
+                $app->getView()->on(View::EVENT_END_BODY, [$this, 'injectErrorEntry']);
+            });
+        }
+    }
+
+    /**
+     * Inject the error entry point JavaScript for auto-reloading of Twig error pages
+     */
+    public function injectErrorEntry()
+    {
+        if (Craft::$app->getResponse()->isServerError || Craft::$app->getResponse()->isClientError) {
+            $settings = self::$plugin->getSettings();
+            if (!empty($settings->errorEntry) && $settings->useDevServer) {
+                try {
+                    $tags = self::$plugin->manifest->getJsModuleTags($settings->errorEntry, false);
+                    if ($tags !== null) {
+                        echo $tags;
+                    }
+                } catch (NotFoundHttpException $e) {
+                    // That's okay, Twigpack will have already logged the error
+                }
+            }
+        }
     }
 
     /**
