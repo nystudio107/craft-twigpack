@@ -58,6 +58,8 @@ Add configuration for Twigpack is done via the `config.php` config file. Here's 
 ### The `config.php` File
 
 ```php
+<?php
+
 return [
     // Global settings
     '*' => [
