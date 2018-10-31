@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.1.3 - 2018-10-31
+### Changed
+* Make `includeCriticalCssTags()` and `includeInlineCssTags()` soft errors that do nothing if the file is missing
+
 ## 1.1.2 - 2018-10-25
 ### Added
 * Added the ability for Hot Module Replacement (HMR) to work through Twig error template pages via the `errorEntry` setting in `config.php`
