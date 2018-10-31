@@ -328,7 +328,7 @@ EOT;
      */
     public static function getFile(string $path): string
     {
-        return self::getFileFromUri($path, null) ?? '';
+        return self::getFileFromUri($path, null, true) ?? '';
     }
 
     /**
@@ -387,15 +387,26 @@ EOT;
      *
      * @param string        $path
      * @param callable|null $callback
+     * @param bool          $pathOnly
      *
      * @return null|mixed
      */
-    protected static function getFileFromUri(string $path, callable $callback = null)
+    protected static function getFileFromUri(string $path, callable $callback = null, bool $pathOnly = false)
     {
         // Resolve any aliases
         $alias = Craft::getAlias($path, false);
         if ($alias) {
             $path = $alias;
+        }
+        // If we only want the file via path, make sure it exists
+        if ($pathOnly && !is_file($path)) {
+            Craft::warning(Craft::t(
+                'twigpack',
+                'File does not exist: {path}',
+                ['path' => $path]
+            ), __METHOD__);
+
+            return '';
         }
         // Make sure it's a full URL
         if (!UrlHelper::isAbsoluteUrl($path) && !is_file($path)) {

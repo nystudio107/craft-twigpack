@@ -19,4 +19,5 @@ return [
     '{name} plugin loaded' => '{name} plugin loaded',
     'Manifest file not found at: {manifestPath}' => 'Manifest file not found at: {manifestPath}',
     'Module does not exist in the manifest: {moduleName}' => 'Module does not exist in the manifest: {moduleName}',
+    'File does not exist: {path}' => 'File does not exist: {path}'
 ];
