@@ -115,10 +115,10 @@ class Manifest
             $name = strstr($name, $dirPrefix);
             $name = str_replace($dirPrefix, '', $name);
             $path = self::combinePaths(
-                    $config['localFiles']['basePath'],
-                    $config['localFiles']['criticalPrefix'],
-                    $name
-                ).$config['localFiles']['criticalSuffix'];
+                $config['localFiles']['basePath'],
+                $config['localFiles']['criticalPrefix'],
+                $name
+            ).$config['localFiles']['criticalSuffix'];
 
             return self::getCssInlineTags($path);
         }
