@@ -143,6 +143,10 @@ If `devMode` is off, the files will be cached until Craft Template Caches are cl
 
 Twigpack also caches any files you include in your Twig documents (see below) using the same data cache, for quick access.
 
+Twigpack uses Yii2's cache method for its cache, so if you're using Redis, it'll use Redis, if you're using the default, it'll be a file cache, etc. It's highly recommended in general that you are clearing all caches as part of your deploy process; doing so will also clear Twigpack's cache as well.
+
+The [clear_caches.sh](https://github.com/nystudio107/craft-scripts#clear_cachessh) script is what we use to clear caches on every deploy.
+
 ## Using Twigpack
 
 Here's a simplified example `manifest.json` file that we'll be using for these examples:
