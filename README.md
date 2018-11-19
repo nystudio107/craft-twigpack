@@ -26,7 +26,7 @@ To install the plugin, follow these instructions.
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Twigpack.
 
-You can also install Twigpack via the **Plugin Store** in the Craft AdminCP.
+You can also install Twigpack via the **Plugin Store** in the Craft Control Panel.
 
 ## Twigpack Overview
 
