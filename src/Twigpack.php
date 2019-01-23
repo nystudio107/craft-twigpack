@@ -187,7 +187,7 @@ class Twigpack extends Plugin
     }
 
     /**
-     * Returns the custom AdminCP cache options.
+     * Returns the custom Control Panel cache options.
      *
      * @return array
      */

@@ -542,10 +542,16 @@ EOT;
     /**
      * @param $string
      *
-     * @return mixed
+     * @return null|array
      */
     private static function jsonFileDecode($string)
     {
-        return JsonHelper::decodeIfJson($string);
+        $json = JsonHelper::decodeIfJson($string);
+        if (\is_string($json)) {
+            Craft::error('Error decoding JSON file: '.$json, __METHOD__);
+            $json = null;
+        }
+
+        return $json;
     }
 }

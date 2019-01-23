@@ -26,7 +26,7 @@ To install the plugin, follow these instructions.
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Twigpack.
 
-You can also install Twigpack via the **Plugin Store** in the Craft AdminCP.
+You can also install Twigpack via the **Plugin Store** in the Craft Control Panel.
 
 ## Twigpack Overview
 
@@ -72,7 +72,7 @@ return [
         ],
         // Public server config
         'server' => [
-            'manifestPath' => '/',
+            'manifestPath' => '@webroot/',
             'publicPath' => '/',
         ],
         // webpack-dev-server config
@@ -107,7 +107,7 @@ return [
   * **legacy** - the name of your legacy manifest file
   * **modern** - the name of your modern manifest file
  * **server** - is an array with `manifestPath` and `publicPath` keys:
-   * **manifestPath** - the public server path to your manifest files; it can be a full URL or a partial path, or a Yii2 alias.  This is usually the same as whatever you set your webpack `output.publicPath` to
+   * **manifestPath** - the public server path to your manifest files; it can be a full URL or a partial path, or a Yii2 alias.  This is usually the same as whatever you set your webpack `output.publicPath` to.
    * **publicPath** - the public server path to your asset files; it can be a full URL or a partial path. This is usually the same as whatever you set your webpack `output.publicPath` to
  * **devServer** - is an array with `manifestPath` and `publicPath` keys:
    * **manifestPath** - the devServer path to your manifest files; it can be a full URL or a partial path, or a Yii2 alias.  This is usually the same as whatever you set your webpack `devServer.publicPath` to
@@ -118,6 +118,8 @@ return [
    * **criticalSuffix** - the suffix added to the name of the currently rendering template for the critical css file name
 
 Note that the `manifest.json` is loaded server-side via PHP, so if you're using a VM such as Homestead, the **manifestPath** may be different from the  **publicPath**.
+
+Note also that the **manifestPath** defaults to a Yii2 alias `@webroot/` (adjust as necessary to point to your `manifest.json` on the file system); this allows Twigpack to load the manifest from the file system, rather than via http request, and is the preferred method. However, it works fine as a full URL as well if you have your `manifest.json` hosted on a CDN or such.
 
 ### Legacy and Modern Bundles
 
