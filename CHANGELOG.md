@@ -1,5 +1,10 @@
 # Twigpack Changelog
 
+## 1.1.4 - 2019-01-22
+### Changed
+* Handle the case where there is an error decoding the JSON from the manifest
+* Updated the documentation to reflect using `@webroot/` by default for the `server` `manifestPath`
+
 ## 1.1.3 - 2018-10-31
 ### Changed
 * Make `includeCriticalCssTags()` and `includeInlineCssTags()` soft errors that do nothing if the file is missing
