@@ -37,7 +37,7 @@ return [
         ],
         // Public server config
         'server' => [
-            'manifestPath' => '/',
+            'manifestPath' => '@webroot/',
             'publicPath' => '/',
         ],
         // webpack-dev-server config
