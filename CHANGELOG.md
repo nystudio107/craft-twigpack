@@ -1,5 +1,11 @@
 # Twigpack Changelog
 
+## 1.1.5 - 2019-03-24
+### Changed
+* Fixed a typo in the `twigpack-manifest-cache` cache key
+* Changed deprecated `\Twig_Markup` to `\Twig\Markup`
+* Elaborated on Twigpack's caching and how to clear it in the `README.md`
+
 ## 1.1.4 - 2019-01-22
 ### Changed
 * Handle the case where there is an error decoding the JSON from the manifest

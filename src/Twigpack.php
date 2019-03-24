@@ -196,7 +196,7 @@ class Twigpack extends Plugin
         return [
             // Manifest cache
             [
-                'key' => 'twigpack-manfiest-cache',
+                'key' => 'twigpack-manifest-cache',
                 'label' => Craft::t('twigpack', 'Twigpack Manifest Cache'),
                 'action' => [$this, 'clearAllCaches'],
             ],
