@@ -121,6 +121,7 @@ Note that the `manifest.json` is loaded server-side via PHP, so if you're using 
 
 Note also that the **manifestPath** defaults to a Yii2 alias `@webroot/` (adjust as necessary to point to your `manifest.json` on the file system); this allows Twigpack to load the manifest from the file system, rather than via http request, and is the preferred method. However, it works fine as a full URL as well if you have your `manifest.json` hosted on a CDN or such.
 
+For a slightly more simplified version of the above config, 
 ### Legacy and Modern Bundles
 
 The idea behind using `manifest.json` and `manifest-legacy.json` is that there will be two builds, one for modern ES6+ modules, and a second for legacy ES5 bundles with polyfills, etc. The entry points are named the same, but the files the entry points load are different.
@@ -143,11 +144,32 @@ Twigpack will memoize the manifest files for performance, and it will also cache
 
 If `devMode` is off, the files will be cached until Craft Template Caches are cleared (which is typically done via deployment), or Craft's Data Caches are cleared. You can also manually clear the cache by using the **Clear Caches** Utility.
 
+The cache duration that Twigpack uses can be configured via the [cacheDuration](https://docs.craftcms.com/v3/config/config-settings.html#cacheduration) Craft General Config Setting.
+
 Twigpack also caches any files you include in your Twig documents (see below) using the same data cache, for quick access.
 
 Twigpack uses Yii2's cache method for its cache, so if you're using Redis, it'll use Redis, if you're using the default, it'll be a file cache, etc. It's highly recommended in general that you are clearing all caches as part of your deploy process; doing so will also clear Twigpack's cache as well.
 
-The [clear_caches.sh](https://github.com/nystudio107/craft-scripts#clear_cachessh) script is what we use to clear caches on every deploy.
+The [clear_caches.sh](https://github.com/nystudio107/craft-scripts#clear_cachessh) script is what we use to clear caches on every deploy. You can also clear the Craft caches via Composer scripts, e.g.:
+
+```json
+"scripts": {
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php craft setup/welcome"
+        ],
+        "post-update-cmd": [
+            "@php craft clear-caches/all"
+        ],
+        "post-install-cmd": [
+            "@php craft clear-caches/all"
+        ]
+    }
+```
+
+See the [Exploring the Craft CMS 3 Console Command Line Interface (CLI)](https://nystudio107.com/blog/exploring-the-craft-cms-3-console-command-line-interface-cli#composer-scripts) article for details.
 
 ## Using Twigpack
 
