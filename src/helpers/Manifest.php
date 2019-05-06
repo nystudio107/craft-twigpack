@@ -102,7 +102,7 @@ class Manifest
     public static function getCriticalCssTags(array $config, $name = null): string
     {
         // Resolve the template name
-        $template = Craft::$app->getView()->resolveTemplate($name ?? Twigpack::$templateName);
+        $template = Craft::$app->getView()->resolveTemplate($name ?? Twigpack::$templateName ?? '');
         if ($template) {
             $name = self::combinePaths(
                 pathinfo($template, PATHINFO_DIRNAME),
