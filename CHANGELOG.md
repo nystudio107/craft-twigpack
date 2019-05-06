@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.1.6 - 2019-05-05
+### Changed
+* Fixed an issue where `null` could potentially be passed in to `resolveTemplate()`
+
 ## 1.1.5 - 2019-03-24
 ### Changed
 * Fixed a typo in the `twigpack-manifest-cache` cache key
