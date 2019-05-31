@@ -229,7 +229,7 @@ To include a versioned JavaScript module in your templates, do:
 This will output:
 
 ```html
-<script src="/js/app.gldlkg983ajhs8s.js"></script>
+<script src="/js/app-legacy.gldlkg983ajhs8s.js"></script>
 ```
 
 You can also include a second optional parameter, to determine whether the JavaScript module should be loaded asynchronously or not (it defaults to `false`):
