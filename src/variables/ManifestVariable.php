@@ -15,6 +15,10 @@ use nystudio107\twigpack\Twigpack;
 
 use craft\helpers\Template;
 
+use yii\web\NotFoundHttpException;
+
+use Twig\Markup;
+
 /**
  * @author    nystudio107
  * @package   Twigpack
@@ -30,10 +34,10 @@ class ManifestVariable
      * @param bool       $async
      * @param null|array $config
      *
-     * @return \Twig\Markup
-     * @throws \yii\web\NotFoundHttpException
+     * @return Markup
+     * @throws NotFoundHttpException
      */
-    public function includeCssModule(string $moduleName, bool $async = false, $config = null): \Twig\Markup
+    public function includeCssModule(string $moduleName, bool $async = false, $config = null): Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getCssModuleTags($moduleName, $async, $config)
@@ -45,9 +49,9 @@ class ManifestVariable
      *
      * @param string $path
      *
-     * @return string
+     * @return Markup
      */
-    public function includeInlineCssTags(string $path): \Twig\Markup
+    public function includeInlineCssTags(string $path): Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getCssInlineTags($path)
@@ -55,14 +59,15 @@ class ManifestVariable
     }
 
     /**
-     * Returns the Critical CSS file for $template wrapped in <style></style> tags
+     * Returns the Critical CSS file for $template wrapped in <style></style>
+     * tags
      *
      * @param null|string $name
-     * @param null|array $config
+     * @param null|array  $config
      *
-     * @return \Twig\Markup
+     * @return Markup
      */
-    public function includeCriticalCssTags($name = null, $config = null): \Twig\Markup
+    public function includeCriticalCssTags($name = null, $config = null): Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getCriticalCssTags($name, $config)
@@ -73,9 +78,9 @@ class ManifestVariable
      * Returns the uglified loadCSS rel=preload Polyfill as per:
      * https://github.com/filamentgroup/loadCSS#how-to-use-loadcss-recommended-example
      *
-     * @return \Twig\Markup
+     * @return Markup
      */
-    public static function includeCssRelPreloadPolyfill(): \Twig\Markup
+    public static function includeCssRelPreloadPolyfill(): Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getCssRelPreloadPolyfill()
@@ -87,8 +92,8 @@ class ManifestVariable
      * @param bool       $async
      * @param null|array $config
      *
-     * @return null|\Twig\Markup
-     * @throws \yii\web\NotFoundHttpException
+     * @return null|Markup
+     * @throws NotFoundHttpException
      */
     public function includeJsModule(string $moduleName, bool $async = false, $config = null)
     {
@@ -104,8 +109,8 @@ class ManifestVariable
      * @param string $type
      * @param null   $config
      *
-     * @return null|\Twig\Markup
-     * @throws \yii\web\NotFoundHttpException
+     * @return null|Markup
+     * @throws NotFoundHttpException
      */
     public function getModuleUri(string $moduleName, string $type = 'modern', $config = null)
     {
@@ -117,9 +122,9 @@ class ManifestVariable
     /**
      * Include the Safari 10.1 nomodule fix JavaScript
      *
-     * @return \Twig\Markup
+     * @return Markup
      */
-    public function includeSafariNomoduleFix(): \Twig\Markup
+    public function includeSafariNomoduleFix(): Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getSafariNomoduleFix()
@@ -131,9 +136,9 @@ class ManifestVariable
      *
      * @param string $path
      *
-     * @return \Twig\Markup
+     * @return Markup
      */
-    public function includeFile(string $path): \Twig\Markup
+    public function includeFile(string $path): Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getFile($path)
@@ -147,9 +152,9 @@ class ManifestVariable
      * @param string $type
      * @param null   $config
      *
-     * @return \Twig\Markup
+     * @return Markup
      */
-    public function includeFileFromManifest(string $fileName, string $type = 'legacy', $config = null): \Twig\Markup
+    public function includeFileFromManifest(string $fileName, string $type = 'legacy', $config = null): Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getFileFromManifest($fileName, $type, $config)
