@@ -109,16 +109,16 @@ class Manifest
                 pathinfo($template, PATHINFO_FILENAME)
             );
             $dirPrefix = 'templates/';
-            if (\defined('CRAFT_TEMPLATES_PATH')) {
+            if (defined('CRAFT_TEMPLATES_PATH')) {
                 $dirPrefix = CRAFT_TEMPLATES_PATH;
             }
             $name = strstr($name, $dirPrefix);
-            $name = str_replace($dirPrefix, '', $name);
+            $name = (string)str_replace($dirPrefix, '', $name);
             $path = self::combinePaths(
-                $config['localFiles']['basePath'],
-                $config['localFiles']['criticalPrefix'],
-                $name
-            ).$config['localFiles']['criticalSuffix'];
+                    $config['localFiles']['basePath'],
+                    $config['localFiles']['criticalPrefix'],
+                    $name
+                ).$config['localFiles']['criticalSuffix'];
 
             return self::getCssInlineTags($path);
         }
@@ -156,6 +156,7 @@ EOT;
         if ($legacyModule === null) {
             return '';
         }
+        $modernModule = '';
         if ($async) {
             $modernModule = self::getModule($config, $moduleName, 'modern', true);
             if ($modernModule === null) {
@@ -253,8 +254,12 @@ EOT;
      * @return null|string
      * @throws NotFoundHttpException
      */
-    public static function getModuleEntry(array $config, string $moduleName, string $type = 'modern', bool $soft = false)
-    {
+    public static function getModuleEntry(
+        array $config,
+        string $moduleName,
+        string $type = 'modern',
+        bool $soft = false
+    ) {
         $module = null;
         // Get the manifest file
         $manifest = self::getManifestFile($config, $type);
@@ -340,6 +345,7 @@ EOT;
      */
     public static function getFileFromManifest(array $config, string $fileName, string $type = 'legacy'): string
     {
+        $path = null;
         try {
             $path = self::getModuleEntry($config, $fileName, $type, true);
         } catch (NotFoundHttpException $e) {
@@ -395,7 +401,7 @@ EOT;
     {
         // Resolve any aliases
         $alias = Craft::getAlias($path, false);
-        if ($alias) {
+        if ($alias && is_string($alias)) {
             $path = $alias;
         }
         // If we only want the file via path, make sure it exists
@@ -497,7 +503,7 @@ EOT;
      */
     protected static function combinePaths(string ...$paths): string
     {
-        $last_key = \count($paths) - 1;
+        $last_key = count($paths) - 1;
         array_walk($paths, function (&$val, $key) use ($last_key) {
             switch ($key) {
                 case 0:
@@ -547,7 +553,7 @@ EOT;
     private static function jsonFileDecode($string)
     {
         $json = JsonHelper::decodeIfJson($string);
-        if (\is_string($json)) {
+        if (is_string($json)) {
             Craft::error('Error decoding JSON file: '.$json, __METHOD__);
             $json = null;
         }

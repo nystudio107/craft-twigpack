@@ -16,6 +16,8 @@ use nystudio107\twigpack\helpers\Manifest as ManifestHelper;
 
 use craft\base\Component;
 
+use yii\web\NotFoundHttpException;
+
 /** @noinspection MissingPropertyAnnotationsInspection */
 
 /**
@@ -36,7 +38,7 @@ class Manifest extends Component
      * @param null|array $config
      *
      * @return string
-     * @throws \yii\web\NotFoundHttpException
+     * @throws NotFoundHttpException
      */
     public function getCssModuleTags(string $moduleName, bool $async = false, $config = null): string
     {
@@ -59,7 +61,7 @@ class Manifest extends Component
     }
 
     /**
-     * @param array $config
+     * @param array       $config
      * @param null|string $name
      *
      * @return string
@@ -91,7 +93,7 @@ class Manifest extends Component
      * @param null|array $config
      *
      * @return null|string
-     * @throws \yii\web\NotFoundHttpException
+     * @throws NotFoundHttpException
      */
     public function getJsModuleTags(string $moduleName, bool $async = false, $config = null)
     {
@@ -119,7 +121,7 @@ class Manifest extends Component
      * @param null   $config
      *
      * @return null|string
-     * @throws \yii\web\NotFoundHttpException
+     * @throws NotFoundHttpException
      */
     public function getModule(string $moduleName, string $type = 'modern', $config = null)
     {
@@ -150,7 +152,7 @@ class Manifest extends Component
      *
      * @return string
      */
-    public function getFileFromManifest(string $fileName, string $type = 'legacy',  $config = null): string
+    public function getFileFromManifest(string $fileName, string $type = 'legacy', $config = null): string
     {
         $settings = Twigpack::$plugin->getSettings();
         $config = $config ?? $settings->getAttributes();
