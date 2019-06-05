@@ -1,5 +1,10 @@
 # Twigpack Changelog
 
+## 1.1.7 - 2019-06-05
+### Changed
+* Clarify expected output with no second param
+* Code cleanup
+
 ## 1.1.6 - 2019-05-05
 ### Changed
 * Fixed an issue where `null` could potentially be passed in to `resolveTemplate()`
