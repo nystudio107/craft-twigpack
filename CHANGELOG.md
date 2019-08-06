@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.1.8 - 2019-08-06
+### Changed
+* Added `cacheKeySuffix` to the Settings model
+
 ## 1.1.7 - 2019-06-05
 ### Changed
 * Clarify expected output with no second param
