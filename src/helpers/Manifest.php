@@ -453,8 +453,10 @@ EOT;
             : null;
         // Get the result from the cache, or parse the file
         $cache = Craft::$app->getCache();
+        $settings = Twigpack::$plugin->getSettings();
+        $cacheKeySuffix = $settings->cacheKeySuffix ?? '';
         $file = $cache->getOrSet(
-            self::CACHE_KEY.$path,
+            self::CACHE_KEY.$cacheKeySuffix.$path,
             function () use ($path, $callback) {
                 $result = null;
                 if (UrlHelper::isAbsoluteUrl($path)) {

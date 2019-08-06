@@ -30,7 +30,9 @@ return [
         'useDevServer' => false,
         // The JavaScript entry from the manifest.json to inject on Twig error pages
         'errorEntry' => '',
-        // Manifest file names
+        // String to be appended to the cache key
+        'cacheKeySuffix' => '',
+       // Manifest file names
         'manifest' => [
             'legacy' => 'manifest-legacy.json',
             'modern' => 'manifest.json',

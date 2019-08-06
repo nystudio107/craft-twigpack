@@ -30,9 +30,15 @@ class Settings extends Model
     public $useDevServer = true;
 
     /**
-     * @var string The JavaScript entry from the manifest.json to inject on Twig error pages
+     * @var string The JavaScript entry from the manifest.json to inject on
+     *      Twig error pages
      */
     public $errorEntry = '';
+
+    /**
+     * @var string String to be appended to the cache key
+     */
+    public $cacheKeySuffix = '';
 
     /**
      * @var array Manifest file names
