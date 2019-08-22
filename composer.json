@@ -13,8 +13,8 @@
         "manifest-json"
     ],
     "support": {
-        "docs": "https://github.com/nystudio107/craft-twigpack/blob/v1/README.md",
-        "issues": "https://github.com/nystudio107/craft-twigpack/issues"
+        "docs": "https://nystudio107.com/plugins/twigpack/documentation",
+        "issues": "https://nystudio107.com/plugins/twigpack/support"
     },
     "license": "MIT",
     "authors": [
