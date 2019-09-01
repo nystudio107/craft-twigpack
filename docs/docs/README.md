@@ -143,7 +143,7 @@ Even if you're not using `webpack-dev-server`, you can still use Twigpack. Just 
 
 ### Caching
 
-Twigpack will memoize the manifest files for performance, and it will also cache them. If `devMode` is on, the cache duration is only 1 second.
+Twigpack will memorize the manifest files for performance, and it will also cache them. If `devMode` is on, the cache duration is only 1 second.
 
 If `devMode` is off, the files will be cached until Craft Template Caches are cleared (which is typically done via deployment), or Craft's Data Caches are cleared. You can also manually clear the cache by using the **Clear Caches** Utility.
 
