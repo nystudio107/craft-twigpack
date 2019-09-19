@@ -243,6 +243,40 @@ EOT;
         return $module;
     }
 
+	/**
+	 * Return the HASH value from to module
+	 *
+	 * @param array  $config
+	 * @param string $moduleName
+	 * @param string $type
+	 * @param bool   $soft
+	 *
+	 * @return null|string
+	 * @throws NotFoundHttpException
+	 */
+	public static function getModuleHash(array $config, string $moduleName, string $type = 'modern', bool $soft = false)
+	{
+
+		try {
+			// Get the module entry
+			$module = self::getModuleEntry($config, $moduleName, $type, $soft);
+			if ($module !== null) {
+				$prefix = self::$isHot
+					? $config['devServer']['publicPath']
+					: $config['server']['publicPath'];
+				// Extract only the Hash Value
+				$modulePath = pathinfo($module);
+				$moduleFilename = $modulePath['filename'];
+				$moduleHash = substr($moduleFilename, strpos($moduleFilename, ".") + 1);
+			}
+		} catch (Exception $e) {
+			// return emtpt string if no module is found
+			return '';
+		}
+
+		return $moduleHash;
+	}
+
     /**
      * Return a module's raw entry from the manifest
      *

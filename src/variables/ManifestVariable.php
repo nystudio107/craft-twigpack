@@ -119,6 +119,23 @@ class ManifestVariable
         );
     }
 
+	/**
+	 * Return the HASH value from a module
+	 *
+	 * @param string $moduleName
+	 * @param string $type
+	 * @param null   $config
+	 *
+	 * @return null|Markup
+	 * @throws NotFoundHttpException
+	 */
+	public function getModuleHash(string $moduleName, string $type = 'modern', $config = null)
+	{
+		return Template::raw(
+			Twigpack::$plugin->manifest->getModuleHash($moduleName, $type, $config)
+		);
+	}
+
     /**
      * Include the Safari 10.1 nomodule fix JavaScript
      *
