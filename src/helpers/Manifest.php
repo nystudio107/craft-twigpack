@@ -352,14 +352,33 @@ EOT;
             Craft::error($e->getMessage(), __METHOD__);
         }
         if ($path !== null) {
-            $path = self::combinePaths(
-                $config['localFiles']['basePath'],
+            // Determine whether we should use the devServer for HMR or not
+            $devMode = Craft::$app->getConfig()->getGeneral()->devMode;
+            if ($devMode) {
+                $devServerPrefix = $config['devServer']['publicPath'];
+                $devServerPath = self::combinePaths(
+                    $devServerPrefix,
+                    $path
+                );
+                $devServerFile = self::getFileFromUri($devServerPath, null);
+                if ($devServerFile) {
+                    return $devServerFile;
+                }
+            }
+            // Otherwise, try not-hot files
+            $localPrefix = $config['localFiles']['basePath'] . $config['localFiles']['criticalPrefix'];
+            $localPath = self::combinePaths(
+                $localPrefix,
                 $path
             );
-
-            return self::getFileFromUri($path, null) ?? '';
+            $alias = Craft::getAlias($localPath, false);
+            if ($alias && is_string($alias)) {
+                $localPath = $alias;
+            }
+            if (is_file($localPath)) {
+                return self::getFile($localPath) ?? '';
+            }
         }
-
         return '';
     }
 
