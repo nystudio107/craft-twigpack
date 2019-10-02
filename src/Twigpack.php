@@ -95,9 +95,6 @@ class Twigpack extends Plugin
         self::$plugin->manifest->invalidateCaches();
     }
 
-    // Protected Methods
-    // =========================================================================
-
     /**
      * Inject the error entry point JavaScript for auto-reloading of Twig error
      * pages
@@ -118,6 +115,9 @@ class Twigpack extends Plugin
             }
         }
     }
+
+    // Protected Methods
+    // =========================================================================
 
     /**
      * Install our event listeners.
