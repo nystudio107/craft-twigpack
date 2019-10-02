@@ -2,7 +2,8 @@
 /**
  * Twigpack plugin for Craft CMS 3.x
  *
- * Twigpack is the conduit between Twig and webpack, with manifest.json & webpack-dev-server HMR support
+ * Twigpack is the conduit between Twig and webpack, with manifest.json &
+ * webpack-dev-server HMR support
  *
  * @link      https://nystudio107.com/
  * @copyright Copyright (c) 2018 nystudio107
@@ -94,6 +95,27 @@ class Twigpack extends Plugin
         self::$plugin->manifest->invalidateCaches();
     }
 
+    /**
+     * Inject the error entry point JavaScript for auto-reloading of Twig error
+     * pages
+     */
+    public function injectErrorEntry()
+    {
+        if (Craft::$app->getResponse()->isServerError || Craft::$app->getResponse()->isClientError) {
+            $settings = self::$plugin->getSettings();
+            if (!empty($settings->errorEntry) && $settings->useDevServer) {
+                try {
+                    $tags = self::$plugin->manifest->getJsModuleTags($settings->errorEntry, false);
+                    if ($tags !== null) {
+                        echo $tags;
+                    }
+                } catch (NotFoundHttpException $e) {
+                    // That's okay, Twigpack will have already logged the error
+                }
+            }
+        }
+    }
+
     // Protected Methods
     // =========================================================================
 
@@ -163,26 +185,6 @@ class Twigpack extends Plugin
             $app->on(Application::EVENT_BEFORE_REQUEST, function () use ($app) {
                 $app->getView()->on(View::EVENT_END_BODY, [$this, 'injectErrorEntry']);
             });
-        }
-    }
-
-    /**
-     * Inject the error entry point JavaScript for auto-reloading of Twig error pages
-     */
-    public function injectErrorEntry()
-    {
-        if (Craft::$app->getResponse()->isServerError || Craft::$app->getResponse()->isClientError) {
-            $settings = self::$plugin->getSettings();
-            if (!empty($settings->errorEntry) && $settings->useDevServer) {
-                try {
-                    $tags = self::$plugin->manifest->getJsModuleTags($settings->errorEntry, false);
-                    if ($tags !== null) {
-                        echo $tags;
-                    }
-                } catch (NotFoundHttpException $e) {
-                    // That's okay, Twigpack will have already logged the error
-                }
-            }
         }
     }
 

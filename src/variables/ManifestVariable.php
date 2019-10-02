@@ -30,6 +30,19 @@ class ManifestVariable
     // =========================================================================
 
     /**
+     * Returns the uglified loadCSS rel=preload Polyfill as per:
+     * https://github.com/filamentgroup/loadCSS#how-to-use-loadcss-recommended-example
+     *
+     * @return Markup
+     */
+    public static function includeCssRelPreloadPolyfill(): Markup
+    {
+        return Template::raw(
+            Twigpack::$plugin->manifest->getCssRelPreloadPolyfill()
+        );
+    }
+
+    /**
      * @param string     $moduleName
      * @param bool       $async
      * @param null|array $config
@@ -75,19 +88,6 @@ class ManifestVariable
     }
 
     /**
-     * Returns the uglified loadCSS rel=preload Polyfill as per:
-     * https://github.com/filamentgroup/loadCSS#how-to-use-loadcss-recommended-example
-     *
-     * @return Markup
-     */
-    public static function includeCssRelPreloadPolyfill(): Markup
-    {
-        return Template::raw(
-            Twigpack::$plugin->manifest->getCssRelPreloadPolyfill()
-        );
-    }
-
-    /**
      * @param string     $moduleName
      * @param bool       $async
      * @param null|array $config
@@ -116,6 +116,23 @@ class ManifestVariable
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getModule($moduleName, $type, $config)
+        );
+    }
+
+    /**
+     * Return the HASH value from a module
+     *
+     * @param string $moduleName
+     * @param string $type
+     * @param null   $config
+     *
+     * @return null|Markup
+     * @throws NotFoundHttpException
+     */
+    public function getModuleHash(string $moduleName, string $type = 'modern', $config = null)
+    {
+        return Template::raw(
+            Twigpack::$plugin->manifest->getModuleHash($moduleName, $type, $config)
         );
     }
 

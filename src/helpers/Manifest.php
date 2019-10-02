@@ -217,6 +217,9 @@ EOT;
     {
         // Get the module entry
         $module = self::getModuleEntry($config, $moduleName, $type, $soft);
+        // Determine whether we should use the devServer for HMR or not
+        $devMode = Craft::$app->getConfig()->getGeneral()->devMode;
+        self::$isHot = ($devMode && $config['useDevServer']);
         if ($module !== null) {
             $prefix = self::$isHot
                 ? $config['devServer']['publicPath']
@@ -241,6 +244,40 @@ EOT;
         }
 
         return $module;
+    }
+
+    /**
+     * Return the HASH value from to module
+     *
+     * @param array  $config
+     * @param string $moduleName
+     * @param string $type
+     * @param bool   $soft
+     *
+     * @return null|string
+     * @throws NotFoundHttpException
+     */
+    public static function getModuleHash(array $config, string $moduleName, string $type = 'modern', bool $soft = false)
+    {
+
+        try {
+            // Get the module entry
+            $module = self::getModuleEntry($config, $moduleName, $type, $soft);
+            if ($module !== null) {
+                $prefix = self::$isHot
+                    ? $config['devServer']['publicPath']
+                    : $config['server']['publicPath'];
+                // Extract only the Hash Value
+                $modulePath = pathinfo($module);
+                $moduleFilename = $modulePath['filename'];
+                $moduleHash = substr($moduleFilename, strpos($moduleFilename, ".") + 1);
+            }
+        } catch (Exception $e) {
+            // return emtpt string if no module is found
+            return '';
+        }
+
+        return $moduleHash;
     }
 
     /**
@@ -352,12 +389,32 @@ EOT;
             Craft::error($e->getMessage(), __METHOD__);
         }
         if ($path !== null) {
-            $path = self::combinePaths(
-                $config['localFiles']['basePath'],
+            // Determine whether we should use the devServer for HMR or not
+            $devMode = Craft::$app->getConfig()->getGeneral()->devMode;
+            if ($devMode) {
+                $devServerPrefix = $config['devServer']['publicPath'];
+                $devServerPath = self::combinePaths(
+                    $devServerPrefix,
+                    $path
+                );
+                $devServerFile = self::getFileFromUri($devServerPath, null);
+                if ($devServerFile) {
+                    return $devServerFile;
+                }
+            }
+            // Otherwise, try not-hot files
+            $localPrefix = $config['localFiles']['basePath'].$config['localFiles']['criticalPrefix'];
+            $localPath = self::combinePaths(
+                $localPrefix,
                 $path
             );
-
-            return self::getFileFromUri($path, null) ?? '';
+            $alias = Craft::getAlias($localPath, false);
+            if ($alias && is_string($alias)) {
+                $localPath = $alias;
+            }
+            if (is_file($localPath)) {
+                return self::getFile($localPath) ?? '';
+            }
         }
 
         return '';

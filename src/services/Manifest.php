@@ -132,6 +132,24 @@ class Manifest extends Component
     }
 
     /**
+     * Return the HASH value from a module
+     *
+     * @param string $moduleName
+     * @param string $type
+     * @param null   $config
+     *
+     * @return null|string
+     * @throws NotFoundHttpException
+     */
+    public function getModuleHash(string $moduleName, string $type = 'modern', $config = null)
+    {
+        $settings = Twigpack::$plugin->getSettings();
+        $config = $config ?? $settings->getAttributes();
+
+        return ManifestHelper::getModuleHash($config, $moduleName, $type);
+    }
+
+    /**
      * Returns the contents of a file from a URI path
      *
      * @param string $path

@@ -1,5 +1,13 @@
 # Twigpack Changelog
 
+## 1.1.9 - 2019-10-01
+### Added
+* Added `getModuleHash()` function, to grab the hash key of a module
+
+### Changed
+* Fixed an issue where `isHot` was not set before use
+* Fixed `getFileFromManifest()` to load files from webpack-dev-server
+
 ## 1.1.8 - 2019-08-06
 ### Changed
 * Added `cacheKeySuffix` to the Settings model
