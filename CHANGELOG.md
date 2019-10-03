@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.1.10 - 2019-10-03
+### Changed
+* 
+
 ## 1.1.9 - 2019-10-01
 ### Added
 * Added `getModuleHash()` function, to grab the hash key of a module
