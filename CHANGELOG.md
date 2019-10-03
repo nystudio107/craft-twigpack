@@ -2,7 +2,7 @@
 
 ## 1.1.10 - 2019-10-03
 ### Changed
-* 
+* Changed examples to use `’dev’` for local development (instead of `’local’`)
 
 ## 1.1.9 - 2019-10-01
 ### Added
