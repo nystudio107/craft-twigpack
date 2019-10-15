@@ -217,9 +217,6 @@ EOT;
     {
         // Get the module entry
         $module = self::getModuleEntry($config, $moduleName, $type, $soft);
-        // Determine whether we should use the devServer for HMR or not
-        $devMode = Craft::$app->getConfig()->getGeneral()->devMode;
-        self::$isHot = ($devMode && $config['useDevServer']);
         if ($module !== null) {
             $prefix = self::$isHot
                 ? $config['devServer']['publicPath']
