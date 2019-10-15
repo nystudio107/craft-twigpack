@@ -1,5 +1,10 @@
 # Twigpack Changelog
 
+## 1.1.11 - 2019-10-15
+### Changed
+* Revert a PR that caused Twigpack to no longer gracefully fall back on locally built assets if the `webpack-dev-server` is not running
+* Add a short timeout to `file_get_contents` to prevent it from taking too long if the file doesn't exist
+
 ## 1.1.10 - 2019-10-03
 ### Changed
 * Changed examples to use `’dev’` for local development (instead of `’local’`)
