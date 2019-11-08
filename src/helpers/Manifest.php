@@ -221,8 +221,9 @@ EOT;
             $prefix = self::$isHot
                 ? $config['devServer']['publicPath']
                 : $config['server']['publicPath'];
-            // If the module isn't a full URL, prefix it
-            if (!UrlHelper::isAbsoluteUrl($module)) {
+            $useAbsoluteUrl = $config['useAbsoluteUrl'];
+            // If the module isn't a full URL, prefix it as required
+            if ($useAbsoluteUrl && !UrlHelper::isAbsoluteUrl($module)) {
                 $module = self::combinePaths($prefix, $module);
             }
             // Resolve any aliases
@@ -230,8 +231,8 @@ EOT;
             if ($alias) {
                 $module = $alias;
             }
-            // Make sure it's a full URL
-            if (!UrlHelper::isAbsoluteUrl($module) && !is_file($module)) {
+            // Make sure it's a full URL, as required
+            if ($useAbsoluteUrl && !UrlHelper::isAbsoluteUrl($module) && !is_file($module)) {
                 try {
                     $module = UrlHelper::siteUrl($module);
                 } catch (Exception $e) {
