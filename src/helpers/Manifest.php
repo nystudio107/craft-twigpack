@@ -400,7 +400,7 @@ EOT;
                 }
             }
             // Otherwise, try not-hot files
-            $localPrefix = $config['localFiles']['basePath'].$config['localFiles']['criticalPrefix'];
+            $localPrefix = $config['localFiles']['basePath'];
             $localPath = self::combinePaths(
                 $localPrefix,
                 $path
