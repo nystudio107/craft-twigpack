@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.1.12 - 2019-11-12
+### Fixed
+* Fixed an issue with `includeFileFromManifest()` not working due to recent changes
+
 ## 1.1.11 - 2019-10-15
 ### Changed
 * Revert a PR that caused Twigpack to no longer gracefully fall back on locally built assets if the `webpack-dev-server` is not running
