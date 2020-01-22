@@ -28,7 +28,7 @@ return [
     '*' => [
         // If `devMode` is on, use webpack-dev-server to all for HMR (hot module reloading)
         'useDevServer' => false,
-        // Enforce Absolute URLs on includes 
+        // Enforce Absolute URLs on includes
         'useAbsoluteUrl' => true,
         // The JavaScript entry from the manifest.json to inject on Twig error pages
         'errorEntry' => '',
