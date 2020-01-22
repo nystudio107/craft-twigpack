@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.1.13 - 2020-01-22
+### Added
+* If we're in `devMode` invalidate the cache immediately
+
 ## 1.1.12 - 2019-11-12
 ### Fixed
 * Fixed an issue with `includeFileFromManifest()` not working due to recent changes
