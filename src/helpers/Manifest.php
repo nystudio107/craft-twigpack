@@ -600,7 +600,11 @@ EOT;
         if ($devMode && !$soft) {
             throw new NotFoundHttpException($error);
         }
-        Craft::error($error, __METHOD__);
+        if (self::$isHot) {
+            Craft::warning($error, __METHOD__);
+        } else {
+            Craft::error($error, __METHOD__);
+        }
     }
 
     // Private Static Methods
