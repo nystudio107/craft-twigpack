@@ -1,8 +1,9 @@
 # Twigpack Changelog
 
 ## 1.1.13 - 2020-01-22
-### Added
+### Changed
 * If we're in `devMode` invalidate the cache immediately
+* If an error is reported, and `self::$isHot` is `true` log it as a warning, not an error
 
 ## 1.1.12 - 2019-11-12
 ### Fixed
