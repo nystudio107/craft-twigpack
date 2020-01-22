@@ -63,6 +63,8 @@ return [
     '*' => [
         // If `devMode` is on, use webpack-dev-server to all for HMR (hot module reloading)
         'useDevServer' => false,
+        // Enforce Absolute URLs on includes
+        'useAbsoluteUrl' => true,
         // The JavaScript entry from the manifest.json to inject on Twig error pages
         'errorEntry' => '',
         // String to be appended to the cache key
@@ -104,6 +106,7 @@ return [
 ```
 
 * **useDevServer** - is a `boolean` that sets whether you will be using [webpack-dev-server](https://github.com/webpack/webpack-dev-server) for hot module replacement (HMR)
+* **useAbsoluteUrl** - should all module URLs be forced to fully qualified absolute URLs?
 * **errorEntry** - is a string that should be the JavaScript entry point (e.g.: `app.js`) in your `manifest.json` that should be injected into Twig error templates, to allow hot module replacement to work through Twig error pages. `devMode` must be `true` and **useDevServer** must also be `true` for this to have any effect. [See it in action](https://twitter.com/nystudio107/status/1055474389314162688)
 * **cacheKeySuffix** - String to be appended to the cache key
 * **manifest** - is an array with `legacy` and `modern` keys. If you're not using legacy/modern bundles, just name them both `manifest.json`
