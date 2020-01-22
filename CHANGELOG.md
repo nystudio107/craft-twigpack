@@ -1,5 +1,13 @@
 # Twigpack Changelog
 
+## 1.1.13 - 2020-01-22
+### Added
+* Added the config setting `useAbsoluteUrl` to control whether module URLs will be forced to be fully qualified aboslute URLs
+
+### Changed
+* If we're in `devMode` invalidate the cache immediately
+* If an error is reported, and `self::$isHot` is `true` log it as a warning, not an error
+
 ## 1.1.12 - 2019-11-12
 ### Fixed
 * Fixed an issue with `includeFileFromManifest()` not working due to recent changes

@@ -30,6 +30,11 @@ class Settings extends Model
     public $useDevServer = true;
 
     /**
+     * @var bool If true, enforces Absolute Urls, if false, allows relative
+     */
+    public $useAbsoluteUrl = true;
+    
+    /**
      * @var string The JavaScript entry from the manifest.json to inject on
      *      Twig error pages
      */
