@@ -505,6 +505,10 @@ EOT;
         $cacheDuration = Craft::$app->getConfig()->getGeneral()->devMode
             ? self::DEVMODE_CACHE_DURATION
             : null;
+        // If we're in `devMode` invalidate the cache immediately
+        if (Craft::$app->getConfig()->getGeneral()->devMode) {
+            self::invalidateCaches();
+        }
         // Get the result from the cache, or parse the file
         $cache = Craft::$app->getCache();
         $settings = Twigpack::$plugin->getSettings();
