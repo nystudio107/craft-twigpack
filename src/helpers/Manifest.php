@@ -335,8 +335,13 @@ EOT;
             $manifestPath = self::$isHot
                 ? $config['devServer']['manifestPath']
                 : $config['server']['manifestPath'];
+            // If this is a dev-server, only look for the modern manifest
+            $thisType = $type;
+            if (self::$isHot) {
+                $thisType = 'modern';
+            }
             // Normalize the path
-            $path = self::combinePaths($manifestPath, $config['manifest'][$type]);
+            $path = self::combinePaths($manifestPath, $config['manifest'][$thisType]);
             $manifest = self::getJsonFile($path);
             // If the manifest isn't found, and it was hot, fall back on non-hot
             if ($manifest === null) {
