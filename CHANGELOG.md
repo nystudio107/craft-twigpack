@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.1.14 - 2020-02-04
+### Added
+* If this is a dev-server, look for the modern manifest file first
+
 ## 1.1.13 - 2020-01-22
 ### Added
 * Added the config setting `useAbsoluteUrl` to control whether module URLs will be forced to be fully qualified aboslute URLs
