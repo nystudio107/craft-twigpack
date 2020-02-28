@@ -135,7 +135,7 @@ class Manifest
      */
     public static function getCssRelPreloadPolyfill(): string
     {
-        Craft::$app->getDeprecator()->log('craft.twigpack.includeCssRelPreloadPolyfill()', 'craft.twigpack.includeCssRelPreloadPolyfill() has been deprecated, this function now does nothing. Using the new media="print" pattern for loading CSS eliminates the need for a polyfill. You can safely remove craft.twigpack.includeCssRelPreloadPolyfill() from your templates.');
+        Craft::$app->getDeprecator()->log('craft.twigpack.includeCssRelPreloadPolyfill()', 'craft.twigpack.includeCssRelPreloadPolyfill() has been deprecated, this function now does nothing. You can safely remove craft.twigpack.includeCssRelPreloadPolyfill() from your templates.');
 
         return '';
     }
