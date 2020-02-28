@@ -67,7 +67,7 @@ class Manifest
         }
         $lines = [];
         if ($async) {
-            $lines[] = "<link rel=\"preload\" href=\"{$legacyModule}\" as=\"style\" onload=\"this.onload=null;this.rel='stylesheet'\" />";
+            $lines[] = "<link rel=\"stylesheet\" href=\"{$legacyModule}\" media=\"print\" onload=\"this.media='all'\" />";
             $lines[] = "<noscript><link rel=\"stylesheet\" href=\"{$legacyModule}\"></noscript>";
         } else {
             $lines[] = "<link rel=\"stylesheet\" href=\"{$legacyModule}\" />";
