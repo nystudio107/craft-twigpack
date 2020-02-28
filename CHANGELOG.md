@@ -1,5 +1,10 @@
 # Twigpack Changelog
 
+## 1.2.0 - 2020-02-28
+### Changed
+* Switched over to using `media="print"` for asynchronously loading a stylesheet as per [The Simplest Way to Load CSS Asynchronously](https://www.filamentgroup.com/lab/load-css-simpler/)
+* Deprecated `craft.twigpack.includeCssRelPreloadPolyfill()` since it is no longer necessary. It now does nothing
+
 ## 1.1.14 - 2020-02-04
 ### Added
 * If this is a dev-server, look for the modern manifest file first
