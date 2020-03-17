@@ -33,7 +33,7 @@ class Settings extends Model
      * @var bool If true, enforces Absolute Urls, if false, allows relative
      */
     public $useAbsoluteUrl = true;
-    
+
     /**
      * @var string The JavaScript entry from the manifest.json to inject on
      *      Twig error pages
@@ -68,6 +68,12 @@ class Settings extends Model
         'manifestPath' => 'http://localhost:8080/',
         'publicPath' => 'http://localhost:8080/',
     ];
+
+    /**
+     * @var string defines which bundle will be used from the webpack dev server.
+     *      Can be 'modern', 'legacy' or 'combined'. Defaults to 'modern'.
+     */
+    public $devServerBuildType = 'modern';
 
     /**
      * @var array Local files config

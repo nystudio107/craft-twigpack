@@ -333,10 +333,11 @@ EOT;
             $manifestPath = self::$isHot
                 ? $config['devServer']['manifestPath']
                 : $config['server']['manifestPath'];
-            // If this is a dev-server, only look for the modern manifest
+            // If this is a dev-server, use the defined build type
             $thisType = $type;
+            $devServerBuildType = $config['devServerBuildType'];
             if (self::$isHot) {
-                $thisType = 'modern';
+                $thisType = ($devServerBuildType === 'combined' ? $thisType : $devServerBuildType);
             }
             // Normalize the path
             $path = self::combinePaths($manifestPath, $config['manifest'][$thisType]);
