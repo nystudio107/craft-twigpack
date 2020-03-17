@@ -335,9 +335,10 @@ EOT;
                 : $config['server']['manifestPath'];
             // If this is a dev-server, use the defined build type
             $thisType = $type;
-            $devServerBuildType = $config['devServerBuildType'];
             if (self::$isHot) {
-                $thisType = ($devServerBuildType === 'combined' ? $thisType : $devServerBuildType);
+                $thisType = $config['devServerBuildType'] === 'combined'
+                    ? $thisType
+                    : $config['devServerBuildType'];
             }
             // Normalize the path
             $path = self::combinePaths($manifestPath, $config['manifest'][$thisType]);
