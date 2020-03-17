@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.3.0 - 2020-03-18
+### Added
+* Added the config setting `devServerBuildType` to determine which webpack-dev-server bundle is loaded.
+
 ## 1.2.0 - 2020-02-28
 ### Changed
 * Switched over to using `media="print"` for asynchronously loading a stylesheet as per [The Simplest Way to Load CSS Asynchronously](https://www.filamentgroup.com/lab/load-css-simpler/)
