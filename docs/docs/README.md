@@ -36,7 +36,7 @@ Twigpack is a bridge between Twig and webpack, with `manifest.json` & [webpack-d
  
  Twigpack also handles generating the necessary `<script>` and `<link>` tags to support both synchronous and asynchronous loading of JavaScript and CSS.
  
- Twigpack allows you to include files inline files into your Twig templates that live outside of the `templates/` directory, such as generated Critical CSS files.
+ Twigpack allows you to include inline files into your Twig templates that live outside of the `templates/` directory, such as generated Critical CSS files.
  
  Additionally, Twigpack has a caching layer to ensure optimal performance.
 
