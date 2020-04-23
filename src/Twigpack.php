@@ -105,9 +105,13 @@ class Twigpack extends Plugin
             $settings = self::$plugin->getSettings();
             if (!empty($settings->errorEntry) && $settings->useDevServer) {
                 try {
-                    $tags = self::$plugin->manifest->getJsModuleTags($settings->errorEntry, false);
-                    if ($tags !== null) {
-                        echo $tags;
+                    $errorEntry = $settings->errorEntry;
+                    if (is_string($errorEntry)) $errorEntry = [$errorEntry];
+                    foreach ($errorEntry as $entry) {
+                        $tag = self::$plugin->manifest->getJsModuleTags($entry, false);
+                        if ($tag !== null) {
+                            echo $tag;
+                        }
                     }
                 } catch (NotFoundHttpException $e) {
                     // That's okay, Twigpack will have already logged the error
