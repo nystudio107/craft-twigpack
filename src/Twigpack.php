@@ -106,7 +106,9 @@ class Twigpack extends Plugin
             if (!empty($settings->errorEntry) && $settings->useDevServer) {
                 try {
                     $errorEntry = $settings->errorEntry;
-                    if (is_string($errorEntry)) $errorEntry = [$errorEntry];
+                    if (is_string($errorEntry)) {
+                        $errorEntry = [$errorEntry];
+                    }
                     foreach ($errorEntry as $entry) {
                         $tag = self::$plugin->manifest->getJsModuleTags($entry, false);
                         if ($tag !== null) {
