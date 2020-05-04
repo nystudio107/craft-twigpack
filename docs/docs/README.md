@@ -66,10 +66,11 @@ return [
         // Enforce Absolute URLs on includes
         'useAbsoluteUrl' => true,
         // The JavaScript entry from the manifest.json to inject on Twig error pages
+        // This can be a string or an array of strings
         'errorEntry' => '',
         // String to be appended to the cache key
         'cacheKeySuffix' => '',
-        // Manifest file names
+       // Manifest file names
         'manifest' => [
             'legacy' => 'manifest-legacy.json',
             'modern' => 'manifest.json',
@@ -84,6 +85,8 @@ return [
             'manifestPath' => 'http://localhost:8080/',
             'publicPath' => 'http://localhost:8080/',
         ],
+        // Bundle to use with the webpack-dev-server
+        'devServerBuildType' => 'modern',
         // Local files config
         'localFiles' => [
             'basePath' => '@webroot/',
@@ -118,6 +121,7 @@ return [
  * **devServer** - is an array with `manifestPath` and `publicPath` keys:
    * **manifestPath** - the devServer path to your manifest files; it can be a full URL or a partial path, or a Yii2 alias.  This is usually the same as whatever you set your webpack `devServer.publicPath` to
    * **publicPath** - the devServer path to your asset files; it can be a full URL or a partial path. This is usually the same as whatever you set your webpack `output.publicPath` to
+ * **devServerBuildType** - Bundle to use with the `webpack-dev-server` -- can be `modern` (the default), `legacy`, or `combined`
  * **localFiles** - is an array with `basePath`, `criticalPrefix` and `criticalSuffix` keys:
    * **basePath** - the file system path or Yii2 alias to the local file system base path of the web root
    * **criticalPrefix** - the prefix added to the name of the currently rendering template for the critical css file name
