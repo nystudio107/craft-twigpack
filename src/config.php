@@ -49,6 +49,8 @@ return [
             'manifestPath' => 'http://localhost:8080/',
             'publicPath' => 'http://localhost:8080/',
         ],
+        // Bundle to use with the webpack-dev-server
+        'devServerBuildType' => 'modern',
         // Local files config
         'localFiles' => [
             'basePath' => '@webroot/',
