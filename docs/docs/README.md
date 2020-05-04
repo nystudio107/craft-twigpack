@@ -36,7 +36,7 @@ Twigpack is a bridge between Twig and webpack, with `manifest.json` & [webpack-d
  
  Twigpack also handles generating the necessary `<script>` and `<link>` tags to support both synchronous and asynchronous loading of JavaScript and CSS.
  
- Twigpack allows you to include files inline files into your Twig templates that live outside of the `templates/` directory, such as generated Critical CSS files.
+ Twigpack allows you to include inline files into your Twig templates that live outside of the `templates/` directory, such as generated Critical CSS files.
  
  Additionally, Twigpack has a caching layer to ensure optimal performance.
 
@@ -66,10 +66,11 @@ return [
         // Enforce Absolute URLs on includes
         'useAbsoluteUrl' => true,
         // The JavaScript entry from the manifest.json to inject on Twig error pages
+        // This can be a string or an array of strings
         'errorEntry' => '',
         // String to be appended to the cache key
         'cacheKeySuffix' => '',
-        // Manifest file names
+       // Manifest file names
         'manifest' => [
             'legacy' => 'manifest-legacy.json',
             'modern' => 'manifest.json',
@@ -84,6 +85,8 @@ return [
             'manifestPath' => 'http://localhost:8080/',
             'publicPath' => 'http://localhost:8080/',
         ],
+        // Bundle to use with the webpack-dev-server
+        'devServerBuildType' => 'modern',
         // Local files config
         'localFiles' => [
             'basePath' => '@webroot/',
@@ -107,7 +110,7 @@ return [
 
 * **useDevServer** - is a `boolean` that sets whether you will be using [webpack-dev-server](https://github.com/webpack/webpack-dev-server) for hot module replacement (HMR)
 * **useAbsoluteUrl** - should all module URLs be forced to fully qualified absolute URLs?
-* **errorEntry** - is a string that should be the JavaScript entry point (e.g.: `app.js`) in your `manifest.json` that should be injected into Twig error templates, to allow hot module replacement to work through Twig error pages. `devMode` must be `true` and **useDevServer** must also be `true` for this to have any effect. [See it in action](https://twitter.com/nystudio107/status/1055474389314162688)
+* **errorEntry** - is a string, or array of strings, that should be the JavaScript entry point(s) (e.g.: `app.js`) in your `manifest.json` that should be injected into Twig error templates, to allow hot module replacement to work through Twig error pages. `devMode` must be `true` and **useDevServer** must also be `true` for this to have any effect. [See it in action](https://twitter.com/nystudio107/status/1055474389314162688)
 * **cacheKeySuffix** - String to be appended to the cache key
 * **manifest** - is an array with `legacy` and `modern` keys. If you're not using legacy/modern bundles, just name them both `manifest.json`
   * **legacy** - the name of your legacy manifest file
@@ -118,6 +121,7 @@ return [
  * **devServer** - is an array with `manifestPath` and `publicPath` keys:
    * **manifestPath** - the devServer path to your manifest files; it can be a full URL or a partial path, or a Yii2 alias.  This is usually the same as whatever you set your webpack `devServer.publicPath` to
    * **publicPath** - the devServer path to your asset files; it can be a full URL or a partial path. This is usually the same as whatever you set your webpack `output.publicPath` to
+ * **devServerBuildType** - Bundle to use with the `webpack-dev-server` -- can be `modern` (the default), `legacy`, or `combined`
  * **localFiles** - is an array with `basePath`, `criticalPrefix` and `criticalSuffix` keys:
    * **basePath** - the file system path or Yii2 alias to the local file system base path of the web root
    * **criticalPrefix** - the prefix added to the name of the currently rendering template for the critical css file name

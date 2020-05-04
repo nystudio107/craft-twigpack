@@ -1,5 +1,10 @@
 # Twigpack Changelog
 
+## 1.2.1 - 2020-05-04
+### Added
+* Added the config setting `devServerBuildType` to determine which webpack-dev-server bundle is loaded.
+* Support passing an array of filenames for `errorEntry`
+
 ## 1.2.0 - 2020-02-28
 ### Changed
 * Switched over to using `media="print"` for asynchronously loading a stylesheet as per [The Simplest Way to Load CSS Asynchronously](https://www.filamentgroup.com/lab/load-css-simpler/)

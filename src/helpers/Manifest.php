@@ -52,9 +52,9 @@ class Manifest
     // =========================================================================
 
     /**
-     * @param array  $config
+     * @param array $config
      * @param string $moduleName
-     * @param bool   $async
+     * @param bool $async
      *
      * @return string
      * @throws NotFoundHttpException
@@ -85,7 +85,7 @@ class Manifest
     {
         $result = self::getFile($path);
         if ($result) {
-            $result = "<style>\r\n".$result."</style>\r\n";
+            $result = "<style>\r\n" . $result . "</style>\r\n";
 
             return $result;
         }
@@ -94,7 +94,7 @@ class Manifest
     }
 
     /**
-     * @param array       $config
+     * @param array $config
      * @param null|string $name
      *
      * @return string
@@ -118,7 +118,7 @@ class Manifest
                     $config['localFiles']['basePath'],
                     $config['localFiles']['criticalPrefix'],
                     $name
-                ).$config['localFiles']['criticalSuffix'];
+                ) . $config['localFiles']['criticalSuffix'];
 
             return self::getCssInlineTags($path);
         }
@@ -141,9 +141,9 @@ class Manifest
     }
 
     /**
-     * @param array  $config
+     * @param array $config
      * @param string $moduleName
-     * @param bool   $async
+     * @param bool $async
      *
      * @return null|string
      * @throws NotFoundHttpException
@@ -203,10 +203,10 @@ EOT;
     /**
      * Return the URI to a module
      *
-     * @param array  $config
+     * @param array $config
      * @param string $moduleName
      * @param string $type
-     * @param bool   $soft
+     * @param bool $soft
      *
      * @return null|string
      * @throws NotFoundHttpException
@@ -245,10 +245,10 @@ EOT;
     /**
      * Return the HASH value from to module
      *
-     * @param array  $config
+     * @param array $config
      * @param string $moduleName
      * @param string $type
-     * @param bool   $soft
+     * @param bool $soft
      *
      * @return null|string
      * @throws NotFoundHttpException
@@ -279,10 +279,10 @@ EOT;
     /**
      * Return a module's raw entry from the manifest
      *
-     * @param array  $config
+     * @param array $config
      * @param string $moduleName
      * @param string $type
-     * @param bool   $soft
+     * @param bool $soft
      *
      * @return null|string
      * @throws NotFoundHttpException
@@ -292,7 +292,8 @@ EOT;
         string $moduleName,
         string $type = 'modern',
         bool $soft = false
-    ) {
+    )
+    {
         $module = null;
         // Get the manifest file
         $manifest = self::getManifestFile($config, $type);
@@ -316,7 +317,7 @@ EOT;
     /**
      * Return a JSON-decoded manifest file
      *
-     * @param array  $config
+     * @param array $config
      * @param string $type
      *
      * @return null|array
@@ -333,10 +334,12 @@ EOT;
             $manifestPath = self::$isHot
                 ? $config['devServer']['manifestPath']
                 : $config['server']['manifestPath'];
-            // If this is a dev-server, only look for the modern manifest
+            // If this is a dev-server, use the defined build type
             $thisType = $type;
             if (self::$isHot) {
-                $thisType = 'modern';
+                $thisType = $config['devServerBuildType'] === 'combined'
+                    ? $thisType
+                    : $config['devServerBuildType'];
             }
             // Normalize the path
             $path = self::combinePaths($manifestPath, $config['manifest'][$thisType]);
@@ -375,7 +378,7 @@ EOT;
     }
 
     /**
-     * @param array  $config
+     * @param array $config
      * @param string $fileName
      * @param string $type
      *
@@ -449,9 +452,9 @@ EOT;
     /**
      * Return the contents of a file from a URI path
      *
-     * @param string        $path
+     * @param string $path
      * @param callable|null $callback
-     * @param bool          $pathOnly
+     * @param bool $pathOnly
      *
      * @return null|mixed
      */
@@ -487,7 +490,7 @@ EOT;
     /**
      * Return the contents of a file from the passed in path
      *
-     * @param string   $path
+     * @param string $path
      * @param callable $callback
      *
      * @return null|mixed
@@ -502,7 +505,7 @@ EOT;
         $dependency = new TagDependency([
             'tags' => [
                 self::CACHE_TAG,
-                self::CACHE_TAG.$path,
+                self::CACHE_TAG . $path,
             ],
         ]);
         // Set the cache duration based on devMode
@@ -518,7 +521,7 @@ EOT;
         $settings = Twigpack::$plugin->getSettings();
         $cacheKeySuffix = $settings->cacheKeySuffix ?? '';
         $file = $cache->getOrSet(
-            self::CACHE_KEY.$cacheKeySuffix.$path,
+            self::CACHE_KEY . $cacheKeySuffix . $path,
             function () use ($path, $callback) {
                 $result = null;
                 if (UrlHelper::isAbsoluteUrl($path)) {
@@ -594,7 +597,7 @@ EOT;
 
     /**
      * @param string $error
-     * @param bool   $soft
+     * @param bool $soft
      *
      * @throws NotFoundHttpException
      */
@@ -623,7 +626,7 @@ EOT;
     {
         $json = JsonHelper::decodeIfJson($string);
         if (is_string($json)) {
-            Craft::error('Error decoding JSON file: '.$json, __METHOD__);
+            Craft::error('Error decoding JSON file: ' . $json, __METHOD__);
             $json = null;
         }
 

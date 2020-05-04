@@ -31,6 +31,7 @@ return [
         // Enforce Absolute URLs on includes
         'useAbsoluteUrl' => true,
         // The JavaScript entry from the manifest.json to inject on Twig error pages
+        // This can be a string or an array of strings
         'errorEntry' => '',
         // String to be appended to the cache key
         'cacheKeySuffix' => '',
@@ -49,6 +50,8 @@ return [
             'manifestPath' => 'http://localhost:8080/',
             'publicPath' => 'http://localhost:8080/',
         ],
+        // Bundle to use with the webpack-dev-server
+        'devServerBuildType' => 'modern',
         // Local files config
         'localFiles' => [
             'basePath' => '@webroot/',
