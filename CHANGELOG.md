@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.2.2 - 2020-05-22
+### Fixed
+* Make sure `$moduleHash` is never undefined
+
 ## 1.2.1 - 2020-05-04
 ### Added
 * Added the config setting `devServerBuildType` to determine which webpack-dev-server bundle is loaded.
