@@ -251,11 +251,11 @@ EOT;
      * @param bool $soft
      *
      * @return null|string
-     * @throws NotFoundHttpException
      */
     public static function getModuleHash(array $config, string $moduleName, string $type = 'modern', bool $soft = false)
     {
 
+        $moduleHash = '';
         try {
             // Get the module entry
             $module = self::getModuleEntry($config, $moduleName, $type, $soft);
@@ -269,7 +269,7 @@ EOT;
                 $moduleHash = substr($moduleFilename, strpos($moduleFilename, ".") + 1);
             }
         } catch (Exception $e) {
-            // return emtpt string if no module is found
+            // return empty string if no module is found
             return '';
         }
 
