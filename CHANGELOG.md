@@ -1,6 +1,9 @@
 # Twigpack Changelog
 
 ## 1.2.2 - 2020-05-22
+### Changed
+* Switched over to using Yii2's `Html::` helpers for creating various tags
+
 ### Fixed
 * Make sure `$moduleHash` is never undefined
 
