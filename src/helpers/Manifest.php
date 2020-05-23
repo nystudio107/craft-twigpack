@@ -12,6 +12,7 @@
 namespace nystudio107\twigpack\helpers;
 
 use Craft;
+use craft\helpers\Html;
 use craft\helpers\Json as JsonHelper;
 use craft\helpers\UrlHelper;
 
@@ -67,10 +68,19 @@ class Manifest
         }
         $lines = [];
         if ($async) {
-            $lines[] = "<link rel=\"stylesheet\" href=\"{$legacyModule}\" media=\"print\" onload=\"this.media='all'\" />";
-            $lines[] = "<noscript><link rel=\"stylesheet\" href=\"{$legacyModule}\"></noscript>";
+            $lines[] = Html::cssFile($legacyModule, [
+                'rel' => 'stylesheet',
+                'media' => 'print',
+                'onload' => "this.media='all'",
+            ]);
+            $lines[] = Html::cssFile($legacyModule, [
+                'rel' => 'stylesheet',
+                'noscript' => true,
+            ]);
         } else {
-            $lines[] = "<link rel=\"stylesheet\" href=\"{$legacyModule}\" />";
+            $lines[] = Html::cssFile($legacyModule, [
+                'rel' => 'stylesheet',
+            ]);
         }
 
         return implode("\r\n", $lines);
@@ -85,7 +95,8 @@ class Manifest
     {
         $result = self::getFile($path);
         if ($result) {
-            $result = "<style>\r\n" . $result . "</style>\r\n";
+            $result = Html::style($result, [
+            ]);
 
             return $result;
         }
@@ -98,6 +109,7 @@ class Manifest
      * @param null|string $name
      *
      * @return string
+     * @throws \Twig\Error\LoaderError
      */
     public static function getCriticalCssTags(array $config, $name = null): string
     {
@@ -163,10 +175,15 @@ class Manifest
         }
         $lines = [];
         if ($async) {
-            $lines[] = "<script type=\"module\" src=\"{$modernModule}\"></script>";
-            $lines[] = "<script nomodule src=\"{$legacyModule}\"></script>";
+            $lines[] = Html::jsFile($modernModule, [
+                'type' => 'module',
+            ]);
+            $lines[] = Html::jsFile($legacyModule, [
+                'nomodule' => true,
+            ]);
         } else {
-            $lines[] = "<script src=\"{$legacyModule}\"></script>";
+            $lines[] = Html::jsFile($legacyModule, [
+            ]);
         }
 
         return implode("\r\n", $lines);
@@ -193,11 +210,13 @@ class Manifest
      */
     public static function getSafariNomoduleFix(): string
     {
-        return <<<EOT
-<script>
+        $code = /** @lang JavaScript */
+            <<<EOT
 !function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()},!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();
-</script>
 EOT;
+
+        return Html::script($code, [
+        ]);
     }
 
     /**
@@ -260,9 +279,6 @@ EOT;
             // Get the module entry
             $module = self::getModuleEntry($config, $moduleName, $type, $soft);
             if ($module !== null) {
-                $prefix = self::$isHot
-                    ? $config['devServer']['publicPath']
-                    : $config['server']['publicPath'];
                 // Extract only the Hash Value
                 $modulePath = pathinfo($module);
                 $moduleFilename = $modulePath['filename'];
