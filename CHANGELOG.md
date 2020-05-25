@@ -1,6 +1,9 @@
 # Twigpack Changelog
 
-## 1.2.2 - 2020-05-22
+## 1.2.2 - 2020-05-26
+### Added
+* Added `cspNonce` setting to allow for Content Security Policy nonce support for inline CSS/JS
+
 ### Changed
 * Switched over to using Yii2's `Html::` helpers for creating various tags
 
