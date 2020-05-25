@@ -11,12 +11,14 @@
 
 namespace nystudio107\twigpack\helpers;
 
+use nystudio107\twigpack\Twigpack;
+use nystudio107\twigpack\models\Settings;
+
 use Craft;
 use craft\helpers\Html;
 use craft\helpers\Json as JsonHelper;
 use craft\helpers\UrlHelper;
 
-use nystudio107\twigpack\Twigpack;
 use yii\base\Exception;
 use yii\caching\TagDependency;
 use yii\web\NotFoundHttpException;
@@ -35,6 +37,12 @@ class Manifest
     const CACHE_TAG = 'twigpack';
 
     const DEVMODE_CACHE_DURATION = 1;
+
+    const CSP_HEADERS = [
+        'Content-Security-Policy',
+        'X-Content-Security-Policy',
+        'X-WebKit-CSP',
+    ];
 
     // Protected Static Properties
     // =========================================================================
@@ -95,8 +103,13 @@ class Manifest
     {
         $result = self::getFile($path);
         if ($result) {
-            $result = Html::style($result, [
-            ]);
+            $config = [];
+            $nonce = self::getNonce();
+            if ($nonce !== null) {
+                $config['nonce'] = $nonce;
+                self::includeNonce($nonce, 'style-src');
+            }
+            $result = Html::style($result, $config);
 
             return $result;
         }
@@ -214,9 +227,14 @@ class Manifest
             <<<EOT
 !function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()},!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();
 EOT;
+        $config = [];
+        $nonce = self::getNonce();
+        if ($nonce !== null) {
+            $config['nonce'] = $nonce;
+            self::includeNonce($nonce, 'script-src');
+        }
 
-        return Html::script($code, [
-        ]);
+        return Html::script($code, $config);
     }
 
     /**
@@ -633,6 +651,61 @@ EOT;
     // Private Static Methods
     // =========================================================================
 
+    /**
+     * @param string $nonce
+     * @param string $cspDirective
+     */
+    private static function includeNonce(string $nonce, string $cspDirective)
+    {
+        $cspNonceType = self::getCspNonceType();
+        if ($cspNonceType) {
+            $cspValue = "{$cspDirective} '$nonce'";
+            foreach(self::CSP_HEADERS as $cspHeader) {
+                switch ($cspNonceType) {
+                    case 'tag':
+                        Craft::$app->getView()->registerMetaTag([
+                            'httpEquiv' => $cspHeader,
+                            'value' => $cspValue,
+                        ]);
+                        break;
+                    case 'header':
+                        Craft::$app->getResponse()->getHeaders()->add($cspHeader, $cspValue . ';');
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     * @return string|null
+     */
+    private static function getCspNonceType()
+    {
+        /** @var Settings $settings */
+        $settings = Twigpack::$plugin->getSettings();
+        $cspNonceType = !empty($settings->cspNonce) ? strtolower($settings->cspNonce) : null;
+
+        return $cspNonceType;
+    }
+
+    /**
+     * @return string|null
+     */
+    private static function getNonce()
+    {
+        $result = null;
+        if (self::getCspNonceType() !== null) {
+            try {
+                $result = bin2hex(random_bytes(22));
+            } catch (\Exception $e) {
+                // That's okay
+            }
+        }
+
+        return $result;
+    }
     /**
      * @param $string
      *
