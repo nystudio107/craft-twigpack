@@ -659,7 +659,7 @@ EOT;
     {
         $cspNonceType = self::getCspNonceType();
         if ($cspNonceType) {
-            $cspValue = "{$cspDirective} '$nonce'";
+            $cspValue = "{$cspDirective} 'nonce-$nonce'";
             foreach(self::CSP_HEADERS as $cspHeader) {
                 switch ($cspNonceType) {
                     case 'tag':
