@@ -87,6 +87,12 @@ return [
         ],
         // Bundle to use with the webpack-dev-server
         'devServerBuildType' => 'modern',
+        // Whether to include a Content Security Policy "nonce" for inline
+        // CSS or JavaScript. Valid values are 'header' or 'tag' for how the CSP
+        // should be included. c.f.:
+        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#Unsafe_inline_script
+        'cspNonce' => '',
+        // Local files config
         // Local files config
         'localFiles' => [
             'basePath' => '@webroot/',
@@ -122,6 +128,7 @@ return [
    * **manifestPath** - the devServer path to your manifest files; it can be a full URL or a partial path, or a Yii2 alias.  This is usually the same as whatever you set your webpack `devServer.publicPath` to
    * **publicPath** - the devServer path to your asset files; it can be a full URL or a partial path. This is usually the same as whatever you set your webpack `output.publicPath` to
  * **devServerBuildType** - Bundle to use with the `webpack-dev-server` -- can be `modern` (the default), `legacy`, or `combined`
+ * **cspNonce** - Whether to include a Content Security Policy "nonce" for inline CSS or JavaScript. Valid values are 'header' or 'tag' for how the CSP should be included. [Learn More](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#Unsafe_inline_script)
  * **localFiles** - is an array with `basePath`, `criticalPrefix` and `criticalSuffix` keys:
    * **basePath** - the file system path or Yii2 alias to the local file system base path of the web root
    * **criticalPrefix** - the prefix added to the name of the currently rendering template for the critical css file name
