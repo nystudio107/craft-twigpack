@@ -76,6 +76,14 @@ class Settings extends Model
     public $devServerBuildType = 'modern';
 
     /**
+     * @var string Whether to include a Content Security Policy "nonce" for inline
+     *      CSS or JavaScript. Valid values are 'header' or 'tag' for how the CSP
+     *      should be included. c.f.:
+     *      https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#Unsafe_inline_script
+     */
+    public $cspNonce = '';
+
+    /**
      * @var array Local files config
      */
     public $localFiles = [
@@ -96,6 +104,8 @@ class Settings extends Model
             ['useDevServer', 'boolean'],
             ['useDevServer', 'default', 'value' => true],
             ['errorEntry', 'string'],
+            ['devServerBuildType', 'string'],
+            ['cspNonce', 'string'],
             [
                 [
                     'manifest',

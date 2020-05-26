@@ -11,11 +11,14 @@
 
 namespace nystudio107\twigpack\helpers;
 
+use nystudio107\twigpack\Twigpack;
+use nystudio107\twigpack\models\Settings;
+
 use Craft;
+use craft\helpers\Html;
 use craft\helpers\Json as JsonHelper;
 use craft\helpers\UrlHelper;
 
-use nystudio107\twigpack\Twigpack;
 use yii\base\Exception;
 use yii\caching\TagDependency;
 use yii\web\NotFoundHttpException;
@@ -34,6 +37,12 @@ class Manifest
     const CACHE_TAG = 'twigpack';
 
     const DEVMODE_CACHE_DURATION = 1;
+
+    const CSP_HEADERS = [
+        'Content-Security-Policy',
+        'X-Content-Security-Policy',
+        'X-WebKit-CSP',
+    ];
 
     // Protected Static Properties
     // =========================================================================
@@ -67,10 +76,19 @@ class Manifest
         }
         $lines = [];
         if ($async) {
-            $lines[] = "<link rel=\"stylesheet\" href=\"{$legacyModule}\" media=\"print\" onload=\"this.media='all'\" />";
-            $lines[] = "<noscript><link rel=\"stylesheet\" href=\"{$legacyModule}\"></noscript>";
+            $lines[] = Html::cssFile($legacyModule, [
+                'rel' => 'stylesheet',
+                'media' => 'print',
+                'onload' => "this.media='all'",
+            ]);
+            $lines[] = Html::cssFile($legacyModule, [
+                'rel' => 'stylesheet',
+                'noscript' => true,
+            ]);
         } else {
-            $lines[] = "<link rel=\"stylesheet\" href=\"{$legacyModule}\" />";
+            $lines[] = Html::cssFile($legacyModule, [
+                'rel' => 'stylesheet',
+            ]);
         }
 
         return implode("\r\n", $lines);
@@ -85,7 +103,13 @@ class Manifest
     {
         $result = self::getFile($path);
         if ($result) {
-            $result = "<style>\r\n" . $result . "</style>\r\n";
+            $config = [];
+            $nonce = self::getNonce();
+            if ($nonce !== null) {
+                $config['nonce'] = $nonce;
+                self::includeNonce($nonce, 'style-src');
+            }
+            $result = Html::style($result, $config);
 
             return $result;
         }
@@ -98,6 +122,7 @@ class Manifest
      * @param null|string $name
      *
      * @return string
+     * @throws \Twig\Error\LoaderError
      */
     public static function getCriticalCssTags(array $config, $name = null): string
     {
@@ -163,10 +188,15 @@ class Manifest
         }
         $lines = [];
         if ($async) {
-            $lines[] = "<script type=\"module\" src=\"{$modernModule}\"></script>";
-            $lines[] = "<script nomodule src=\"{$legacyModule}\"></script>";
+            $lines[] = Html::jsFile($modernModule, [
+                'type' => 'module',
+            ]);
+            $lines[] = Html::jsFile($legacyModule, [
+                'nomodule' => true,
+            ]);
         } else {
-            $lines[] = "<script src=\"{$legacyModule}\"></script>";
+            $lines[] = Html::jsFile($legacyModule, [
+            ]);
         }
 
         return implode("\r\n", $lines);
@@ -193,11 +223,18 @@ class Manifest
      */
     public static function getSafariNomoduleFix(): string
     {
-        return <<<EOT
-<script>
+        $code = /** @lang JavaScript */
+            <<<EOT
 !function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()},!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();
-</script>
 EOT;
+        $config = [];
+        $nonce = self::getNonce();
+        if ($nonce !== null) {
+            $config['nonce'] = $nonce;
+            self::includeNonce($nonce, 'script-src');
+        }
+
+        return Html::script($code, $config);
     }
 
     /**
@@ -251,25 +288,22 @@ EOT;
      * @param bool $soft
      *
      * @return null|string
-     * @throws NotFoundHttpException
      */
     public static function getModuleHash(array $config, string $moduleName, string $type = 'modern', bool $soft = false)
     {
 
+        $moduleHash = '';
         try {
             // Get the module entry
             $module = self::getModuleEntry($config, $moduleName, $type, $soft);
             if ($module !== null) {
-                $prefix = self::$isHot
-                    ? $config['devServer']['publicPath']
-                    : $config['server']['publicPath'];
                 // Extract only the Hash Value
                 $modulePath = pathinfo($module);
                 $moduleFilename = $modulePath['filename'];
                 $moduleHash = substr($moduleFilename, strpos($moduleFilename, ".") + 1);
             }
         } catch (Exception $e) {
-            // return emtpt string if no module is found
+            // return empty string if no module is found
             return '';
         }
 
@@ -617,6 +651,61 @@ EOT;
     // Private Static Methods
     // =========================================================================
 
+    /**
+     * @param string $nonce
+     * @param string $cspDirective
+     */
+    private static function includeNonce(string $nonce, string $cspDirective)
+    {
+        $cspNonceType = self::getCspNonceType();
+        if ($cspNonceType) {
+            $cspValue = "{$cspDirective} 'nonce-$nonce'";
+            foreach(self::CSP_HEADERS as $cspHeader) {
+                switch ($cspNonceType) {
+                    case 'tag':
+                        Craft::$app->getView()->registerMetaTag([
+                            'httpEquiv' => $cspHeader,
+                            'value' => $cspValue,
+                        ]);
+                        break;
+                    case 'header':
+                        Craft::$app->getResponse()->getHeaders()->add($cspHeader, $cspValue . ';');
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     * @return string|null
+     */
+    private static function getCspNonceType()
+    {
+        /** @var Settings $settings */
+        $settings = Twigpack::$plugin->getSettings();
+        $cspNonceType = !empty($settings->cspNonce) ? strtolower($settings->cspNonce) : null;
+
+        return $cspNonceType;
+    }
+
+    /**
+     * @return string|null
+     */
+    private static function getNonce()
+    {
+        $result = null;
+        if (self::getCspNonceType() !== null) {
+            try {
+                $result = bin2hex(random_bytes(22));
+            } catch (\Exception $e) {
+                // That's okay
+            }
+        }
+
+        return $result;
+    }
     /**
      * @param $string
      *
