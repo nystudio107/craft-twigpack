@@ -64,11 +64,12 @@ class Manifest
      * @param array $config
      * @param string $moduleName
      * @param bool $async
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return string
      * @throws NotFoundHttpException
      */
-    public static function getCssModuleTags(array $config, string $moduleName, bool $async): string
+    public static function getCssModuleTags(array $config, string $moduleName, bool $async, array $attributes = []): string
     {
         $legacyModule = self::getModule($config, $moduleName, 'legacy', true);
         if ($legacyModule === null) {
@@ -76,19 +77,19 @@ class Manifest
         }
         $lines = [];
         if ($async) {
-            $lines[] = Html::cssFile($legacyModule, [
+            $lines[] = Html::cssFile($legacyModule, array_merge([
                 'rel' => 'stylesheet',
                 'media' => 'print',
                 'onload' => "this.media='all'",
-            ]);
-            $lines[] = Html::cssFile($legacyModule, [
+            ], $attributes));
+            $lines[] = Html::cssFile($legacyModule, array_merge([
                 'rel' => 'stylesheet',
                 'noscript' => true,
-            ]);
+            ], $attributes));
         } else {
-            $lines[] = Html::cssFile($legacyModule, [
+            $lines[] = Html::cssFile($legacyModule, array_merge([
                 'rel' => 'stylesheet',
-            ]);
+            ], $attributes));
         }
 
         return implode("\r\n", $lines);
@@ -96,10 +97,11 @@ class Manifest
 
     /**
      * @param string $path
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return string
      */
-    public static function getCssInlineTags(string $path): string
+    public static function getCssInlineTags(string $path, array $attributes = []): string
     {
         $result = self::getFile($path);
         if ($result) {
@@ -109,7 +111,7 @@ class Manifest
                 $config['nonce'] = $nonce;
                 self::includeNonce($nonce, 'style-src');
             }
-            $result = Html::style($result, $config);
+            $result = Html::style($result, array_merge($config, $attributes));
 
             return $result;
         }
@@ -120,11 +122,12 @@ class Manifest
     /**
      * @param array $config
      * @param null|string $name
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return string
      * @throws \Twig\Error\LoaderError
      */
-    public static function getCriticalCssTags(array $config, $name = null): string
+    public static function getCriticalCssTags(array $config, $name = null, array $attributes = []): string
     {
         // Resolve the template name
         $template = Craft::$app->getView()->resolveTemplate($name ?? Twigpack::$templateName ?? '');
@@ -145,7 +148,7 @@ class Manifest
                     $name
                 ) . $config['localFiles']['criticalSuffix'];
 
-            return self::getCssInlineTags($path);
+            return self::getCssInlineTags($path, $attributes);
         }
 
         return '';
@@ -154,6 +157,7 @@ class Manifest
     /**
      * Returns the uglified loadCSS rel=preload Polyfill as per:
      * https://github.com/filamentgroup/loadCSS#how-to-use-loadcss-recommended-example
+     *
      * @return string
      * @throws \craft\errors\DeprecationException
      * @deprecated in 1.2.0
@@ -169,11 +173,12 @@ class Manifest
      * @param array $config
      * @param string $moduleName
      * @param bool $async
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return null|string
      * @throws NotFoundHttpException
      */
-    public static function getJsModuleTags(array $config, string $moduleName, bool $async)
+    public static function getJsModuleTags(array $config, string $moduleName, bool $async, array $attributes = [])
     {
         $legacyModule = self::getModule($config, $moduleName, 'legacy', true);
         if ($legacyModule === null) {
@@ -188,15 +193,15 @@ class Manifest
         }
         $lines = [];
         if ($async) {
-            $lines[] = Html::jsFile($modernModule, [
+            $lines[] = Html::jsFile($modernModule, array_merge([
                 'type' => 'module',
-            ]);
-            $lines[] = Html::jsFile($legacyModule, [
+            ], $attributes));
+            $lines[] = Html::jsFile($legacyModule, array_merge([
                 'nomodule' => true,
-            ]);
+            ], $attributes));
         } else {
-            $lines[] = Html::jsFile($legacyModule, [
-            ]);
+            $lines[] = Html::jsFile($legacyModule, array_merge([
+            ], $attributes));
         }
 
         return implode("\r\n", $lines);
@@ -219,9 +224,11 @@ class Manifest
      *
      * c.f.: https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc
      *
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
+     *
      * @return string
      */
-    public static function getSafariNomoduleFix(): string
+    public static function getSafariNomoduleFix(array $attributes = []): string
     {
         $code = /** @lang JavaScript */
             <<<EOT
@@ -234,7 +241,7 @@ EOT;
             self::includeNonce($nonce, 'script-src');
         }
 
-        return Html::script($code, $config);
+        return Html::script($code, array_merge($config, $attributes));
     }
 
     /**
