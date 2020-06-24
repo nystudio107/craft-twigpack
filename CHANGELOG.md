@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.2.3 - 2020-06-24
+### Added
+* Added the ability to pass down an `$attributes` array to functions that generate tags, so you can add arbitrary HTML attributes
+
 ## 1.2.2 - 2020-05-25
 ### Added
 * Added `cspNonce` setting to allow for Content Security Policy nonce support for inline CSS/JS
