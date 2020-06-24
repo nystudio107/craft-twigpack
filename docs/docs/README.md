@@ -230,6 +230,21 @@ This will output:
 ...as per [The Simplest Way to Load CSS Asynchronously)
 ](https://www.filamentgroup.com/lab/load-css-simpler/).
 
+You can also include an optional third parameter, which is an array of key/value pairs of HTML attributes that should get added to the resulting tags:
+
+```twig
+{{ craft.twigpack.includeCssModule("style.css", true, {
+    "crossorigin": "anonymous",
+}) }}
+```
+
+This will output:
+
+```html
+<link rel="stylesheet" href="/css/style.sfkjsf734ashf.css" media="print" onload="this.media='all'" crossorigin="anonymous">
+<noscript><link rel="stylesheet" href="/css/style.sfkjsf734ashf.css" crossorigin="anonymous"></noscript>
+```
+
 ### Including JavaScript
 
 To include a versioned JavaScript module in your templates, do:
@@ -259,6 +274,21 @@ This will output:
 
 This assumes you've set up a webpack build as per the [Deploying ES2015+ Code in Production Today](https://philipwalton.com/articles/deploying-es2015-code-in-production-today/) article, where you create both a legacy ES5 bundle with polyfills, and a modern ES6+ module.
 
+You can also include an optional third parameter, which is an array of key/value pairs of HTML attributes that should get added to the resulting tags:
+
+```twig
+{{ craft.twigpack.includeJsModule("app.js", true, {
+    "crossorigin": "anonymous",
+}) }}
+```
+
+This will output:
+
+```html
+<script type="module" src="/js/app.gldlkg983ajhs8s.js" crossorigin="anonymous"></script>
+<script nomodule src="/js/app-legacy.gldlkg983ajhs8s.js" crossorigin="anonymous"></script>
+```
+
 There is a nomodule fix for Safari 10.1 that you can include on the page via:
 
 ```twig
@@ -266,6 +296,7 @@ There is a nomodule fix for Safari 10.1 that you can include on the page via:
 ```
 
 This will output:
+
 ```html
 <script>
 !function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()},!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();
@@ -273,6 +304,22 @@ This will output:
 ```
 
 ...as per the [safari-nomodule.js Gist](https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc). You'll want to include this once on the page, before you do `craft.twigpack.includeJsModule("app.js", true)`. It's only necessary if you're using legacy/modern JavaScript bundles.
+
+You can also include an optional parameter, which is an array of key/value pairs of HTML attributes that should get added to the resulting tags:
+
+```twig
+{{ craft.twigpack.includeSafariNomoduleFix({
+    "lang": "ts",
+}) }}
+```
+
+This will output:
+
+```html
+<script lang="ts">
+!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()},!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();
+</script>
+```
 
 ### Getting a Module URI
 
@@ -343,6 +390,21 @@ Aliases can also be used:
 {{ craft.twigpack.includeInlineCssTags("@webroot/foo.css") }}
 ```
 
+You can also include an optional second parameter, which is an array of key/value pairs of HTML attributes that should get added to the resulting tags:
+
+```twig
+{{ craft.twigpack.includeInlineCssTags("@webroot/foo.css", {
+    "media": "all",
+}) }}
+```
+
+This will output:
+
+```html
+<style media="all">
+</style>
+```
+
 #### craft.twigpack.includeCriticalCssTags()
 
 If you're using Critical CSS, this function allows you to easily inline the critical CSS by doing just:
@@ -365,10 +427,25 @@ You can override the automatic template name determination by passing in your ow
 {{ craft.twigpack.includeCriticalCssTags("/path/to/foo.css") }}
 ```
 
+You can also include an optional second parameter, which is an array of key/value pairs of HTML attributes that should get added to the resulting tags:
+
+```twig
+{{ craft.twigpack.includeCriticalCssTags("/path/to/foo.css", {
+    "media": "all",
+}) }}
+```
+
+This will output:
+
+```html
+<style media="all">
+</style>
+```
+
 ## Just for Fun
 
 Here's a video of hot module replacement of a Vue JS component, using Twigpack as the bridge:
 
-[![Hot Module Replacement with webpack & Twigpack](http://i3.ytimg.com/vi/LfF3CV_Do0Y/hqdefault.jpg)](https://youtu.be/LfF3CV_Do0Y)
+[![Hot Module Replacement with webpack & Twigpack](https://i3.ytimg.com/vi/LfF3CV_Do0Y/hqdefault.jpg)](https://youtu.be/LfF3CV_Do0Y)
 
 Brought to you by [nystudio107](https://nystudio107.com/)
