@@ -33,45 +33,49 @@ class Manifest extends Component
     /**
      * Return the HTML tags to include the CSS
      *
-     * @param string     $moduleName
-     * @param bool       $async
+     * @param string $moduleName
+     * @param bool $async
      * @param null|array $config
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return string
      * @throws NotFoundHttpException
      */
-    public function getCssModuleTags(string $moduleName, bool $async = false, $config = null): string
+    public function getCssModuleTags(string $moduleName, bool $async = false, $config = null, array $attributes = []): string
     {
         $settings = Twigpack::$plugin->getSettings();
         $config = $config ?? $settings->getAttributes();
 
-        return ManifestHelper::getCssModuleTags($config, $moduleName, $async);
+        return ManifestHelper::getCssModuleTags($config, $moduleName, $async, $attributes);
     }
 
     /**
      * Returns the CSS file in $path wrapped in <style></style> tags
      *
      * @param $path
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return string
      */
-    public function getCssInlineTags(string $path): string
+    public function getCssInlineTags(string $path, array $attributes = []): string
     {
-        return ManifestHelper::getCssInlineTags($path);
+        return ManifestHelper::getCssInlineTags($path, $attributes);
     }
 
     /**
-     * @param array       $config
+     * @param array $config
      * @param null|string $name
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return string
+     * @throws \Twig\Error\LoaderError
      */
-    public function getCriticalCssTags($name = null, $config = null): string
+    public function getCriticalCssTags($name = null, $config = null, array $attributes = []): string
     {
         $settings = Twigpack::$plugin->getSettings();
         $config = $config ?? $settings->getAttributes();
 
-        return ManifestHelper::getCriticalCssTags($config, $name);
+        return ManifestHelper::getCriticalCssTags($config, $name, $attributes);
     }
 
     /**
@@ -91,26 +95,29 @@ class Manifest extends Component
      * @param string     $moduleName
      * @param bool       $async
      * @param null|array $config
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return null|string
      * @throws NotFoundHttpException
      */
-    public function getJsModuleTags(string $moduleName, bool $async = false, $config = null)
+    public function getJsModuleTags(string $moduleName, bool $async = false, $config = null, array $attributes = [])
     {
         $settings = Twigpack::$plugin->getSettings();
         $config = $config ?? $settings->getAttributes();
 
-        return ManifestHelper::getJsModuleTags($config, $moduleName, $async);
+        return ManifestHelper::getJsModuleTags($config, $moduleName, $async, $attributes);
     }
 
     /**
      * Return the Safari 10.1 nomodule JavaScript fix
      *
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
+     *
      * @return string
      */
-    public function getSafariNomoduleFix(): string
+    public function getSafariNomoduleFix(array $attributes = []): string
     {
-        return ManifestHelper::getSafariNomoduleFix();
+        return ManifestHelper::getSafariNomoduleFix($attributes);
     }
 
     /**

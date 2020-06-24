@@ -43,17 +43,17 @@ class ManifestVariable
     }
 
     /**
-     * @param string     $moduleName
-     * @param bool       $async
-     * @param null|array $config
+     * @param string $moduleName
+     * @param bool $async
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return Markup
      * @throws NotFoundHttpException
      */
-    public function includeCssModule(string $moduleName, bool $async = false, $config = null): Markup
+    public function includeCssModule(string $moduleName, bool $async = false, array $attributes = []): Markup
     {
         return Template::raw(
-            Twigpack::$plugin->manifest->getCssModuleTags($moduleName, $async, $config)
+            Twigpack::$plugin->manifest->getCssModuleTags($moduleName, $async, null, $attributes)
         );
     }
 
@@ -61,13 +61,14 @@ class ManifestVariable
      * Returns the CSS file in $path wrapped in <style></style> tags
      *
      * @param string $path
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return Markup
      */
-    public function includeInlineCssTags(string $path): Markup
+    public function includeInlineCssTags(string $path, array $attributes = []): Markup
     {
         return Template::raw(
-            Twigpack::$plugin->manifest->getCssInlineTags($path)
+            Twigpack::$plugin->manifest->getCssInlineTags($path, $attributes)
         );
     }
 
@@ -76,29 +77,30 @@ class ManifestVariable
      * tags
      *
      * @param null|string $name
-     * @param null|array  $config
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return Markup
+     * @throws \Twig\Error\LoaderError
      */
-    public function includeCriticalCssTags($name = null, $config = null): Markup
+    public function includeCriticalCssTags($name = null, array $attributes = []): Markup
     {
         return Template::raw(
-            Twigpack::$plugin->manifest->getCriticalCssTags($name, $config)
+            Twigpack::$plugin->manifest->getCriticalCssTags($name, null, $attributes)
         );
     }
 
     /**
      * @param string     $moduleName
      * @param bool       $async
-     * @param null|array $config
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return null|Markup
      * @throws NotFoundHttpException
      */
-    public function includeJsModule(string $moduleName, bool $async = false, $config = null)
+    public function includeJsModule(string $moduleName, bool $async = false, array $attributes = [])
     {
         return Template::raw(
-            Twigpack::$plugin->manifest->getJsModuleTags($moduleName, $async, $config)
+            Twigpack::$plugin->manifest->getJsModuleTags($moduleName, $async, null, $attributes)
         );
     }
 
@@ -139,12 +141,14 @@ class ManifestVariable
     /**
      * Include the Safari 10.1 nomodule fix JavaScript
      *
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
+     *
      * @return Markup
      */
-    public function includeSafariNomoduleFix(): Markup
+    public function includeSafariNomoduleFix(array $attributes = []): Markup
     {
         return Template::raw(
-            Twigpack::$plugin->manifest->getSafariNomoduleFix()
+            Twigpack::$plugin->manifest->getSafariNomoduleFix($attributes)
         );
     }
 
