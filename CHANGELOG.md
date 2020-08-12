@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.2.4 - 2020-08-12
+### Changed
+* Suppress errors for `styles.js` modules (which is a work-around to a webpack bug)
+
 ## 1.2.3 - 2020-06-24
 ### Added
 * Added the ability to pass down an `$attributes` array to functions that generate tags, so you can add arbitrary HTML attributes
