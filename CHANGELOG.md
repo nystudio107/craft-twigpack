@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.2.5 - 2020-08-14
+### Changed
+* Fixed a regression from the `styles.js` error suppression that would cause it to throw an exception if you attempted to load it
+
 ## 1.2.4 - 2020-08-12
 ### Changed
 * Suppress errors for `styles.js` modules (which is a work-around to a webpack bug)
