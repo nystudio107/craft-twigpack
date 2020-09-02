@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.2.6 - 2020-09-02
+### Changed
+* Ensure that a string is always passed to `Template::raw()`
+
 ## 1.2.5 - 2020-08-14
 ### Changed
 * Fixed a regression from the `styles.js` error suppression that would cause it to throw an exception if you attempted to load it
