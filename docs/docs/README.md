@@ -138,7 +138,6 @@ Note that the `manifest.json` is loaded server-side via PHP, so if you're using 
 
 Note also that the **manifestPath** defaults to a Yii2 alias `@webroot/` (adjust as necessary to point to your `manifest.json` on the file system); this allows Twigpack to load the manifest from the file system, rather than via http request, and is the preferred method. However, it works fine as a full URL as well if you have your `manifest.json` hosted on a CDN or such.
 
-For a slightly more simplified version of the above config, 
 ### Legacy and Modern Bundles
 
 The idea behind using `manifest.json` and `manifest-legacy.json` is that there will be two builds, one for modern ES6+ modules, and a second for legacy ES5 bundles with polyfills, etc. The entry points are named the same, but the files the entry points load are different.
