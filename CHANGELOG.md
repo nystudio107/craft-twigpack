@@ -1,8 +1,9 @@
 # Twigpack Changelog
 
-## 1.2.6 - 2020-09-02
+## 1.2.6 - 2020-09-16
 ### Changed
 * Ensure that a string is always passed to `Template::raw()`
+* Updated the docs
 
 ## 1.2.5 - 2020-08-14
 ### Changed
