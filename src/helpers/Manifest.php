@@ -45,6 +45,10 @@ class Manifest
         'X-WebKit-CSP',
     ];
 
+    const SUPPRESS_ERRORS_FOR_MODULES = [
+        'styles.js',
+    ];
+
     // Protected Static Properties
     // =========================================================================
 
@@ -414,14 +418,16 @@ EOT;
         // Get the manifest file
         $manifest = self::getManifestFile($config, $type);
         if ($manifest !== null) {
-
             // Make sure it exists in the manifest
             if (empty($manifest[$moduleName])) {
-                self::reportError(Craft::t(
-                    'twigpack',
-                    'Module does not exist in the manifest: {moduleName}',
-                    ['moduleName' => $moduleName]
-                ), $soft);
+                // Don't report errors for any files in SUPPRESS_ERRORS_FOR_MODULES
+                if (!in_array($moduleName, self::SUPPRESS_ERRORS_FOR_MODULES)) {
+                    self::reportError(Craft::t(
+                        'twigpack',
+                        'Module does not exist in the manifest: {moduleName}',
+                        ['moduleName' => $moduleName]
+                    ), $soft);
+                }
 
                 return null;
             }

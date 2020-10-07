@@ -38,7 +38,7 @@ class ManifestVariable
     public static function includeCssRelPreloadPolyfill(): Markup
     {
         return Template::raw(
-            Twigpack::$plugin->manifest->getCssRelPreloadPolyfill()
+            Twigpack::$plugin->manifest->getCssRelPreloadPolyfill() ?? ''
         );
     }
 
@@ -53,7 +53,7 @@ class ManifestVariable
     public function includeCssModule(string $moduleName, bool $async = false, array $attributes = []): Markup
     {
         return Template::raw(
-            Twigpack::$plugin->manifest->getCssModuleTags($moduleName, $async, null, $attributes)
+            Twigpack::$plugin->manifest->getCssModuleTags($moduleName, $async, null, $attributes) ?? ''
         );
     }
 
@@ -68,7 +68,7 @@ class ManifestVariable
     public function includeInlineCssTags(string $path, array $attributes = []): Markup
     {
         return Template::raw(
-            Twigpack::$plugin->manifest->getCssInlineTags($path, $attributes)
+            Twigpack::$plugin->manifest->getCssInlineTags($path, $attributes) ?? ''
         );
     }
 
@@ -85,7 +85,7 @@ class ManifestVariable
     public function includeCriticalCssTags($name = null, array $attributes = []): Markup
     {
         return Template::raw(
-            Twigpack::$plugin->manifest->getCriticalCssTags($name, null, $attributes)
+            Twigpack::$plugin->manifest->getCriticalCssTags($name, null, $attributes) ?? ''
         );
     }
 
@@ -100,7 +100,7 @@ class ManifestVariable
     public function includeJsModule(string $moduleName, bool $async = false, array $attributes = [])
     {
         return Template::raw(
-            Twigpack::$plugin->manifest->getJsModuleTags($moduleName, $async, null, $attributes)
+            Twigpack::$plugin->manifest->getJsModuleTags($moduleName, $async, null, $attributes) ?? ''
         );
     }
 
@@ -115,7 +115,7 @@ class ManifestVariable
     public function getModuleTagsByPath(string $moduleName, bool $async = false, array $attributes = [])
     {
         return Template::raw(
-            Twigpack::$plugin->manifest->getModuleTagsByPath($moduleName, $async, null, $attributes)
+            Twigpack::$plugin->manifest->getModuleTagsByPath($moduleName, $async, null, $attributes) ?? ''
         );
     }
 
@@ -132,7 +132,7 @@ class ManifestVariable
     public function getModuleUri(string $moduleName, string $type = 'modern', $config = null)
     {
         return Template::raw(
-            Twigpack::$plugin->manifest->getModule($moduleName, $type, $config)
+            Twigpack::$plugin->manifest->getModule($moduleName, $type, $config) ?? ''
         );
     }
 
@@ -149,7 +149,7 @@ class ManifestVariable
     public function getModuleHash(string $moduleName, string $type = 'modern', $config = null)
     {
         return Template::raw(
-            Twigpack::$plugin->manifest->getModuleHash($moduleName, $type, $config)
+            Twigpack::$plugin->manifest->getModuleHash($moduleName, $type, $config) ?? ''
         );
     }
 
@@ -163,7 +163,7 @@ class ManifestVariable
     public function includeSafariNomoduleFix(array $attributes = []): Markup
     {
         return Template::raw(
-            Twigpack::$plugin->manifest->getSafariNomoduleFix($attributes)
+            Twigpack::$plugin->manifest->getSafariNomoduleFix($attributes) ?? ''
         );
     }
 
@@ -177,7 +177,7 @@ class ManifestVariable
     public function includeFile(string $path): Markup
     {
         return Template::raw(
-            Twigpack::$plugin->manifest->getFile($path)
+            Twigpack::$plugin->manifest->getFile($path) ?? ''
         );
     }
 
