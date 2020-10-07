@@ -24,7 +24,8 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^3.0.0"
+        "craftcms/cms": "^3.0.0",
+        "galbar/jsonpath": "^1.1"
     },
     "autoload": {
         "psr-4": {
