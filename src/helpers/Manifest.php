@@ -445,6 +445,10 @@ EOT;
             $devMode = Craft::$app->getConfig()->getGeneral()->devMode;
             if ($devMode) {
                 $devServerPrefix = $config['devServer']['publicPath'];
+                // If we're using the devserver, swap in the deverserver path
+                if (UrlHelper::isAbsoluteUrl($path) && self::$isHot) {
+                    $path = parse_url($path, PHP_URL_PATH);
+                }
                 $devServerPath = self::combinePaths(
                     $devServerPrefix,
                     $path
