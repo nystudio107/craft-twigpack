@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.2.7 - 2020-12-11
+### Fixed
+* Fixed the `craft.twigpack.includeFileFromManifest()` so that it will use the internal `devServer.publicPath` setting for HMR
+
 ## 1.2.6 - 2020-09-16
 ### Changed
 * Ensure that a string is always passed to `Template::raw()`
