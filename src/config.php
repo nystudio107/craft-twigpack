@@ -51,7 +51,7 @@ return [
             'publicPath' => 'http://localhost:8080/',
         ],
         // Bundle to use with the webpack-dev-server
-        'devServerBuildType' => 'modern',
+        'devServerBuildType' => 'combined',
         // Whether to include a Content Security Policy "nonce" for inline
         // CSS or JavaScript. Valid values are 'header' or 'tag' for how the CSP
         // should be included. c.f.:
