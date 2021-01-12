@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.2.8 - 2021-01-12
+### Fixed
+* Fixed an issue where `includeFileFromManifest()` wouldn't properly fall back on non-hot files if the URL returned a 404 with HTML content
+
 ## 1.2.7 - 2020-12-11
 ### Fixed
 * Fixed the `craft.twigpack.includeFileFromManifest()` so that it will use the internal `devServer.publicPath` setting for HMR
