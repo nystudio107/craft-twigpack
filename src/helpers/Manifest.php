@@ -627,6 +627,9 @@ EOT;
     protected static function getHttpResponseCode($url, $context)
     {
         $headers = @get_headers($url, 0, $context);
+        if (empty($headers)) {
+            return '404';
+        }
 
         return substr($headers[0], 9, 3);
     }
