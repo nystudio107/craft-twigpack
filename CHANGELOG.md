@@ -1,8 +1,11 @@
 # Twigpack Changelog
 
-## 1.2.9 - UNRELEASED
+## 1.2.9 - 2021-01-12
 ### Changed
 * Default devServerBuildType to `combined`
+
+### Fixed
+* Ensure that `getHttpResponseCode()` returns a 404 on error
 
 ## 1.2.8 - 2021-01-12
 ### Fixed
