@@ -576,6 +576,7 @@ EOT;
             self::CACHE_KEY . $cacheKeySuffix . $path,
             function () use ($path, $callback) {
                 $result = null;
+                $contents = null;
                 if (UrlHelper::isAbsoluteUrl($path)) {
                     /**
                      * Silly work-around for what appears to be a file_get_contents bug with https
@@ -593,7 +594,9 @@ EOT;
                         ],
                     ];
                     $context = stream_context_create($opts);
-                    $contents = @file_get_contents($path, false, $context);
+                    if (self::getHttpResponseCode($path, $context) === '200') {
+                        $contents = @file_get_contents($path, false, $context);
+                    }
                 } else {
                     $contents = @file_get_contents($path);
                 }
@@ -612,6 +615,20 @@ EOT;
         self::$files[$path] = $file;
 
         return $file;
+    }
+
+    /**
+     * Get the response code from a given $url
+     *
+     * @param $url
+     * @param $context
+     * @return false|string
+     */
+    protected static function getHttpResponseCode($url, $context)
+    {
+        $headers = @get_headers($url, 0, $context);
+
+        return substr($headers[0], 9, 3);
     }
 
     /**
