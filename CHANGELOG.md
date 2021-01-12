@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.2.9 - UNRELEASED
+### Changed
+* Default devServerBuildType to `combined`
+
 ## 1.2.8 - 2021-01-12
 ### Fixed
 * Fixed an issue where `includeFileFromManifest()` wouldn't properly fall back on non-hot files if the URL returned a 404 with HTML content
