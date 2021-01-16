@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.2.10 - 2021-01-16
+### Added
+* Added a `FileDependency` cache dependency for files loaded from a local path, so things like the `manifest.json` will auto-cache bust if the file changes
+
 ## 1.2.9 - 2021-01-12
 ### Changed
 * Default devServerBuildType to `combined`
