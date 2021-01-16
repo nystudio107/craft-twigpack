@@ -20,6 +20,8 @@ use craft\helpers\Json as JsonHelper;
 use craft\helpers\UrlHelper;
 
 use yii\base\Exception;
+use yii\caching\ChainedDependency;
+use yii\caching\FileDependency;
 use yii\caching\TagDependency;
 use yii\web\NotFoundHttpException;
 
@@ -560,6 +562,17 @@ EOT;
                 self::CACHE_TAG . $path,
             ],
         ]);
+        // If this is a file path such as for the `manifest.json`, add a FileDependency so it's cache bust if the file changes
+        if (!UrlHelper::isAbsoluteUrl($path)) {
+            $dependency = new ChainedDependency([
+                'dependencies' => [
+                    new FileDependency([
+                        'fileName' => $path
+                    ]),
+                    $dependency
+                ]
+            ]);
+        }
         // Set the cache duration based on devMode
         $cacheDuration = Craft::$app->getConfig()->getGeneral()->devMode
             ? self::DEVMODE_CACHE_DURATION
