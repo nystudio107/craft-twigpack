@@ -38,8 +38,6 @@ class Manifest
     const CACHE_KEY = 'twigpack';
     const CACHE_TAG = 'twigpack';
 
-    const DEVMODE_CACHE_DURATION = 1;
-
     const CSP_HEADERS = [
         'Content-Security-Policy',
         'X-Content-Security-Policy',
@@ -393,7 +391,7 @@ EOT;
             }
             // Normalize the path
             $path = self::combinePaths($manifestPath, $config['manifest'][$thisType]);
-            $manifest = self::getJsonFile($path);
+            $manifest = self::getJsonFile($path, $config['devServerManifestCacheDuration'], true);
             // If the manifest isn't found, and it was hot, fall back on non-hot
             if ($manifest === null) {
                 // We couldn't find a manifest; throw an error
@@ -492,12 +490,14 @@ EOT;
      * Return the contents of a JSON file from a URI path
      *
      * @param string $path
+     * @param int $devCacheDuration
+     * @param bool $isManifest
      *
      * @return null|array
      */
-    protected static function getJsonFile(string $path)
+    protected static function getJsonFile(string $path, int $devCacheDuration = 1, bool $isManifest = false)
     {
-        return self::getFileFromUri($path, [self::class, 'jsonFileDecode']);
+        return self::getFileFromUri($path, [self::class, 'jsonFileDecode'], false, $devCacheDuration, $isManifest);
     }
 
     // Protected Static Methods
@@ -509,10 +509,12 @@ EOT;
      * @param string $path
      * @param callable|null $callback
      * @param bool $pathOnly
+     * @param int $devCacheDuration
+     * @param bool $isManifest
      *
      * @return null|mixed
      */
-    protected static function getFileFromUri(string $path, callable $callback = null, bool $pathOnly = false)
+    protected static function getFileFromUri(string $path, callable $callback = null, bool $pathOnly = false, int $devCacheDuration = 1, bool $isManifest = false)
     {
         // Resolve any aliases
         $alias = Craft::getAlias($path, false);
@@ -538,7 +540,7 @@ EOT;
             }
         }
 
-        return self::getFileContents($path, $callback);
+        return self::getFileContents($path, $callback, $devCacheDuration, $isManifest);
     }
 
     /**
@@ -546,10 +548,12 @@ EOT;
      *
      * @param string $path
      * @param callable $callback
+     * @param int $devCacheDuration
+     * @param bool $isManifest
      *
      * @return null|mixed
      */
-    protected static function getFileContents(string $path, callable $callback = null)
+    protected static function getFileContents(string $path, callable $callback = null, int $devCacheDuration = 1, bool $isManifest = false)
     {
         // Return the memoized manifest if it exists
         if (!empty(self::$files[$path])) {
@@ -575,10 +579,10 @@ EOT;
         }
         // Set the cache duration based on devMode
         $cacheDuration = Craft::$app->getConfig()->getGeneral()->devMode
-            ? self::DEVMODE_CACHE_DURATION
+            ? $devCacheDuration
             : null;
         // If we're in `devMode` invalidate the cache immediately
-        if (Craft::$app->getConfig()->getGeneral()->devMode) {
+        if (!$isManifest && Craft::$app->getConfig()->getGeneral()->devMode) {
             self::invalidateCaches();
         }
         // Get the result from the cache, or parse the file

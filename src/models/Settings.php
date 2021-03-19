@@ -76,6 +76,12 @@ class Settings extends Model
     public $devServerBuildType = 'modern';
 
     /**
+     * @var int defines for how many seconds the manifest file from the webpack dev server is cached.
+     *      Any integer greater than 0 is valid. Defaults to 1.
+     */
+    public $devServerManifestCacheDuration = 1;
+
+    /**
      * @var string Whether to include a Content Security Policy "nonce" for inline
      *      CSS or JavaScript. Valid values are 'header' or 'tag' for how the CSP
      *      should be included. c.f.:
@@ -105,6 +111,7 @@ class Settings extends Model
             ['useDevServer', 'default', 'value' => true],
             ['errorEntry', 'string'],
             ['devServerBuildType', 'string'],
+            ['devServerManifestCacheDuration', 'number', 'integerOnly' => true, 'min' => 1 ],
             ['cspNonce', 'string'],
             [
                 [
