@@ -1,6 +1,6 @@
 # Twigpack Changelog
 
-## 1.2.11 - UNRELEASED
+## 1.2.11 - 2021.03.21
 ### Changed
 * Use Guzzle for remote file fetches rather than `curl`, for improved performance
 
