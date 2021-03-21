@@ -18,9 +18,11 @@ use Craft;
 use craft\helpers\Html;
 use craft\helpers\Json as JsonHelper;
 use craft\helpers\UrlHelper;
+
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
+
 use yii\base\Exception;
 use yii\caching\ChainedDependency;
 use yii\caching\FileDependency;
@@ -609,7 +611,9 @@ EOT;
                         if ($response->getStatusCode() === 200) {
                             $contents = $response->getBody()->getContents();
                         }
-                    } catch(GuzzleException $ex) {}
+                    } catch(GuzzleException $e) {
+                        Craft::error($e, __METHOD__);
+                    }
                 } else {
                     $contents = @file_get_contents($path);
                 }
