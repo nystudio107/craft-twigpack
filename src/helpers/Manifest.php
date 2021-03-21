@@ -19,6 +19,10 @@ use craft\helpers\Html;
 use craft\helpers\Json as JsonHelper;
 use craft\helpers\UrlHelper;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\RequestOptions;
+
 use yii\base\Exception;
 use yii\caching\ChainedDependency;
 use yii\caching\FileDependency;
@@ -591,24 +595,24 @@ EOT;
                 $result = null;
                 $contents = null;
                 if (UrlHelper::isAbsoluteUrl($path)) {
-                    /**
-                     * Silly work-around for what appears to be a file_get_contents bug with https
-                     * http://stackoverflow.com/questions/10524748/why-im-getting-500-error-when-using-file-get-contents-but-works-in-a-browser
-                     */
-                    $opts = [
-                        'ssl' => [
-                            'verify_peer' => false,
-                            'verify_peer_name' => false,
-                        ],
-                        'http' => [
-                            'timeout' => 5,
-                            'ignore_errors' => true,
-                            'header' => "User-Agent:Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13\r\n",
-                        ],
-                    ];
-                    $context = stream_context_create($opts);
-                    if (self::getHttpResponseCode($path, $context) === '200') {
-                        $contents = @file_get_contents($path, false, $context);
+                    $client = new Client([
+                        RequestOptions::HTTP_ERRORS => false,
+                        RequestOptions::CONNECT_TIMEOUT => 3,
+                        RequestOptions::VERIFY => false,
+                        RequestOptions::TIMEOUT => 5,
+                    ]);
+                    try {
+                        $response = $client->request('GET', $path, [
+                            RequestOptions::HEADERS => [
+                                'User-Agent' => "User-Agent:Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13\r\n",
+                                'Accept' => '*/*',
+                            ],
+                        ]);
+                        if ($response->getStatusCode() === 200) {
+                            $contents = $response->getBody()->getContents();
+                        }
+                    } catch(GuzzleException $e) {
+                        Craft::error($e, __METHOD__);
                     }
                 } else {
                     $contents = @file_get_contents($path);
