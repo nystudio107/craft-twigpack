@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.2.11 - UNRELEASED
+### Changed
+* Use Guzzle for remote file fetches rather than `curl`, for improved performance
+
 ## 1.2.10 - 2021-02-24
 ### Added
 * Added a `FileDependency` cache dependency for files loaded from a local path, so things like the `manifest.json` will auto-cache bust if the file changes
