@@ -171,7 +171,7 @@ The [clear_caches.sh](https://github.com/nystudio107/craft-scripts#clear_cachess
 ```json
 "scripts": {
         "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+            "@php -r \"file_exists('.env') || copy('example.env', '.env');\""
         ],
         "post-create-project-cmd": [
             "@php craft setup/welcome"
