@@ -611,7 +611,7 @@ EOT;
                         if ($response->getStatusCode() === 200) {
                             $contents = $response->getBody()->getContents();
                         }
-                    } catch(GuzzleException $e) {
+                    } catch(\Throwable $e) {
                         Craft::error($e, __METHOD__);
                     }
                 } else {
