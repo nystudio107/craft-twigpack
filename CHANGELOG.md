@@ -5,7 +5,7 @@
 * Catch all errors thrown by Guzzle
 
 ### Fixed
-* Add a `100ms` delay when requesting the manifest file if using it in hot mode, as a hack to avoid a `webpack-dev-server` / Tailwind CSS JIT race condition
+* Add a `100ms` delay when requesting the manifest file if using it in hot mode, as a hack to avoid a `webpack-dev-server` / Tailwind CSS JIT race condition (https://github.com/nystudio107/craft/issues/55)
 
 ## 1.2.11 - 2021.03.21
 ### Changed
