@@ -595,12 +595,20 @@ EOT;
                 $result = null;
                 $contents = null;
                 if (UrlHelper::isAbsoluteUrl($path)) {
-                    $client = new Client([
+                    $clientOtions = [
                         RequestOptions::HTTP_ERRORS => false,
                         RequestOptions::CONNECT_TIMEOUT => 3,
                         RequestOptions::VERIFY => false,
                         RequestOptions::TIMEOUT => 5,
-                    ]);
+                    ];
+                    // If we're hot, insert a short 50ms delay in fetching remove files, to handle a webpack-dev-server/
+                    // Tailwind CSS JIT race condition
+                    if (self::$isHot) {
+                        $clientOtions = array_merge($clientOtions, [
+                            RequestOptions::DELAY => 100,
+                        ]);
+                    }
+                    $client = new Client($clientOtions);
                     try {
                         $response = $client->request('GET', $path, [
                             RequestOptions::HEADERS => [
@@ -611,7 +619,7 @@ EOT;
                         if ($response->getStatusCode() === 200) {
                             $contents = $response->getBody()->getContents();
                         }
-                    } catch(GuzzleException $e) {
+                    } catch(\Throwable $e) {
                         Craft::error($e, __METHOD__);
                     }
                 } else {
