@@ -1,6 +1,6 @@
 # Twigpack Changelog
 
-## 1.2.12 - UNRELEASED
+## 1.2.12 - 2021.04.05
 ### Changed
 * Catch all errors thrown by Guzzle
 
