@@ -1,5 +1,10 @@
 # Twigpack Changelog
 
+## Unreleased
+
+### Fixed
+* Fixed a malformed `User-Agent` header in a request to `mix-manifest.json`
+
 ## 1.2.12 - 2021.04.05
 ### Changed
 * Catch all errors thrown by Guzzle
