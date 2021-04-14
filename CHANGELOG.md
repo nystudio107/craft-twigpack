@@ -1,5 +1,12 @@
 # Twigpack Changelog
 
+## 1.2.13 - 2021.04.13
+### Added
+* Added buildchain for docs
+
+### Fixed
+* Fixed a malformed `User-Agent` header in a request to `mix-manifest.json` (https://github.com/nystudio107/craft-twigpack/issues/62)
+
 ## 1.2.12 - 2021.04.05
 ### Changed
 * Catch all errors thrown by Guzzle
