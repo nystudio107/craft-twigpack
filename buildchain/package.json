@@ -1,0 +1,36 @@
+{
+  "author": {
+    "email": "andrew@nystudio107.com",
+    "name": "Andrew Welch",
+    "url": "https://nystudio107.com"
+  },
+  "browser": "./src/Twigpack.php",
+  "bugs": {
+    "email": "andrew@nystudio107.com",
+    "url": "https://nystudio107.com"
+  },
+  "dependencies": {
+  },
+  "description": "Twigpack is a bridge between Twig and webpack, with manifest.json & webpack-dev-server HMR support",
+  "devDependencies": {
+ },
+  "homepage": "https://nystudio107.com",
+  "keywords": [
+    "twigpack",
+    "craftcms",
+    "craft",
+    "cms",
+    "plugin"
+  ],
+  "license": "SEE LICENSE IN LICENSE.md",
+  "name": "twigpack",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nystudio107/craft-twigpack.git"
+  },
+  "scripts": {
+    "docs": "cd ../docs && rm -f package-lock.json && npm install && npm run docs:build"
+  },
+  "version": "1.2.13"
+}
