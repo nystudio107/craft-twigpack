@@ -1,6 +1,8 @@
 # Twigpack Changelog
 
 ## 1.2.14 - UNRELEASED
+### Changed
+* Move settings from the `composer.json` “extra” to the plugin main class
 ### Fixed
 * Fix `DOCSDEST` path
 
