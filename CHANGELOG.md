@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.2.14 - UNRELEASED
+### Fixed
+* Fix `DOCSDEST` path
+
 ## 1.2.13 - 2021.04.13
 ### Added
 * Added buildchain for docs
