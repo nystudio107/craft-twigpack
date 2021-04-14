@@ -55,6 +55,21 @@ class Twigpack extends Plugin
      */
     public static $templateName;
 
+    // Static Methods
+    // =========================================================================
+
+    /**
+     * @inheritdoc
+     */
+    public function __construct($id, $parent = null, array $config = [])
+    {
+        $config['components'] = [
+            'manifest' => ManifestService::class,
+        ];
+
+        parent::__construct($id, $parent, $config);
+    }
+
     // Public Properties
     // =========================================================================
 
@@ -62,6 +77,16 @@ class Twigpack extends Plugin
      * @var string
      */
     public $schemaVersion = '1.0.0';
+
+    /**
+     * @var bool
+     */
+    public $hasCpSection = false;
+
+    /**
+     * @var bool
+     */
+    public $hasCpSettings = false;
 
     // Public Methods
     // =========================================================================
