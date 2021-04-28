@@ -30,7 +30,7 @@
     "url": "git+https://github.com/nystudio107/craft-twigpack.git"
   },
   "scripts": {
-    "docs": "cd ../docs && rm -f package-lock.json && npm install && npm run docs:build"
+    "docs": "cd ../docs && rm -f package-lock.json && npm install && npm update && npm run docs:build"
   },
   "version": "1.2.13"
 }

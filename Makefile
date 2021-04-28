@@ -6,7 +6,7 @@ DOCKERRUN=docker container run \
 	-t \
 	-v `pwd`:/app \
 	${CONTAINER}:${TAG}
-DOCSDEST?=../../sites/nystudio107/web/docs/similar
+DOCSDEST?=../../sites/nystudio107/web/docs/twigpack
 
 .PHONY: docker docs npm
 
