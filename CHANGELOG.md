@@ -1,10 +1,12 @@
 # Twigpack Changelog
 
-## 1.2.14 - UNRELEASED
+## 1.2.14 - 2021.04.28
 ### Changed
 * Move settings from the `composer.json` “extra” to the plugin main class
+
 ### Fixed
 * Fix `DOCSDEST` path
+* No longer invalidate caches immediately in local dev, and instead rely on the 1s cache (https://github.com/nystudio107/craft-twigpack/issues/67)
 
 ## 1.2.13 - 2021.04.13
 ### Added
