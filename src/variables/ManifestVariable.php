@@ -105,6 +105,21 @@ class ManifestVariable
     }
 
     /**
+     * @param string     $moduleName
+     * @param bool       $async
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
+     *
+     * @return null|Markup
+     * @throws NotFoundHttpException
+     */
+    public function getModuleTagsByPath(string $moduleName, bool $async = false, array $attributes = [])
+    {
+        return Template::raw(
+            Twigpack::$plugin->manifest->getModuleTagsByPath($moduleName, $async, null, $attributes) ?? ''
+        );
+    }
+
+    /**
      * Return the URI to a module
      *
      * @param string $moduleName
@@ -178,7 +193,7 @@ class ManifestVariable
     public function includeFileFromManifest(string $fileName, string $type = 'legacy', $config = null): Markup
     {
         return Template::raw(
-            Twigpack::$plugin->manifest->getFileFromManifest($fileName, $type, $config) ?? ''
+            Twigpack::$plugin->manifest->getFileFromManifest($fileName, $type, $config)
         );
     }
 }

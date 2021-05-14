@@ -109,6 +109,25 @@ class Manifest extends Component
     }
 
     /**
+     * Return the HTML tags to include the modules
+     *
+     * @param string     $moduleName
+     * @param bool       $async
+     * @param null|array $config
+     * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
+     *
+     * @return null|string
+     * @throws NotFoundHttpException
+     */
+    public function getModuleTagsByPath(string $moduleName, bool $async = false, $config = null, array $attributes = [])
+    {
+        $settings = Twigpack::$plugin->getSettings();
+        $config = $config ?? $settings->getAttributes();
+
+        return ManifestHelper::getModuleTagsByPath($config, $moduleName, $async, $attributes);
+    }
+
+    /**
      * Return the Safari 10.1 nomodule JavaScript fix
      *
      * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
