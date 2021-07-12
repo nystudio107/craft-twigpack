@@ -284,12 +284,12 @@ EOT;
                 $module = $alias;
             }
             // Make sure it's a full URL, as required
-            if ($useAbsoluteUrl && !UrlHelper::isAbsoluteUrl($module) && !is_file($module)) {
-                try {
+            try {
+                if ($useAbsoluteUrl && !UrlHelper::isAbsoluteUrl($module) && !is_file($module)) {
                     $module = UrlHelper::siteUrl($module);
-                } catch (Exception $e) {
-                    Craft::error($e->getMessage(), __METHOD__);
                 }
+            } catch (Exception $e) {
+                Craft::error($e->getMessage(), __METHOD__);
             }
         }
 
@@ -474,8 +474,12 @@ EOT;
             if ($alias && is_string($alias)) {
                 $localPath = $alias;
             }
-            if (is_file($localPath)) {
-                return self::getFile($localPath) ?? '';
+            try {
+                if (is_file($localPath)) {
+                    return self::getFile($localPath) ?? '';
+                }
+            } catch (Exception $e) {
+                Craft::error($e->getMessage(), __METHOD__);
             }
         }
 
@@ -524,22 +528,27 @@ EOT;
             $path = $alias;
         }
         // If we only want the file via path, make sure it exists
-        if ($pathOnly && !is_file($path)) {
-            Craft::warning(Craft::t(
-                'twigpack',
-                'File does not exist: {path}',
-                ['path' => $path]
-            ), __METHOD__);
+        try {
+            if ($pathOnly && !is_file($path)) {
+                Craft::warning(Craft::t(
+                    'twigpack',
+                    'File does not exist: {path}',
+                    ['path' => $path]
+                ), __METHOD__);
 
-            return '';
-        }
-        // Make sure it's a full URL
-        if (!UrlHelper::isAbsoluteUrl($path) && !is_file($path)) {
-            try {
-                $path = UrlHelper::siteUrl($path);
-            } catch (Exception $e) {
-                Craft::error($e->getMessage(), __METHOD__);
+                return '';
             }
+        } catch (Exception $e) {
+            Craft::error($e->getMessage(), __METHOD__);
+        }
+
+        // Make sure it's a full URL
+        try {
+            if (!UrlHelper::isAbsoluteUrl($path) && !is_file($path)) {
+                $path = UrlHelper::siteUrl($path);
+            }
+        } catch (Exception $e) {
+            Craft::error($e->getMessage(), __METHOD__);
         }
 
         return self::getFileContents($path, $callback);
