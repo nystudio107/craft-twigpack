@@ -42,18 +42,18 @@ Twigpack is a bridge between Twig and webpack, with `manifest.json` & [webpack-d
 
 ### Why not just use AssetRev?
 
-You might be wondering... why not just use the excellent [AssetRev plugin](https://github.com/clubstudioltd/craft-asset-rev)? You certainly can, and we have in the past. Twigpack was written because:
+You might be wondering... Why not just use the excellent [AssetRev plugin](https://github.com/clubstudioltd/craft-asset-rev)? You certainly can, and we have in the past. Twigpack was written because:
 * We wanted support for legacy/modern JavaScript bundles
 * We wanted to use `webpack-dev-server` for hot module replacement
-* We wanted a way to inline generated files such as critical css that live outside of the `templates/` directory
+* We wanted a way to inline generated files such as critical CSS that live outside of the `templates/` directory
 * We wanted a performant caching mechanism in place
-* ...and we also didn't care about various versioning schemes other than the webpack `manifest.json`
+* ...and we also didn’t care about various versioning schemes other than the webpack `manifest.json`
 
 Use whatever works for you!
 
 ## Configuring Twigpack
 
-Add configuration for Twigpack is done via the `config.php` config file. Here's the default `config.php`; it should be renamed to `twigpack.php` and copied to your `config/` directory to take effect.
+Add configuration for Twigpack is done via the `config.php` config file. Here’s the default `config.php`; it should be renamed to `twigpack.php` and copied to your `config/` directory to take effect.
 
 ### The `config.php` File
 
@@ -116,9 +116,9 @@ return [
 
 * **useDevServer** - is a `boolean` that sets whether you will be using [webpack-dev-server](https://github.com/webpack/webpack-dev-server) for hot module replacement (HMR)
 * **useAbsoluteUrl** - should all module URLs be forced to fully qualified absolute URLs?
-* **errorEntry** - is a string, or array of strings, that should be the JavaScript entry point(s) (e.g.: `app.js`) in your `manifest.json` that should be injected into Twig error templates, to allow hot module replacement to work through Twig error pages. `devMode` must be `true` and **useDevServer** must also be `true` for this to have any effect. [See it in action](https://twitter.com/nystudio107/status/1055474389314162688)
+* **errorEntry** - is a string, or array of strings, that should be the JavaScript entry point(s) (for example: `app.js`) in your `manifest.json` that should be injected into Twig error templates, to allow hot module replacement to work through Twig error pages. `devMode` must be `true` and **useDevServer** must also be `true` for this to have any effect. [See it in action](https://twitter.com/nystudio107/status/1055474389314162688)
 * **cacheKeySuffix** - String to be appended to the cache key
-* **manifest** - is an array with `legacy` and `modern` keys. If you're not using legacy/modern bundles, just name them both `manifest.json`
+* **manifest** - is an array with `legacy` and `modern` keys. If you’re not using legacy/modern bundles, just name them both `manifest.json`
   * **legacy** - the name of your legacy manifest file
   * **modern** - the name of your modern manifest file
  * **server** - is an array with `manifestPath` and `publicPath` keys:
@@ -128,13 +128,13 @@ return [
    * **manifestPath** - the devServer path to your manifest files; it can be a full URL or a partial path, or a Yii2 alias.  This is usually the same as whatever you set your webpack `devServer.publicPath` to
    * **publicPath** - the devServer path to your asset files; it can be a full URL or a partial path. This is usually the same as whatever you set your webpack `output.publicPath` to
  * **devServerBuildType** - Bundle to use with the `webpack-dev-server` -- can be `modern` (the default), `legacy`, or `combined`
- * **cspNonce** - Whether to include a Content Security Policy "nonce" for inline CSS or JavaScript. Valid values are 'header' or 'tag' for how the CSP should be included. [Learn More](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#Unsafe_inline_script)
+ * **cspNonce** - Whether to include a Content Security Policy "nonce" for inline CSS or JavaScript. Valid values are 'header’ or 'tag’ for how the CSP should be included. [Learn More](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#Unsafe_inline_script)
  * **localFiles** - is an array with `basePath`, `criticalPrefix` and `criticalSuffix` keys:
    * **basePath** - the file system path or Yii2 alias to the local file system base path of the web root
-   * **criticalPrefix** - the prefix added to the name of the currently rendering template for the critical css file name
-   * **criticalSuffix** - the suffix added to the name of the currently rendering template for the critical css file name
+   * **criticalPrefix** - the prefix added to the name of the currently rendering template for the critical CSS filename
+   * **criticalSuffix** - the suffix added to the name of the currently rendering template for the critical CSS filename
 
-Note that the `manifest.json` is loaded server-side via PHP, so if you're using a VM such as Homestead, the **manifestPath** may be different from the  **publicPath**.
+Note that the `manifest.json` is loaded server-side via PHP, so if you’re using a VM such as Homestead, the **manifestPath** may be different from the  **publicPath**.
 
 Note also that the **manifestPath** defaults to a Yii2 alias `@webroot/` (adjust as necessary to point to your `manifest.json` on the file system); this allows Twigpack to load the manifest from the file system, rather than via http request, and is the preferred method. However, it works fine as a full URL as well if you have your `manifest.json` hosted on a CDN or such.
 
@@ -142,7 +142,7 @@ Note also that the **manifestPath** defaults to a Yii2 alias `@webroot/` (adjust
 
 The idea behind using `manifest.json` and `manifest-legacy.json` is that there will be two builds, one for modern ES6+ modules, and a second for legacy ES5 bundles with polyfills, etc. The entry points are named the same, but the files the entry points load are different.
 
-Even if you're not producing legacy and modern bundles as per the [Deploying ES2015+ Code in Production Today](https://philipwalton.com/articles/deploying-es2015-code-in-production-today/) article, you can still use Twigpack. Just name both the `legacy` and `modern` manifest files `manifest.json` in the `config.php`
+Even if you’re not producing legacy and modern bundles as per the [Deploying ES2015+ Code in Production Today](https://philipwalton.com/articles/deploying-es2015-code-in-production-today/) article, you can still use Twigpack. Just name both the `legacy` and `modern` manifest files `manifest.json` in the `config.php`
 
 ### DevServer
 
@@ -152,21 +152,21 @@ Note that the **devServer** will only be used if `devMode` is on.
 
 Using the [webpack-dev-server](https://github.com/webpack/webpack-dev-server) means you get [hot module replacement](https://webpack.js.org/concepts/hot-module-replacement/), and the files are all built in-memory for speed. Think of it as a very enhanced version of BrowserWatch or `watch` tasks.
 
-Even if you're not using `webpack-dev-server`, you can still use Twigpack. Just set **useDevServer** to false.
+Even if you’re not using `webpack-dev-server`, you can still use Twigpack. Just set **useDevServer** to false.
 
 ### Caching
 
 Twigpack will memoize the manifest files for performance, and it will also cache them. If `devMode` is on, the cache duration is only 1 second.
 
-If `devMode` is off, the files will be cached until Craft Template Caches are cleared (which is typically done via deployment), or Craft's Data Caches are cleared. You can also manually clear the cache by using the **Clear Caches** Utility.
+If `devMode` is off, the files will be cached until Craft Template Caches are cleared (which is typically done via deployment), or Craft’s Data Caches are cleared. You can also manually clear the cache by using the **Clear Caches** Utility.
 
 The cache duration that Twigpack uses can be configured via the [cacheDuration](https://docs.craftcms.com/v3/config/config-settings.html#cacheduration) Craft General Config Setting.
 
 Twigpack also caches any files you include in your Twig documents (see below) using the same data cache, for quick access.
 
-Twigpack uses Yii2's cache method for its cache, so if you're using Redis, it'll use Redis, if you're using the default, it'll be a file cache, etc. It's highly recommended in general that you are clearing all caches as part of your deploy process; doing so will also clear Twigpack's cache as well.
+Twigpack uses Yii2’s cache method for its cache, so if you’re using Redis, it’ll use Redis, if you’re using the default, it’ll be a file cache, etc. It’s highly recommended in general that you are clearing all caches as part of your deploy process; doing so will also clear Twigpack’s cache as well.
 
-The [clear_caches.sh](https://github.com/nystudio107/craft-scripts#clear_cachessh) script is what we use to clear caches on every deploy. You can also clear the Craft caches via Composer scripts, e.g.:
+The [clear_caches.sh](https://github.com/nystudio107/craft-scripts#clear_cachessh) script is what we use to clear caches on every deploy. You can also clear the Craft caches via Composer scripts, for example:
 
 ```json
 "scripts": {
@@ -185,11 +185,11 @@ The [clear_caches.sh](https://github.com/nystudio107/craft-scripts#clear_cachess
     }
 ```
 
-See the [Exploring the Craft CMS 3 Console Command Line Interface (CLI)](https://nystudio107.com/blog/exploring-the-craft-cms-3-console-command-line-interface-cli#composer-scripts) article for details.
+See the [Exploring the Craft CMS 3 Console command-line Interface (CLI)](https://nystudio107.com/blog/exploring-the-craft-cms-3-console-command-line-interface-cli#composer-scripts) article for details.
 
 ## Using Twigpack
 
-Here's a simplified example `manifest.json` file that we'll be using for these examples:
+Here’s a simplified example `manifest.json` file that we’ll be using for these examples:
 
 ```json
 {
@@ -229,7 +229,7 @@ This will output:
 ...as per [The Simplest Way to Load CSS Asynchronously)
 ](https://www.filamentgroup.com/lab/load-css-simpler/).
 
-You can also include an optional third parameter, which is an array of key/value pairs of HTML attributes that should get added to the resulting tags:
+You can also include an optional third parameter, which is an array of key-value pairs of HTML attributes that should get added to the resulting tags:
 
 ```twig
 {{ craft.twigpack.includeCssModule("style.css", true, {
@@ -271,9 +271,9 @@ This will output:
 <script nomodule src="/js/app-legacy.gldlkg983ajhs8s.js"></script>
 ```
 
-This assumes you've set up a webpack build as per the [Deploying ES2015+ Code in Production Today](https://philipwalton.com/articles/deploying-es2015-code-in-production-today/) article, where you create both a legacy ES5 bundle with polyfills, and a modern ES6+ module.
+This assumes you’ve set up a webpack build as per the [Deploying ES2015+ Code in Production Today](https://philipwalton.com/articles/deploying-es2015-code-in-production-today/) article, where you create both a legacy ES5 bundle with polyfills, and a modern ES6+ module.
 
-You can also include an optional third parameter, which is an array of key/value pairs of HTML attributes that should get added to the resulting tags:
+You can also include an optional third parameter, which is an array of key-value pairs of HTML attributes that should get added to the resulting tags:
 
 ```twig
 {{ craft.twigpack.includeJsModule("app.js", true, {
@@ -302,9 +302,9 @@ This will output:
 </script>
 ```
 
-...as per the [safari-nomodule.js Gist](https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc). You'll want to include this once on the page, before you do `craft.twigpack.includeJsModule("app.js", true)`. It's only necessary if you're using legacy/modern JavaScript bundles.
+...as per the [safari-nomodule.js Gist](https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc). You’ll want to include this once on the page, before you do `craft.twigpack.includeJsModule("app.js", true)`. It’s only necessary if you’re using legacy/modern JavaScript bundles.
 
-You can also include an optional parameter, which is an array of key/value pairs of HTML attributes that should get added to the resulting tags:
+You can also include an optional parameter, which is an array of key-value pairs of HTML attributes that should get added to the resulting tags:
 
 ```twig
 {{ craft.twigpack.includeSafariNomoduleFix({
@@ -322,7 +322,7 @@ This will output:
 
 ### Getting a Module URI
 
-You normally shouldn't need to get a JavaScript/CSS module's URI directly, but you can do so via:
+You normally shouldn’t need to get a JavaScript/CSS module’s URI directly, but you can do so via:
 
 ```twig
 {{ craft.twigpack.getModuleUri("app.js") }}
@@ -355,7 +355,7 @@ Twigpack also offers functionality similar to the [Inlin plugin](https://github.
 {{ craft.twigpack.includeFile("/path/to/foo.txt") }}
 ```
 
-This will include the file at the file system path specified into the Twig template. Yii2 aliases as supported, e.g.:
+This will include the file at the file system path specified into the Twig template. Yii2 aliases as supported, for example:
 
 ```twig
 {{ craft.twigpack.includeFile("@webroot/foo.txt") }}
@@ -369,7 +369,7 @@ You can also use a URL:
 
 #### craft.twigpack.includeFileFromManifest()
 
-You can inline a file generated by webpack by referencing the name of the file in the manifest, e.g.:
+You can inline a file generated by webpack by referencing the name of the file in the manifest, for example:
 
 ```twig
 {{ craft.twigpack.includeFileFromManifest("webapp.html") }}
@@ -377,7 +377,7 @@ You can inline a file generated by webpack by referencing the name of the file i
 
 #### craft.twigpack.includeInlineCssTags()
 
-This conveniences function works just like `craft.twigpack.includeFile()` but wraps the included file in `<style></style>` tags, e.g.:
+This conveniences function works just like `craft.twigpack.includeFile()` but wraps the included file in `<style></style>` tags, for example:
 
 ```twig
 {{ craft.twigpack.includeInlineCssTags("/path/to/foo.css") }}
@@ -389,7 +389,7 @@ Aliases can also be used:
 {{ craft.twigpack.includeInlineCssTags("@webroot/foo.css") }}
 ```
 
-You can also include an optional second parameter, which is an array of key/value pairs of HTML attributes that should get added to the resulting tags:
+You can also include an optional second parameter, which is an array of key-value pairs of HTML attributes that should get added to the resulting tags:
 
 ```twig
 {{ craft.twigpack.includeInlineCssTags("@webroot/foo.css", {
@@ -406,7 +406,7 @@ This will output:
 
 #### craft.twigpack.includeCriticalCssTags()
 
-If you're using Critical CSS, this function allows you to easily inline the critical CSS by doing just:
+If you’re using Critical CSS, this function allows you to easily inline the critical CSS by doing just:
 
 ```twig
 {{ craft.twigpack.includeCriticalCssTags() }}
@@ -426,7 +426,7 @@ You can override the automatic template name determination by passing in your ow
 {{ craft.twigpack.includeCriticalCssTags("/path/to/foo.css") }}
 ```
 
-You can also include an optional second parameter, which is an array of key/value pairs of HTML attributes that should get added to the resulting tags:
+You can also include an optional second parameter, which is an array of key-value pairs of HTML attributes that should get added to the resulting tags:
 
 ```twig
 {{ craft.twigpack.includeCriticalCssTags("/path/to/foo.css", {
@@ -443,7 +443,7 @@ This will output:
 
 ## Just for Fun
 
-Here's a video of hot module replacement of a Vue JS component, using Twigpack as the bridge:
+Here’s a video of hot module replacement of a Vue JS component, using Twigpack as the bridge:
 
 [![Hot Module Replacement with webpack & Twigpack](https://i3.ytimg.com/vi/LfF3CV_Do0Y/hqdefault.jpg)](https://youtu.be/LfF3CV_Do0Y)
 

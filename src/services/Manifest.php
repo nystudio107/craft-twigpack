@@ -52,7 +52,7 @@ class Manifest extends Component
     /**
      * Returns the CSS file in $path wrapped in <style></style> tags
      *
-     * @param $path
+     * @param string $path
      * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return string
