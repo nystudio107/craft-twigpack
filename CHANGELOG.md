@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.2.15 - 2021.07.11
+### Changed
+* Wrap calls to `is_file()` with try/catch, to handle open_basedir restrictions that cause exceptions to be thrown (https://github.com/nystudio107/craft-twigpack/issues/73)
+
 ## 1.2.14 - 2021.04.28
 ### Changed
 * Move settings from the `composer.json` “extra” to the plugin main class
