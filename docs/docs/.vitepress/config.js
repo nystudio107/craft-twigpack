@@ -13,7 +13,7 @@ module.exports = {
         docsDir: 'docs/docs',
         docsBranch: 'v1',
         algolia: {
-            apiKey: '',
+            apiKey: 'd1b7baa35f1ccbaeb2e5f343f555fe4a',
             indexName: 'twigpack'
         },
         editLinks: true,
