@@ -1,40 +1,43 @@
 {
-    "name": "nystudio107/craft-twigpack",
-    "description": "Twigpack is a bridge between Twig and webpack, with manifest.json & webpack-dev-server HMR support",
-    "type": "craft-plugin",
-    "version": "4.0.0-beta.1",
-    "keywords": [
-        "craftcms",
-        "craft-plugin",
-        "twig",
-        "webpack",
-        "webpack-dev-server",
-        "hmr-support",
-        "manifest-json"
-    ],
-    "support": {
-        "docs": "https://nystudio107.com/plugins/twigpack/documentation",
-        "issues": "https://nystudio107.com/plugins/twigpack/support"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "nystudio107",
-            "homepage": "https://nystudio107.com/"
-        }
-    ],
-    "require": {
-        "craftcms/cms": "^4.0.0-alpha"
-    },
-    "autoload": {
-        "psr-4": {
-          "nystudio107\\twigpack\\": "src/"
-        }
-    },
-    "extra": {
-        "name": "Twigpack",
-        "handle": "twigpack",
-        "changelogUrl": "https://raw.githubusercontent.com/craft-nystudio107/twigpack/v1/CHANGELOG.md",
-        "class": "nystudio107\\twigpack\\Twigpack"
+  "name": "nystudio107/craft-twigpack",
+  "description": "Twigpack is a bridge between Twig and webpack, with manifest.json & webpack-dev-server HMR support",
+  "type": "craft-plugin",
+  "version": "4.0.0-beta.1",
+  "keywords": [
+    "craftcms",
+    "craft-plugin",
+    "twig",
+    "webpack",
+    "webpack-dev-server",
+    "hmr-support",
+    "manifest-json"
+  ],
+  "support": {
+    "docs": "https://nystudio107.com/plugins/twigpack/documentation",
+    "issues": "https://nystudio107.com/plugins/twigpack/support"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "nystudio107",
+      "homepage": "https://nystudio107.com/"
     }
+  ],
+  "require": {
+    "craftcms/cms": "^4.0.0-alpha"
+  },
+  "autoload": {
+    "psr-4": {
+      "nystudio107\\twigpack\\": "src/"
+    }
+  },
+  "extra": {
+    "changelogUrl": "https://raw.githubusercontent.com/craft-nystudio107/twigpack/v4/CHANGELOG.md",
+    "class": "nystudio107\\twigpack\\Twigpack",
+    "developer": "nystudio107",
+    "developerUrl": "https://nystudio107.com",
+    "documentationUrl": "https://nystudio107.com/docs/twigpack/",
+    "handle": "twigpack",
+    "name": "Twigpack"
+  }
 }
