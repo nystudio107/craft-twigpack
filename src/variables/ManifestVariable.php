@@ -11,13 +11,11 @@
 
 namespace nystudio107\twigpack\variables;
 
-use nystudio107\twigpack\Twigpack;
-
 use craft\helpers\Template;
-
-use yii\web\NotFoundHttpException;
-
+use nystudio107\twigpack\Twigpack;
+use Twig\Error\LoaderError;
 use Twig\Markup;
+use yii\web\NotFoundHttpException;
 
 /**
  * @author    nystudio107
@@ -80,9 +78,9 @@ class ManifestVariable
      * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return Markup
-     * @throws \Twig\Error\LoaderError
+     * @throws LoaderError
      */
-    public function includeCriticalCssTags($name = null, array $attributes = []): Markup
+    public function includeCriticalCssTags(?string $name = null, array $attributes = []): Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getCriticalCssTags($name, null, $attributes) ?? ''
@@ -90,14 +88,14 @@ class ManifestVariable
     }
 
     /**
-     * @param string     $moduleName
-     * @param bool       $async
+     * @param string $moduleName
+     * @param bool $async
      * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
-     * @return null|Markup
+     * @return Markup
      * @throws NotFoundHttpException
      */
-    public function includeJsModule(string $moduleName, bool $async = false, array $attributes = [])
+    public function includeJsModule(string $moduleName, bool $async = false, array $attributes = []): Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getJsModuleTags($moduleName, $async, null, $attributes) ?? ''
@@ -109,12 +107,12 @@ class ManifestVariable
      *
      * @param string $moduleName
      * @param string $type
-     * @param null   $config
+     * @param null $config
      *
-     * @return null|Markup
+     * @return Markup
      * @throws NotFoundHttpException
      */
-    public function getModuleUri(string $moduleName, string $type = 'modern', $config = null)
+    public function getModuleUri(string $moduleName, string $type = 'modern', $config = null): Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getModule($moduleName, $type, $config) ?? ''
@@ -126,12 +124,12 @@ class ManifestVariable
      *
      * @param string $moduleName
      * @param string $type
-     * @param null   $config
+     * @param null $config
      *
-     * @return null|Markup
+     * @return Markup
      * @throws NotFoundHttpException
      */
-    public function getModuleHash(string $moduleName, string $type = 'modern', $config = null)
+    public function getModuleHash(string $moduleName, string $type = 'modern', $config = null): Markup
     {
         return Template::raw(
             Twigpack::$plugin->manifest->getModuleHash($moduleName, $type, $config) ?? ''
@@ -171,7 +169,7 @@ class ManifestVariable
      *
      * @param string $fileName
      * @param string $type
-     * @param null   $config
+     * @param null $config
      *
      * @return Markup
      */

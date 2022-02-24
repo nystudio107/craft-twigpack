@@ -11,18 +11,17 @@
 
 namespace nystudio107\twigpack\helpers;
 
-use nystudio107\twigpack\Twigpack;
-use nystudio107\twigpack\models\Settings;
-
 use Craft;
+use craft\errors\DeprecationException;
 use craft\helpers\Html;
 use craft\helpers\Json as JsonHelper;
 use craft\helpers\UrlHelper;
-
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
-
+use nystudio107\twigpack\models\Settings;
+use nystudio107\twigpack\Twigpack;
+use Throwable;
+use Twig\Error\LoaderError;
 use yii\base\Exception;
 use yii\caching\ChainedDependency;
 use yii\caching\FileDependency;
@@ -131,13 +130,13 @@ class Manifest
 
     /**
      * @param array $config
-     * @param null|string $name
+     * @param string|null $name
      * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
+     * @throws LoaderError
      */
-    public static function getCriticalCssTags(array $config, $name = null, array $attributes = []): string
+    public static function getCriticalCssTags(array $config, ?string $name = null, array $attributes = []): string
     {
         // Resolve the template name
         $template = Craft::$app->getView()->resolveTemplate($name ?? Twigpack::$templateName ?? '');
@@ -169,7 +168,7 @@ class Manifest
      * https://github.com/filamentgroup/loadCSS#how-to-use-loadcss-recommended-example
      *
      * @return string
-     * @throws \craft\errors\DeprecationException
+     * @throws DeprecationException
      * @deprecated in 1.2.0
      */
     public static function getCssRelPreloadPolyfill(): string
@@ -188,7 +187,7 @@ class Manifest
      * @return null|string
      * @throws NotFoundHttpException
      */
-    public static function getJsModuleTags(array $config, string $moduleName, bool $async, array $attributes = [])
+    public static function getJsModuleTags(array $config, string $moduleName, bool $async, array $attributes = []): ?string
     {
         $legacyModule = self::getModule($config, $moduleName, 'legacy', true);
         if ($legacyModule === null) {
@@ -265,7 +264,7 @@ EOT;
      * @return null|string
      * @throws NotFoundHttpException
      */
-    public static function getModule(array $config, string $moduleName, string $type = 'modern', bool $soft = false)
+    public static function getModule(array $config, string $moduleName, string $type = 'modern', bool $soft = false): ?string
     {
         // Get the module entry
         $module = self::getModuleEntry($config, $moduleName, $type, $soft);
@@ -306,7 +305,7 @@ EOT;
      *
      * @return null|string
      */
-    public static function getModuleHash(array $config, string $moduleName, string $type = 'modern', bool $soft = false)
+    public static function getModuleHash(array $config, string $moduleName, string $type = 'modern', bool $soft = false): ?string
     {
 
         $moduleHash = '';
@@ -339,11 +338,11 @@ EOT;
      * @throws NotFoundHttpException
      */
     public static function getModuleEntry(
-        array $config,
+        array  $config,
         string $moduleName,
         string $type = 'modern',
-        bool $soft = false
-    )
+        bool   $soft = false
+    ): ?string
     {
         $module = null;
         // Get the manifest file
@@ -377,7 +376,7 @@ EOT;
      * @return null|array
      * @throws NotFoundHttpException
      */
-    public static function getManifestFile(array $config, string $type = 'modern')
+    public static function getManifestFile(array $config, string $type = 'modern'): ?array
     {
         $manifest = null;
         // Determine whether we should use the devServer for HMR or not
@@ -489,7 +488,7 @@ EOT;
     /**
      * Invalidate all of the manifest caches
      */
-    public static function invalidateCaches()
+    public static function invalidateCaches(): void
     {
         $cache = Craft::$app->getCache();
         TagDependency::invalidate($cache, self::CACHE_TAG);
@@ -503,7 +502,7 @@ EOT;
      *
      * @return null|array
      */
-    protected static function getJsonFile(string $path)
+    protected static function getJsonFile(string $path): ?array
     {
         return self::getFileFromUri($path, [self::class, 'jsonFileDecode']);
     }
@@ -520,7 +519,7 @@ EOT;
      *
      * @return null|mixed
      */
-    protected static function getFileFromUri(string $path, callable $callback = null, bool $pathOnly = false)
+    protected static function getFileFromUri(string $path, callable $callback = null, bool $pathOnly = false): mixed
     {
         // Resolve any aliases
         $alias = Craft::getAlias($path, false);
@@ -562,7 +561,7 @@ EOT;
      *
      * @return null|mixed
      */
-    protected static function getFileContents(string $path, callable $callback = null)
+    protected static function getFileContents(string $path, callable $callback = null): mixed
     {
         // Return the memoized manifest if it exists
         if (!empty(self::$files[$path])) {
@@ -624,7 +623,7 @@ EOT;
                         if ($response->getStatusCode() === 200) {
                             $contents = $response->getBody()->getContents();
                         }
-                    } catch(\Throwable $e) {
+                    } catch (Throwable $e) {
                         Craft::error($e, __METHOD__);
                     }
                 } else {
@@ -654,7 +653,7 @@ EOT;
      * @param $context
      * @return false|string
      */
-    protected static function getHttpResponseCode($url, $context)
+    protected static function getHttpResponseCode($url, $context): bool|string
     {
         $headers = @get_headers($url, 0, $context);
         if (empty($headers)) {
@@ -671,7 +670,7 @@ EOT;
      *
      * @return string
      */
-    protected static function combinePaths(string ...$paths): string
+    protected static function combinePaths(?string ...$paths): string
     {
         $last_key = count($paths) - 1;
         array_walk($paths, function (&$val, $key) use ($last_key) {
@@ -703,7 +702,7 @@ EOT;
      *
      * @throws NotFoundHttpException
      */
-    protected static function reportError(string $error, $soft = false)
+    protected static function reportError(string $error, $soft = false): void
     {
         $devMode = Craft::$app->getConfig()->getGeneral()->devMode;
         if ($devMode && !$soft) {
@@ -723,12 +722,12 @@ EOT;
      * @param string $nonce
      * @param string $cspDirective
      */
-    private static function includeNonce(string $nonce, string $cspDirective)
+    private static function includeNonce(string $nonce, string $cspDirective): void
     {
         $cspNonceType = self::getCspNonceType();
         if ($cspNonceType) {
             $cspValue = "{$cspDirective} 'nonce-$nonce'";
-            foreach(self::CSP_HEADERS as $cspHeader) {
+            foreach (self::CSP_HEADERS as $cspHeader) {
                 switch ($cspNonceType) {
                     case 'tag':
                         Craft::$app->getView()->registerMetaTag([
@@ -749,7 +748,7 @@ EOT;
     /**
      * @return string|null
      */
-    private static function getCspNonceType()
+    private static function getCspNonceType(): ?string
     {
         /** @var Settings $settings */
         $settings = Twigpack::$plugin->getSettings();
@@ -761,7 +760,7 @@ EOT;
     /**
      * @return string|null
      */
-    private static function getNonce()
+    private static function getNonce(): ?string
     {
         $result = null;
         if (self::getCspNonceType() !== null) {
@@ -774,12 +773,13 @@ EOT;
 
         return $result;
     }
+
     /**
      * @param $string
      *
      * @return null|array
      */
-    private static function jsonFileDecode($string)
+    private static function jsonFileDecode($string): ?array
     {
         $json = JsonHelper::decodeIfJson($string);
         if (is_string($json)) {

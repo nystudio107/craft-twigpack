@@ -11,23 +11,20 @@
 
 namespace nystudio107\twigpack;
 
-use nystudio107\twigpack\services\Manifest as ManifestService;
-use nystudio107\twigpack\models\Settings;
-use nystudio107\twigpack\variables\ManifestVariable;
-
 use Craft;
+use craft\base\Model;
 use craft\base\Plugin;
-use craft\events\DeleteTemplateCachesEvent;
 use craft\events\PluginEvent;
 use craft\events\RegisterCacheOptionsEvent;
 use craft\events\TemplateEvent;
 use craft\services\Plugins;
-use craft\services\TemplateCaches;
 use craft\utilities\ClearCaches;
-use craft\web\twig\variables\CraftVariable;
 use craft\web\Application;
+use craft\web\twig\variables\CraftVariable;
 use craft\web\View;
-
+use nystudio107\twigpack\models\Settings;
+use nystudio107\twigpack\services\Manifest as ManifestService;
+use nystudio107\twigpack\variables\ManifestVariable;
 use yii\base\Event;
 use yii\web\NotFoundHttpException;
 
@@ -48,15 +45,30 @@ class Twigpack extends Plugin
     /**
      * @var Twigpack
      */
-    public static $plugin;
+    public static Twigpack $plugin;
 
     /**
      * @var string
      */
-    public static $templateName;
+    public static string $templateName;
 
     // Static Methods
     // =========================================================================
+    /**
+     * @var string
+     */
+    public string $schemaVersion = '1.0.0';
+
+    // Public Properties
+    // =========================================================================
+    /**
+     * @var bool
+     */
+    public bool $hasCpSection = false;
+    /**
+     * @var bool
+     */
+    public bool $hasCpSettings = false;
 
     /**
      * @inheritdoc
@@ -70,31 +82,13 @@ class Twigpack extends Plugin
         parent::__construct($id, $parent, $config);
     }
 
-    // Public Properties
-    // =========================================================================
-
-    /**
-     * @var string
-     */
-    public $schemaVersion = '1.0.0';
-
-    /**
-     * @var bool
-     */
-    public $hasCpSection = false;
-
-    /**
-     * @var bool
-     */
-    public $hasCpSettings = false;
-
     // Public Methods
     // =========================================================================
 
     /**
      * @inheritdoc
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         self::$plugin = $this;
@@ -114,7 +108,7 @@ class Twigpack extends Plugin
     /**
      * Clear all the caches!
      */
-    public function clearAllCaches()
+    public function clearAllCaches(): void
     {
         // Clear all of Twigpack's caches
         self::$plugin->manifest->invalidateCaches();
@@ -124,11 +118,11 @@ class Twigpack extends Plugin
      * Inject the error entry point JavaScript for auto-reloading of Twig error
      * pages
      */
-    public function injectErrorEntry()
+    public function injectErrorEntry(): void
     {
         if (Craft::$app->getResponse()->isServerError || Craft::$app->getResponse()->isClientError) {
             $settings = self::$plugin->getSettings();
-            if (!empty($settings->errorEntry) && $settings->useDevServer) {
+            if ($settings && !empty($settings->errorEntry) && $settings->useDevServer) {
                 try {
                     $errorEntry = $settings->errorEntry;
                     if (is_string($errorEntry)) {
@@ -153,14 +147,14 @@ class Twigpack extends Plugin
     /**
      * Install our event listeners.
      */
-    protected function installEventListeners()
+    protected function installEventListeners(): void
     {
         // Remember the name of the currently rendering template
         // Handler: View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE
         Event::on(
             View::class,
             View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE,
-            function (TemplateEvent $event) {
+            static function (TemplateEvent $event) {
                 self::$templateName = $event->template;
             }
         );
@@ -168,19 +162,10 @@ class Twigpack extends Plugin
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_INIT,
-            function (Event $event) {
+            static function (Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
                 $variable->set('twigpack', ManifestVariable::class);
-            }
-        );
-        // Handler: TemplateCaches::EVENT_AFTER_DELETE_CACHES
-        Event::on(
-            TemplateCaches::class,
-            TemplateCaches::EVENT_AFTER_DELETE_CACHES,
-            function (DeleteTemplateCachesEvent $event) {
-                // Invalidate the caches when template caches are deleted
-                $this->clearAllCaches();
             }
         );
         // Handler: Plugins::EVENT_AFTER_INSTALL_PLUGIN
@@ -239,7 +224,7 @@ class Twigpack extends Plugin
     /**
      * @inheritdoc
      */
-    protected function createSettingsModel()
+    protected function createSettingsModel(): ?Model
     {
         return new Settings();
     }

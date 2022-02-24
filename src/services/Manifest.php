@@ -11,11 +11,10 @@
 
 namespace nystudio107\twigpack\services;
 
-use nystudio107\twigpack\Twigpack;
-use nystudio107\twigpack\helpers\Manifest as ManifestHelper;
-
 use craft\base\Component;
-
+use nystudio107\twigpack\helpers\Manifest as ManifestHelper;
+use nystudio107\twigpack\Twigpack;
+use Twig\Error\LoaderError;
 use yii\web\NotFoundHttpException;
 
 /** @noinspection MissingPropertyAnnotationsInspection */
@@ -68,9 +67,9 @@ class Manifest extends Component
      * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
+     * @throws LoaderError
      */
-    public function getCriticalCssTags($name = null, $config = null, array $attributes = []): string
+    public function getCriticalCssTags(?string $name = null, ?array $config = null, array $attributes = []): string
     {
         $settings = Twigpack::$plugin->getSettings();
         $config = $config ?? $settings->getAttributes();
@@ -92,15 +91,15 @@ class Manifest extends Component
     /**
      * Return the HTML tags to include the JavaScript module
      *
-     * @param string     $moduleName
-     * @param bool       $async
+     * @param string $moduleName
+     * @param bool $async
      * @param null|array $config
      * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return null|string
      * @throws NotFoundHttpException
      */
-    public function getJsModuleTags(string $moduleName, bool $async = false, $config = null, array $attributes = [])
+    public function getJsModuleTags(string $moduleName, bool $async = false, ?array $config = null, array $attributes = [])
     {
         $settings = Twigpack::$plugin->getSettings();
         $config = $config ?? $settings->getAttributes();
@@ -125,12 +124,12 @@ class Manifest extends Component
      *
      * @param string $moduleName
      * @param string $type
-     * @param null   $config
+     * @param null $config
      *
      * @return null|string
      * @throws NotFoundHttpException
      */
-    public function getModule(string $moduleName, string $type = 'modern', $config = null)
+    public function getModule(string $moduleName, string $type = 'modern', $config = null): ?string
     {
         $settings = Twigpack::$plugin->getSettings();
         $config = $config ?? $settings->getAttributes();
@@ -143,12 +142,12 @@ class Manifest extends Component
      *
      * @param string $moduleName
      * @param string $type
-     * @param null   $config
+     * @param null $config
      *
      * @return null|string
      * @throws NotFoundHttpException
      */
-    public function getModuleHash(string $moduleName, string $type = 'modern', $config = null)
+    public function getModuleHash(string $moduleName, string $type = 'modern', $config = null): ?string
     {
         $settings = Twigpack::$plugin->getSettings();
         $config = $config ?? $settings->getAttributes();
@@ -173,7 +172,7 @@ class Manifest extends Component
      *
      * @param string $fileName
      * @param string $type
-     * @param null   $config
+     * @param null $config
      *
      * @return string
      */

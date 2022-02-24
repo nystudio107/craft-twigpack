@@ -1,5 +1,11 @@
 # Twigpack Changelog
 
+## 4.0.0-beta.1 - 2022.02.24
+
+### Added
+
+* Initial Craft CMS 4 compatibility
+
 ## 1.2.15 - 2021.07.11
 ### Changed
 * Wrap calls to `is_file()` with try/catch, to handle open_basedir restrictions that cause exceptions to be thrown (https://github.com/nystudio107/craft-twigpack/issues/73)

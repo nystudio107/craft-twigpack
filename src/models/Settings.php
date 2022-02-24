@@ -27,28 +27,28 @@ class Settings extends Model
      * @var bool If `devMode` is on, use webpack-dev-server to all for HMR (hot
      *      module reloading)
      */
-    public $useDevServer = true;
+    public bool $useDevServer = true;
 
     /**
      * @var bool If true, enforces Absolute Urls, if false, allows relative
      */
-    public $useAbsoluteUrl = true;
+    public bool $useAbsoluteUrl = true;
 
     /**
-     * @var string The JavaScript entry from the manifest.json to inject on
+     * @var array|string The JavaScript entry from the manifest.json to inject on
      *      Twig error pages
      */
-    public $errorEntry = '';
+    public array|string $errorEntry = '';
 
     /**
      * @var string String to be appended to the cache key
      */
-    public $cacheKeySuffix = '';
+    public string $cacheKeySuffix = '';
 
     /**
      * @var array Manifest file names
      */
-    public $manifest = [
+    public array $manifest = [
         'legacy' => 'manifest-legacy.json',
         'modern' => 'manifest.json',
     ];
@@ -56,7 +56,7 @@ class Settings extends Model
     /**
      * @var array Public server config
      */
-    public $server = [
+    public array $server = [
         'manifestPath' => '/',
         'publicPath' => '/',
     ];
@@ -64,7 +64,7 @@ class Settings extends Model
     /**
      * @var array webpack-dev-server config
      */
-    public $devServer = [
+    public array $devServer = [
         'manifestPath' => 'http://localhost:8080/',
         'publicPath' => 'http://localhost:8080/',
     ];
@@ -73,7 +73,7 @@ class Settings extends Model
      * @var string defines which bundle will be used from the webpack dev server.
      *      Can be 'modern', 'legacy' or 'combined'. Defaults to 'modern'.
      */
-    public $devServerBuildType = 'modern';
+    public string $devServerBuildType = 'modern';
 
     /**
      * @var string Whether to include a Content Security Policy "nonce" for inline
@@ -81,12 +81,12 @@ class Settings extends Model
      *      should be included. c.f.:
      *      https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#Unsafe_inline_script
      */
-    public $cspNonce = '';
+    public string $cspNonce = '';
 
     /**
      * @var array Local files config
      */
-    public $localFiles = [
+    public array $localFiles = [
         'basePath' => '@webroot/',
         'criticalPrefix' => 'dist/criticalcss/',
         'criticalSuffix' => '_critical.min.css',
@@ -98,7 +98,7 @@ class Settings extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['useDevServer', 'boolean'],
