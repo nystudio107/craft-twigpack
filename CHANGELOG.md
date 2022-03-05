@@ -1,5 +1,11 @@
 # Twigpack Changelog
 
+## 4.0.0-beta.2 - 2022.03.04
+
+### Fixed
+
+* Updated types for Craft CMS `4.0.0-alpha.1` via Rector
+
 ## 4.0.0-beta.1 - 2022.02.24
 
 ### Added
