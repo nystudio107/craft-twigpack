@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 4.0.0-beta.3 - 2022.04.17
+### Fixed
+* Fix incorrect `User-Agent` header that could cause an error to be thrown
+
 ## 4.0.0-beta.2 - 2022.03.04
 
 ### Fixed
