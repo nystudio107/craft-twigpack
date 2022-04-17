@@ -11,18 +11,17 @@
 
 namespace nystudio107\twigpack\helpers;
 
-use nystudio107\twigpack\Twigpack;
-use nystudio107\twigpack\models\Settings;
-
 use Craft;
+use craft\errors\DeprecationException;
 use craft\helpers\Html;
 use craft\helpers\Json as JsonHelper;
 use craft\helpers\UrlHelper;
-
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
-
+use nystudio107\twigpack\models\Settings;
+use nystudio107\twigpack\Twigpack;
+use Throwable;
+use Twig\Error\LoaderError;
 use yii\base\Exception;
 use yii\caching\ChainedDependency;
 use yii\caching\FileDependency;
@@ -135,7 +134,7 @@ class Manifest
      * @param array $attributes additional HTML key/value pair attributes to add to the resulting tag
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
+     * @throws LoaderError
      */
     public static function getCriticalCssTags(array $config, $name = null, array $attributes = []): string
     {
@@ -169,7 +168,7 @@ class Manifest
      * https://github.com/filamentgroup/loadCSS#how-to-use-loadcss-recommended-example
      *
      * @return string
-     * @throws \craft\errors\DeprecationException
+     * @throws DeprecationException
      * @deprecated in 1.2.0
      */
     public static function getCssRelPreloadPolyfill(): string
@@ -339,10 +338,10 @@ EOT;
      * @throws NotFoundHttpException
      */
     public static function getModuleEntry(
-        array $config,
+        array  $config,
         string $moduleName,
         string $type = 'modern',
-        bool $soft = false
+        bool   $soft = false
     )
     {
         $module = null;
@@ -617,14 +616,14 @@ EOT;
                     try {
                         $response = $client->request('GET', $path, [
                             RequestOptions::HEADERS => [
-                                'User-Agent' => "User-Agent:Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13",
+                                'User-Agent' => "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13",
                                 'Accept' => '*/*',
                             ],
                         ]);
                         if ($response->getStatusCode() === 200) {
                             $contents = $response->getBody()->getContents();
                         }
-                    } catch(\Throwable $e) {
+                    } catch (Throwable $e) {
                         Craft::error($e, __METHOD__);
                     }
                 } else {
@@ -728,7 +727,7 @@ EOT;
         $cspNonceType = self::getCspNonceType();
         if ($cspNonceType) {
             $cspValue = "{$cspDirective} 'nonce-$nonce'";
-            foreach(self::CSP_HEADERS as $cspHeader) {
+            foreach (self::CSP_HEADERS as $cspHeader) {
                 switch ($cspNonceType) {
                     case 'tag':
                         Craft::$app->getView()->registerMetaTag([
@@ -774,6 +773,7 @@ EOT;
 
         return $result;
     }
+
     /**
      * @param $string
      *
