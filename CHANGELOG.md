@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.2.16 - 2022.04.17
+### Fixed
+* Fix incorrect `User-Agent` header that could cause an error to be thrown
+
 ## 1.2.15 - 2021.07.11
 ### Changed
 * Wrap calls to `is_file()` with try/catch, to handle open_basedir restrictions that cause exceptions to be thrown (https://github.com/nystudio107/craft-twigpack/issues/73)
