@@ -1,5 +1,9 @@
 # Twigpack Changelog
 
+## 1.2.17 - 2022.04.26
+### Changed
+* Don't log the full exception on a Guzzle error, just log the message
+
 ## 1.2.16 - 2022.04.17
 ### Fixed
 * Fix incorrect `User-Agent` header that could cause an error to be thrown
