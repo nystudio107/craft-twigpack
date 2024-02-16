@@ -14,6 +14,8 @@ namespace nystudio107\twigpack;
 use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
+use craft\cloud\cli\controllers\UpController;
+use craft\events\CancelableEvent;
 use craft\events\PluginEvent;
 use craft\events\RegisterCacheOptionsEvent;
 use craft\events\TemplateEvent;
@@ -195,6 +197,18 @@ class Twigpack extends Plugin
                 );
             }
         );
+        // Clears cache after craft cloud/up is run, which Craft Cloud runs on deploy
+        // Handler: UpController::EVENT_AFTER_UP
+        if (class_exists(UpController::class)) {
+            Event::on(
+                UpController::class,
+                UpController::EVENT_AFTER_UP,
+                function (CancelableEvent $event) {
+                    $this->clearAllCaches();
+                }
+            );
+        }
+
         // delay attaching event handler to the view component after it is fully configured
         $app = Craft::$app;
         if ($app->getConfig()->getGeneral()->devMode) {

@@ -36,5 +36,8 @@
     "class": "nystudio107\\twigpack\\Twigpack",
     "handle": "twigpack",
     "name": "Twigpack"
+  },
+  "require-dev": {
+    "craftcms/cloud": "^1.37"
   }
 }

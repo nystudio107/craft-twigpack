@@ -1,10 +1,10 @@
 ---
-title: Twigpack plugin for Craft CMS 3.x
+title: Twigpack plugin for Craft CMS 4.x
 description: Twigpack is a bridge between Twig and webpack, with manifest.json & webpack-dev-server HMR support
 ---
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nystudio107/craft-twigpack/badges/quality-score.png?b=v1)](https://scrutinizer-ci.com/g/nystudio107/craft-twigpack/?branch=v1) [![Code Coverage](https://scrutinizer-ci.com/g/nystudio107/craft-twigpack/badges/coverage.png?b=v1)](https://scrutinizer-ci.com/g/nystudio107/craft-twigpack/?branch=v1) [![Build Status](https://scrutinizer-ci.com/g/nystudio107/craft-twigpack/badges/build.png?b=v1)](https://scrutinizer-ci.com/g/nystudio107/craft-twigpack/build-status/v1) [![Code Intelligence Status](https://scrutinizer-ci.com/g/nystudio107/craft-twigpack/badges/code-intelligence.svg?b=v1)](https://scrutinizer-ci.com/code-intelligence)
 
-# Twigpack plugin for Craft CMS 3.x
+# Twigpack plugin for Craft CMS 4.x
 
 Twigpack is a bridge between Twig and webpack, with manifest.json & webpack-dev-server HMR support
 
@@ -14,7 +14,7 @@ Related Article: [An Annotated webpack 4 Config for Frontend Web Development](ht
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.0 or later.
+This plugin requires Craft CMS 4.0.0 or later.
 
 ## Installation
 
@@ -443,6 +443,62 @@ This will output:
 ```html
 <style media="all">
 </style>
+```
+
+## Craft Cloud
+
+During a [build](https://craftcms.com/knowledge-base/cloud-builds), Craft Cloud deploys static assets to a CDN, so you’ll need to configure Twigpack to use the appropriate URLs:
+
+```php
+<?php
+// config/twigpack.php
+
+use craft\cloud\Helper as CloudHelper;
+
+return [
+    'server' => [
+        'manifestPath' => CloudHelper::artifactUrl('dist/'),
+        'publicPath' => CloudHelper::artifactUrl('dist/'),
+    ],
+];
+```
+
+This helper function returns a CDN URL that includes your project and environment identifiers, like this:
+
+```
+https://cdn.craft.com/{project-uuid}/builds/{environment-uuid}/artifacts/dist/
+```
+
+Outside of Cloud, `CloudHelper::artifactUrl()` evaluates the passed string as though it were prepended with the `@web` alias.
+
+If you’d prefer to use an on-disk `manifestPath` when working locally (instead of a URL), the `CloudHelper::isCraftCloud()` function lets you switch based on the environment:
+
+```php
+<?php
+// config/twigpack.php
+
+use craft\cloud\Helper as CloudHelper;
+
+return [
+    'server' => [
+        'manifestPath' => CloudHelper::isCraftCloud() ? CloudHelper::artifactUrl('dist/') : '@webroot/dist/',
+        'publicPath' => CloudHelper::artifactUrl('dist/'),
+    ],
+];
+```
+
+Additionally, your Webpack configuration should have `output.publicPath` set to the same CDN URL.
+In Craft Cloud’s build pipeline, this is exposed as a [`CRAFT_CLOUD_ARTIFACT_BASE_URL` environment variable](https://craftcms.com/knowledge-base/cloud-builds#build-command):
+
+```javascript
+// webpack.config.js
+import webpack from 'webpack';
+
+export default {
+  output: {
+    publicPath: `${process.env.CRAFT_CLOUD_ARTIFACT_BASE_URL || ''}/dist/`,
+  },
+};
 ```
 
 ## Just for Fun
