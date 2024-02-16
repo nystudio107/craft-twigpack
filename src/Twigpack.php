@@ -197,6 +197,7 @@ class Twigpack extends Plugin
                 );
             }
         );
+        // Clears cache after craft cloud/up is run, which Craft Cloud runs on deploy
         // Handler: UpController::EVENT_AFTER_UP
         if (class_exists(UpController::class)) {
             Event::on(
