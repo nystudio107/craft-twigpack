@@ -1,10 +1,10 @@
 ---
-title: Twigpack plugin for Craft CMS 3.x
+title: Twigpack plugin for Craft CMS 4.x
 description: Twigpack is a bridge between Twig and webpack, with manifest.json & webpack-dev-server HMR support
 ---
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nystudio107/craft-twigpack/badges/quality-score.png?b=v1)](https://scrutinizer-ci.com/g/nystudio107/craft-twigpack/?branch=v1) [![Code Coverage](https://scrutinizer-ci.com/g/nystudio107/craft-twigpack/badges/coverage.png?b=v1)](https://scrutinizer-ci.com/g/nystudio107/craft-twigpack/?branch=v1) [![Build Status](https://scrutinizer-ci.com/g/nystudio107/craft-twigpack/badges/build.png?b=v1)](https://scrutinizer-ci.com/g/nystudio107/craft-twigpack/build-status/v1) [![Code Intelligence Status](https://scrutinizer-ci.com/g/nystudio107/craft-twigpack/badges/code-intelligence.svg?b=v1)](https://scrutinizer-ci.com/code-intelligence)
 
-# Twigpack plugin for Craft CMS 3.x
+# Twigpack plugin for Craft CMS 4.x
 
 Twigpack is a bridge between Twig and webpack, with manifest.json & webpack-dev-server HMR support
 
@@ -14,7 +14,7 @@ Related Article: [An Annotated webpack 4 Config for Frontend Web Development](ht
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.0 or later.
+This plugin requires Craft CMS 4.0.0 or later.
 
 ## Installation
 
