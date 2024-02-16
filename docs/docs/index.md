@@ -445,6 +445,46 @@ This will output:
 </style>
 ```
 
+## Craft Cloud
+
+Craft Cloud deploys build artifacts to a CDN, so you'll need to configure `config/twipack.php` to use the CDN URL:  
+
+```php
+return [
+     'server' => [
+         'manifestPath' => \craft\cloud\Helper::artifactUrl('dist/'),
+         'publicPath' => \craft\cloud\Helper::artifactUrl('dist/'),
+     ],
+];
+```
+
+The `\craft\cloud\Helper::artifactUrl()` function will return a URL like `https://cdn.craft.com/{uuid}/builds/{uuid}/artifacts/dist/`
+in a Craft Cloud environment, and `@web/dist/` otherwise.
+
+If you'd like to use a different path all together when working locally, you can use the `\craft\cloud\Helper::isCraftCloud()`:
+
+```php
+return [
+     'server' => [
+         'manifestPath' => \craft\cloud\Helper::isCraftCloud() ? \craft\cloud\Helper::artifactUrl('dist/') : '@webroot/dist/',
+         'publicPath' => \craft\cloud\Helper::artifactUrl('dist/'),
+     ],
+];
+```
+
+Additionally, your Webpack configuration should have `output.publicPath` configured to use the same CDN URL.
+In Craft Cloud's build pipeline, this is exposed as an `CRAFT_CLOUD_ARTIFACT_BASE_URL` environment variable.
+
+```javascript
+import webpack from 'webpack';
+
+export default {
+  output: {
+    publicPath: `${process.env.CRAFT_CLOUD_ARTIFACT_BASE_URL || ''}/dist/`,
+  },
+};
+```
+
 ## Just for Fun
 
 Here’s a video of hot module replacement of a Vue JS component, using Twigpack as the bridge:
