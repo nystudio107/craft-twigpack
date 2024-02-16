@@ -447,14 +447,16 @@ This will output:
 
 ## Craft Cloud
 
-Craft Cloud deploys build artifacts to a CDN, so you'll need to configure `config/twipack.php` to use the CDN URL:  
+Craft Cloud deploys build artifacts to a CDN, so you'll need to configure Twigpack to use the CDN URL:  
 
 ```php
+<?php
+// config/twigpack.php
 return [
-     'server' => [
-         'manifestPath' => \craft\cloud\Helper::artifactUrl('dist/'),
-         'publicPath' => \craft\cloud\Helper::artifactUrl('dist/'),
-     ],
+    'server' => [
+        'manifestPath' => \craft\cloud\Helper::artifactUrl('dist/'),
+        'publicPath' => \craft\cloud\Helper::artifactUrl('dist/'),
+    ],
 ];
 ```
 
@@ -464,11 +466,13 @@ in a Craft Cloud environment, and `@web/dist/` otherwise.
 If you'd like to use a different path all together when working locally, you can use the `\craft\cloud\Helper::isCraftCloud()`:
 
 ```php
+<?php
+// config/twigpack.php
 return [
-     'server' => [
-         'manifestPath' => \craft\cloud\Helper::isCraftCloud() ? \craft\cloud\Helper::artifactUrl('dist/') : '@webroot/dist/',
-         'publicPath' => \craft\cloud\Helper::artifactUrl('dist/'),
-     ],
+    'server' => [
+        'manifestPath' => \craft\cloud\Helper::isCraftCloud() ? \craft\cloud\Helper::artifactUrl('dist/') : '@webroot/dist/',
+        'publicPath' => \craft\cloud\Helper::artifactUrl('dist/'),
+    ],
 ];
 ```
 
@@ -476,6 +480,7 @@ Additionally, your Webpack configuration should have `output.publicPath` configu
 In Craft Cloud's build pipeline, this is exposed as an `CRAFT_CLOUD_ARTIFACT_BASE_URL` environment variable.
 
 ```javascript
+// webpack.config.js
 import webpack from 'webpack';
 
 export default {
