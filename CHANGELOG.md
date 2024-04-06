@@ -1,6 +1,6 @@
 # Twigpack Changelog
 
-## 4.0.0 - UNRELEASED
+## 4.0.0 - 2024.04.05
 ### Added
 * Add Craft Cloud compatibility
 * Add `phpstan` and `ecs` code linting
