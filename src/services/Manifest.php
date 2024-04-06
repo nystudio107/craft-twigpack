@@ -124,7 +124,7 @@ class Manifest extends Component
      *
      * @param string $moduleName
      * @param string $type
-     * @param null $config
+     * @param ?array $config
      *
      * @return null|string
      * @throws NotFoundHttpException
@@ -142,7 +142,7 @@ class Manifest extends Component
      *
      * @param string $moduleName
      * @param string $type
-     * @param null $config
+     * @param ?array $config
      *
      * @return null|string
      * @throws NotFoundHttpException
@@ -172,7 +172,7 @@ class Manifest extends Component
      *
      * @param string $fileName
      * @param string $type
-     * @param null $config
+     * @param ?array $config
      *
      * @return string
      */

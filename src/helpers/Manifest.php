@@ -38,18 +38,18 @@ class Manifest
     // Constants
     // =========================================================================
 
-    const CACHE_KEY = 'twigpack';
-    const CACHE_TAG = 'twigpack';
+    public const CACHE_KEY = 'twigpack';
+    public const CACHE_TAG = 'twigpack';
 
-    const DEVMODE_CACHE_DURATION = 1;
+    public const DEVMODE_CACHE_DURATION = 1;
 
-    const CSP_HEADERS = [
+    public const CSP_HEADERS = [
         'Content-Security-Policy',
         'X-Content-Security-Policy',
         'X-WebKit-CSP',
     ];
 
-    const SUPPRESS_ERRORS_FOR_MODULES = [
+    public const SUPPRESS_ERRORS_FOR_MODULES = [
         'styles.js',
     ];
 
@@ -307,7 +307,6 @@ EOT;
      */
     public static function getModuleHash(array $config, string $moduleName, string $type = 'modern', bool $soft = false): ?string
     {
-
         $moduleHash = '';
         try {
             // Get the module entry
@@ -341,9 +340,8 @@ EOT;
         array  $config,
         string $moduleName,
         string $type = 'modern',
-        bool   $soft = false
-    ): ?string
-    {
+        bool   $soft = false,
+    ): ?string {
         $module = null;
         // Get the manifest file
         $manifest = self::getManifestFile($config, $type);
@@ -475,7 +473,7 @@ EOT;
             }
             try {
                 if (is_file($localPath)) {
-                    return self::getFile($localPath) ?? '';
+                    return self::getFile($localPath);
                 }
             } catch (Exception $e) {
                 Craft::error($e->getMessage(), __METHOD__);
@@ -579,10 +577,10 @@ EOT;
             $dependency = new ChainedDependency([
                 'dependencies' => [
                     new FileDependency([
-                        'fileName' => $path
+                        'fileName' => $path,
                     ]),
-                    $dependency
-                ]
+                    $dependency,
+                ],
             ]);
         }
         // Set the cache duration based on devMode
@@ -595,7 +593,7 @@ EOT;
         $cacheKeySuffix = $settings->cacheKeySuffix ?? '';
         $file = $cache->getOrSet(
             self::CACHE_KEY . $cacheKeySuffix . $path,
-            function () use ($path, $callback) {
+            function() use ($path, $callback) {
                 $result = null;
                 $contents = null;
                 if (UrlHelper::isAbsoluteUrl($path)) {
@@ -655,7 +653,7 @@ EOT;
      */
     protected static function getHttpResponseCode($url, $context): bool|string
     {
-        $headers = @get_headers($url, 0, $context);
+        $headers = @get_headers($url, false, $context);
         if (empty($headers)) {
             return '404';
         }
@@ -673,7 +671,7 @@ EOT;
     protected static function combinePaths(?string ...$paths): string
     {
         $last_key = count($paths) - 1;
-        array_walk($paths, function (&$val, $key) use ($last_key) {
+        array_walk($paths, function(&$val, $key) use ($last_key) {
             switch ($key) {
                 case 0:
                     $val = rtrim($val, '/ ');

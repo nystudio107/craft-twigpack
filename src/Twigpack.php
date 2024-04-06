@@ -14,6 +14,8 @@ namespace nystudio107\twigpack;
 use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
+use craft\cloud\cli\controllers\UpController;
+use craft\events\CancelableEvent;
 use craft\events\PluginEvent;
 use craft\events\RegisterCacheOptionsEvent;
 use craft\events\TemplateEvent;
@@ -43,14 +45,14 @@ class Twigpack extends Plugin
     // =========================================================================
 
     /**
-     * @var Twigpack
+     * @var ?Twigpack
      */
-    public static Twigpack $plugin;
+    public static ?Twigpack $plugin = null;
 
     /**
      * @var string
      */
-    public static string $templateName;
+    public static string $templateName = '';
 
     // Static Methods
     // =========================================================================
@@ -121,6 +123,7 @@ class Twigpack extends Plugin
     public function injectErrorEntry(): void
     {
         if (Craft::$app->getResponse()->isServerError || Craft::$app->getResponse()->isClientError) {
+            /** @var ?Settings $settings */
             $settings = self::$plugin->getSettings();
             if ($settings && !empty($settings->errorEntry) && $settings->useDevServer) {
                 try {
@@ -154,7 +157,7 @@ class Twigpack extends Plugin
         Event::on(
             View::class,
             View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE,
-            static function (TemplateEvent $event) {
+            static function(TemplateEvent $event) {
                 self::$templateName = $event->template;
             }
         );
@@ -162,7 +165,7 @@ class Twigpack extends Plugin
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_INIT,
-            static function (Event $event) {
+            static function(Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
                 $variable->set('twigpack', ManifestVariable::class);
@@ -172,7 +175,7 @@ class Twigpack extends Plugin
         Event::on(
             Plugins::class,
             Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-            function (PluginEvent $event) {
+            function(PluginEvent $event) {
                 if ($event->plugin === $this) {
                     // Invalidate our caches after we've been installed
                     $this->clearAllCaches();
@@ -183,7 +186,7 @@ class Twigpack extends Plugin
         Event::on(
             ClearCaches::class,
             ClearCaches::EVENT_REGISTER_CACHE_OPTIONS,
-            function (RegisterCacheOptionsEvent $event) {
+            function(RegisterCacheOptionsEvent $event) {
                 Craft::debug(
                     'ClearCaches::EVENT_REGISTER_CACHE_OPTIONS',
                     __METHOD__
@@ -195,10 +198,22 @@ class Twigpack extends Plugin
                 );
             }
         );
+        // Clears cache after craft cloud/up is run, which Craft Cloud runs on deploy
+        // Handler: UpController::EVENT_AFTER_UP
+        if (class_exists(UpController::class)) {
+            Event::on(
+                UpController::class,
+                UpController::EVENT_AFTER_UP,
+                function (CancelableEvent $event) {
+                    $this->clearAllCaches();
+                }
+            );
+        }
+
         // delay attaching event handler to the view component after it is fully configured
         $app = Craft::$app;
         if ($app->getConfig()->getGeneral()->devMode) {
-            $app->on(Application::EVENT_BEFORE_REQUEST, function () use ($app) {
+            $app->on(Application::EVENT_BEFORE_REQUEST, function() use ($app) {
                 $app->getView()->on(View::EVENT_END_BODY, [$this, 'injectErrorEntry']);
             });
         }

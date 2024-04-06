@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="gr_x5F_icon22_x5F_twigPack" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+	 x="0px" y="0px" width="250px" height="250px" viewBox="0 0 250 250" enable-background="new 0 0 250 250" xml:space="preserve">
+<g id="gr_x5F_big_64_">
+	<path id="gr_269_" fill="#F3BA48" d="M237.664,172.701c0,9.539-6.76,21.252-15.021,26.02l-82.621,47.701
+		c-8.263,4.771-21.78,4.771-30.043,0l-82.621-47.701c-8.263-4.768-15.022-16.48-15.022-26.02V77.298
+		c0-9.539,6.759-21.25,15.022-26.018l82.621-47.702c8.263-4.771,21.78-4.771,30.043,0l82.621,47.702
+		c8.262,4.768,15.021,16.479,15.021,26.018V172.701z"/>
+	<g>
+		<defs>
+			<path id="gr_268_" d="M237.889,172.797c0,9.558-6.773,21.294-15.051,26.071l-82.786,47.796c-8.279,4.781-21.824,4.781-30.103,0
+				l-82.786-47.796c-8.279-4.777-15.052-16.514-15.052-26.071V77.203c0-9.558,6.773-21.293,15.052-26.07l82.786-47.797
+				c8.279-4.781,21.824-4.781,30.103,0l82.786,47.797c8.277,4.777,15.051,16.512,15.051,26.07V172.797z"/>
+		</defs>
+		<clipPath id="gr_1_">
+			<use xlink:href="#gr_268_"  overflow="visible"/>
+		</clipPath>
+		
+			<path clip-path="url(#gr_1_)" fill="none" stroke="#FFFFFF" stroke-width="10.7143" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+			M125.837,196.426l-63.114-36.439l0.837-71.43l62.277-34.989l61.439,36.44l-0.837,71.428L125.837,196.426z M125.837,128.889
+			v120.797 M125.837,128.889l107.903-69.35 M125.837,128.889l-107.98-69.35 M125.837,53.567V-0.115 M17.85,190.602l44.873-30.615
+			 M186.439,161.436l43.883,29.166"/>
+	</g>
+</g>
+</svg>

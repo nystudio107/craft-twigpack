@@ -1,5 +1,7 @@
-ARG TAG=14-alpine
-FROM nystudio107/node-dev-base:$TAG
+ARG TAG=20-alpine
+FROM node:$TAG
+
+RUN npm install -g npm@^10.0.0
 
 WORKDIR /app/
 
