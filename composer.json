@@ -29,7 +29,7 @@
     "craftcms/cms": "^5.0.0"
   },
   "require-dev": {
-    "craftcms/cloud": "^2.0.0",
+    "craftcms/cloud": "^2.0.0 || ^3.0.0",
     "craftcms/ecs": "dev-main",
     "craftcms/phpstan": "dev-main",
     "craftcms/rector": "dev-main"
